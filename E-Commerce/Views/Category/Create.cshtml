@@ -1,0 +1,36 @@
+﻿@model Category
+
+
+<div class="container">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Add Category</h2>
+		</div>
+	</div>
+</div>
+
+
+<form method="post">
+	<div class="border p-3 mt-2">
+		<div class="mb-3 p-1">
+			<label class="p-0">Category Name</label>
+			<input class="form-control" type="text" />
+		</div>
+		<div class="mb-3 p-1">
+			<label class="p-0">Display Order</label>
+			<input class="form-control" type="text" />
+		</div>
+		<div class="row d-flex justify-content-between">
+			<div class="col-6">
+				<a asp-controller="Category" asp-action="Index" class="btn btn-secondary btn-sm border">
+					<i class="fs-6 p-1 bi bi-arrow-return-left"></i>
+					Back to List
+				</a>
+			</div>
+			<div class="col-6 text-end">
+				<button class="btn btn-secondary btn-sm border" type="submit">Clear</button>
+				<button class="btn btn-sm btn-primary" type="reset">Create</button>
+			</div>
+		</div>
+	</div>
+</form>

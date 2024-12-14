@@ -1,1 +1,40 @@
-﻿<h1>Category List View</h1>
+﻿@model List<Category>
+
+<div class="container-fluid mb-2">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Category List</h2>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-controller="Category" asp-action="Create" class="btn btn-sm btn-primary">
+				<i class="fs-6 bi bi-plus-circle px-1"></i>Create Category
+			</a>
+		</div>
+	</div>
+</div>
+
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>
+				Category Name
+			</th>
+			<th>
+				Display Orders
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var obj in Model.OrderByDescending(o => o.DisplayOrder))
+		{
+			<tr>
+				<td>
+					@obj.Name
+				</td>
+				<td>
+					@obj.DisplayOrder
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
