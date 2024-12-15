@@ -15,12 +15,15 @@
 
 <table class="table table-bordered table-striped">
 	<thead>
-		<tr>
+		<tr class="text-center">
 			<th>
 				Category Name
 			</th>
 			<th>
 				Display Orders
+			</th>
+			<th>
+				Actions
 			</th>
 		</tr>
 	</thead>
@@ -33,6 +36,17 @@
 				</td>
 				<td>
 					@obj.DisplayOrder
+				</td>
+				<td>
+					<div class="btn-group d-flex justify-content-center" role="group">
+						<a class="btn btn-sm btn-primary mx-2" asp-controller="Category" asp-action="Edit" asp-route-Id="@obj.Id">
+							<i class="bi bi-pencil-square fs-6"></i> Edit
+						</a>
+
+						<a class="btn btn-sm btn-danger mx-2" asp-controller="Category" asp-action="Delete" asp-route-Id="@obj.Id">
+							<i class="bi bi-trash fs-6"></i> Delete
+						</a>
+					</div>
 				</td>
 			</tr>
 		}

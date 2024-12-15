@@ -21,5 +21,38 @@ namespace E_Commerce.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Create(Category obj)
+        {
+            if (int.TryParse(obj.Name, out int name))
+                ModelState.AddModelError("name", "Name Should not be Number");
+
+            List<Category> categories = _db.Categories.ToList();
+            var isAlreadyExists = categories.Exists(d => d.Name == obj.Name);
+
+            if (isAlreadyExists)
+                ModelState.AddModelError("name", $"{obj.Name} is Already Exists");
+
+
+            if (!ModelState.IsValid) return View();
+
+            _db.Categories.Add(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult Edit(int? Id)
+        {
+            if (Id == null || Id == 0) return NotFound();
+
+            Category? category = _db.Categories.Find(Id);
+            if(category == null) return NotFound();
+
+
+            return View(category);
+        }
+
     }
 }

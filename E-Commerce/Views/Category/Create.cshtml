@@ -12,14 +12,19 @@
 
 <form method="post">
 	<div class="border p-3 mt-2">
+
 		<div class="mb-3 p-1">
-			<label class="p-0">Category Name</label>
-			<input class="form-control" type="text" />
+			<label asp-for="Name" class="p-0"></label>
+			<input asp-for="Name" class="form-control" type="text" />
+			<span class="fs-6 text-danger" asp-validation-for="Name"></span>
 		</div>
+
 		<div class="mb-3 p-1">
-			<label class="p-0">Display Order</label>
-			<input class="form-control" type="text" />
+			<label asp-for="DisplayOrder" class="p-0"></label>
+			<input asp-for="DisplayOrder" class="form-control" type="text" />
+			<span class="fs-6 text-danger" asp-validation-for="DisplayOrder"></span>
 		</div>
+
 		<div class="row d-flex justify-content-between">
 			<div class="col-6">
 				<a asp-controller="Category" asp-action="Index" class="btn btn-secondary btn-sm border">
@@ -28,9 +33,15 @@
 				</a>
 			</div>
 			<div class="col-6 text-end">
-				<button class="btn btn-secondary btn-sm border" type="submit">Clear</button>
-				<button class="btn btn-sm btn-primary" type="reset">Create</button>
+				<button class="btn btn-secondary btn-sm border clearBtn" type="reset">Clear</button>
+				<button class="btn btn-sm btn-primary" type="submit">Create</button>
 			</div>
 		</div>
 	</div>
 </form>
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial"></partial>
+	}
+}
