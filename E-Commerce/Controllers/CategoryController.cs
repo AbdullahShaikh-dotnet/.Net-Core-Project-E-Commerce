@@ -1,4 +1,5 @@
-﻿using E_Commerce.Data;
+﻿using System.Security.Cryptography;
+using E_Commerce.Data;
 using E_Commerce.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -50,9 +51,45 @@ namespace E_Commerce.Controllers
             Category? category = _db.Categories.Find(Id);
             if(category == null) return NotFound();
 
+            return View(category);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(Category obj)
+        {
+            if (obj.Id == 0) return NotFound();
+
+            if (!ModelState.IsValid) return View();
+
+            _db.Categories.Update(obj);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+
+        public IActionResult Delete(int? Id)
+        {
+            if (Id == null || Id == 0) return NotFound();
+
+            Category? category = _db.Categories.Find(Id);
+            if (category == null) return NotFound();
 
             return View(category);
         }
 
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(Category obj)
+        {
+            Category? Db_Category = _db.Categories.Find(obj.Id);
+
+            if(Db_Category == null) return NotFound();
+
+            _db.Categories.Remove(Db_Category);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
