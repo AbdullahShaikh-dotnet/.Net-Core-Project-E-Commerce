@@ -16,5 +16,9 @@ namespace E_Commerce.Models
         [Range(1,100)]
         [DisplayName("Display Order")] 
         public int DisplayOrder { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
     }
 }
