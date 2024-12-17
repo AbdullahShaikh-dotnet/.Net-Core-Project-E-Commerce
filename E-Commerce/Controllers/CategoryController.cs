@@ -15,7 +15,7 @@ namespace E_Commerce.Controllers
         }
         public IActionResult Index()
         {
-            List<Category> categories = _db.Categories.Where<Category>(data => !data.IsDeleted).ToList();
+            List<Category> categories = _db.Categories.Where(data => !data.IsDeleted).ToList();
             return View(categories);
         }
 
@@ -33,6 +33,7 @@ namespace E_Commerce.Controllers
 
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
 
@@ -49,7 +50,7 @@ namespace E_Commerce.Controllers
             }
 
             List<Category> categories = _db.Categories.ToList();
-            var isAlreadyExists = categories.Exists(d => d.Name == obj.Name);
+            var isAlreadyExists = categories.Exists(d => d.Name == obj.Name && !d.IsDeleted);
 
             if (isAlreadyExists)
             {
@@ -78,13 +79,11 @@ namespace E_Commerce.Controllers
 
             if (!ModelState.IsValid) return View();
 
-            if (Validation(obj))
-            {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(obj);
+            _db.Categories.Update(obj);
+            _db.SaveChanges();
+            TempData["success"] = "Category Updated Successfully";
+            return RedirectToAction("Index");
+
         }
 
 
@@ -110,8 +109,8 @@ namespace E_Commerce.Controllers
 
             Db_Category.IsDeleted = true;
             Db_Category.DeletedAt = DateTime.Now;
-
             _db.SaveChanges();
+            TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
     }
