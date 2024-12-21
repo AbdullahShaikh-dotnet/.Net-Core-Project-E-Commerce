@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ECom.Models;
 
 namespace ECom.DataAccess.Repository.IRepository
 {
-    public interface ICategoryRepository : IRepository<Category>
+    public interface IUnitOfWork
     {
-        void Update(Category CategoryObject);
+        ICategoryRepository Category { get; }
+
+        void Save();
     }
 }

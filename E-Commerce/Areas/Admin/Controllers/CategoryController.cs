@@ -6,18 +6,19 @@ using ECom.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace E_Commerce.Controllers
+namespace E_Commerce.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryRepository categoryRepo)
+        private readonly IUnitOfWork _UnitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepo;
+            _UnitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _categoryRepository.GetAll().Where(data => !data.IsDeleted).ToList();
+            List<Category> categories = _UnitOfWork.Category.GetAll().Where(data => !data.IsDeleted).ToList();
             return View(categories);
         }
 
@@ -33,8 +34,8 @@ namespace E_Commerce.Controllers
             {
                 if (!ModelState.IsValid) return View();
 
-                _categoryRepository.Add(obj);
-                _categoryRepository.Save();
+                _UnitOfWork.Category.Add(obj);
+                _UnitOfWork.Save();
                 TempData["success"] = "Category Created Successfully";
                 return RedirectToAction("Index");
             }
@@ -51,7 +52,7 @@ namespace E_Commerce.Controllers
                 return false;
             }
 
-            List<Category> categories = _categoryRepository.GetAll().ToList();
+            List<Category> categories = _UnitOfWork.Category.GetAll().ToList();
             var isAlreadyExists = categories.Exists(d => d.Name == obj.Name && !d.IsDeleted);
 
             if (isAlreadyExists)
@@ -67,7 +68,7 @@ namespace E_Commerce.Controllers
         {
             if (Id == null || Id == 0) return NotFound();
 
-            Category? category = _categoryRepository.Get(cat => Id == cat.Id);
+            Category? category = _UnitOfWork.Category.Get(cat => Id == cat.Id);
             if (category == null) return NotFound();
 
             return View(category);
@@ -81,8 +82,8 @@ namespace E_Commerce.Controllers
 
             if (!ModelState.IsValid) return View();
 
-            _categoryRepository.Update(obj);
-            _categoryRepository.Save();
+            _UnitOfWork.Category.Update(obj);
+            _UnitOfWork.Save();
             TempData["success"] = "Category Updated Successfully";
             return RedirectToAction("Index");
 
@@ -93,7 +94,7 @@ namespace E_Commerce.Controllers
         {
             if (Id == null || Id == 0) return NotFound();
 
-            Category? category = _categoryRepository.Get(cat => Id == cat.Id);
+            Category? category = _UnitOfWork.Category.Get(cat => Id == cat.Id);
             if (category == null) return NotFound();
 
             return View(category);
@@ -103,7 +104,7 @@ namespace E_Commerce.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(Category obj)
         {
-            Category? Db_Category = _categoryRepository.Get(cat => obj.Id == cat.Id);
+            Category? Db_Category = _UnitOfWork.Category.Get(cat => obj.Id == cat.Id);
 
             if (Db_Category == null) return NotFound();
 
@@ -111,7 +112,7 @@ namespace E_Commerce.Controllers
 
             Db_Category.IsDeleted = true;
             Db_Category.DeletedAt = DateTime.Now;
-            _categoryRepository.Save();
+            _UnitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
         }
