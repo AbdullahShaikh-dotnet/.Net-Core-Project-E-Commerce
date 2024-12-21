@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
-using E_Commerce.Data;
-using E_Commerce.Models;
+using E_Commerce.DataAccess.Data;
+using ECom.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 

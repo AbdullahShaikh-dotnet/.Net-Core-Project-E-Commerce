@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace E_Commerce.Migrations
+namespace E_Commerce.DataAccess.Migrations
 {
     /// <inheritdoc />
     public partial class AddedIsDeletedColumnandDeleatedAtColumn : Migration

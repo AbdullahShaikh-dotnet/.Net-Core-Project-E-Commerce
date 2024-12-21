@@ -16,4 +16,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ECom.DataAccess\ECom.DataAccess.csproj" />
+    <ProjectReference Include="..\ECom.Models\ECom.Models.csproj" />
+  </ItemGroup>
+
 </Project>

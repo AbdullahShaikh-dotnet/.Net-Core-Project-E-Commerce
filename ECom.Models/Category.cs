@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace E_Commerce.Models
+namespace ECom.Models
 {
     public class Category
     {
@@ -13,8 +13,8 @@ namespace E_Commerce.Models
         [MaxLength(50, ErrorMessage = $"Category Max Length Should be 50")]
         public string Name { get; set; }
 
-        [Range(1,100)]
-        [DisplayName("Display Order")] 
+        [Range(1, 100)]
+        [DisplayName("Display Order")]
         public int DisplayOrder { get; set; }
 
         public bool IsDeleted { get; set; }
