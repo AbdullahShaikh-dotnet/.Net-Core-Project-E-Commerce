@@ -44,5 +44,10 @@ namespace ECom.Models
         [DisplayName("Price for 100+")]
         [Range(1, 1000)]
         public double Price100 { get; set; }
+
+
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

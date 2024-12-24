@@ -1,0 +1,70 @@
+﻿@model List<Product>
+
+<div class="container-fluid mb-2">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Product List</h2>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-controller="Product" asp-action="Create" class="btn btn-sm btn-primary">
+				<i class="fs-6 bi bi-plus-circle px-1"></i>Create Product
+			</a>
+		</div>
+	</div>
+</div>
+<div class="table-responsive">
+	<table class="table table-bordered shadow-sm">
+		<thead class="border-bottom-0">
+			<tr class="text-center">
+				<th class="bg-body-secondary">Sr.No</th>
+				<th class="bg-body-secondary">Title</th>
+				<th class="bg-body-secondary">Description</th>
+				<th class="bg-body-secondary">Author</th>
+				<th class="bg-body-secondary">ISBN</th>
+				<th class="bg-body-secondary">List Price</th>
+				<th class="bg-body-secondary">Price</th>
+				<th class="bg-body-secondary">Price 50</th>
+				<th class="bg-body-secondary">Price 100</th>
+				<th class="bg-body-secondary">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var obj in Model.Select((product, index) => new { product, index }))
+			{
+				<tr>
+					<td class="fs-6">@(@obj.index + 1)</td>
+					<td class="fs-6">@obj.product.Title</td>
+					<td class="fs-6">@obj.product.Description</td>
+					<td class="fs-6">@obj.product.Author</td>
+					<td class="fs-6">@obj.product.ISBN</td>
+					<td class="fs-6">@obj.product.ListPrice.ToString("C2")</td>
+					<td class="fs-6">@obj.product.Price.ToString("C2")</td>
+					<td class="fs-6">@obj.product.Price50.ToString("C2")</td>
+					<td class="fs-6">@obj.product.Price100.ToString("C2")</td>
+					<td>
+						<div class="btn-group d-flex justify-content-center" role="group">
+							<a class="mx-4" asp-controller="Product" asp-action="Edit" asp-route-Id="@obj.product.Id">
+								<i class="bi bi-pencil-square fs-4"></i>
+							</a>
+
+							<a class="text-danger mx-4" asp-controller="Product" asp-action="Delete" asp-route-Id="@obj.product.Id">
+								<i class="bi bi-trash fs-4"></i>
+							</a>
+						</div>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+@* 	<div class="px-2">
+		<nav aria-label="grid-navigation">
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item"><a class="page-link" href="#">Next</a></li>
+			</ul>
+		</nav>
+	</div> *@
+</div>
