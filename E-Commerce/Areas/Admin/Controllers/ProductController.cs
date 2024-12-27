@@ -10,10 +10,12 @@ namespace E_Commerce.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
+
         public ProductController(IUnitOfWork unitOfWork)
         {
             _UnitOfWork = unitOfWork;
         }
+
         public IActionResult Index()
         {
             List<Product> Products = _UnitOfWork.Product.GetAll()
@@ -21,7 +23,7 @@ namespace E_Commerce.Areas.Admin.Controllers
             return View(Products);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
             IEnumerable<SelectListItem> Category = _UnitOfWork.Category
                 .GetAll()
@@ -38,11 +40,15 @@ namespace E_Commerce.Areas.Admin.Controllers
                 product = new Product()
             };
 
+            if (id == 0 || id == null)
+                return View(productViewModel);
+
+            productViewModel.product = _UnitOfWork.Product.Get(data => data.Id == id);
             return View(productViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(ProductVM _productVM)
+        public IActionResult Upsert(ProductVM _productVM, IFormFile? file)
         {
             if (Validation(_productVM.product))
             {
@@ -68,7 +74,6 @@ namespace E_Commerce.Areas.Admin.Controllers
             return View(_productVM);
         }
 
-
         private bool Validation(Product obj)
         {
             if (int.TryParse(obj.Title, out int name))
@@ -89,32 +94,6 @@ namespace E_Commerce.Areas.Admin.Controllers
             return true;
         }
 
-        public IActionResult Edit(int? Id)
-        {
-            if (Id == null || Id == 0) return NotFound();
-
-            Product? Product = _UnitOfWork.Product.Get(cat => Id == cat.Id);
-            if (Product == null) return NotFound();
-
-            return View(Product);
-        }
-
-
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-            if (obj.Id == 0) return NotFound();
-
-            if (!ModelState.IsValid) return View();
-
-            _UnitOfWork.Product.Update(obj);
-            _UnitOfWork.Save();
-            TempData["success"] = "Product Updated Successfully";
-            return RedirectToAction("Index");
-
-        }
-
-
         public IActionResult Delete(int? Id)
         {
             if (Id == null || Id == 0) return NotFound();
@@ -124,7 +103,6 @@ namespace E_Commerce.Areas.Admin.Controllers
 
             return View(product);
         }
-
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeletePost(Product obj)
