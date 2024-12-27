@@ -20,22 +20,39 @@
 					<input asp-for="product.Title" class="form-control" type="text" />
 					<span class="fs-6 text-danger" asp-validation-for="product.Title"></span>
 				</div>
+
 				<div class="mb-3 p-1">
-					<label asp-for="product.ISBN" class="p-0"></label>
-					<input asp-for="product.ISBN" class="form-control" type="text" />
-					<span class="fs-6 text-danger" asp-validation-for="product.ISBN"></span>
+					<label asp-for="product.Category_ID" class="p-0"></label>
+					<select asp-for="product.Category_ID" asp-items="@Model.categoryList" class="form-select" type="text">
+						<option disabled selected>Select Category</option>
+					</select>
+					<span class="fs-6 text-danger" asp-validation-for="product.Category_ID"></span>
 				</div>
+
+			</div>
+			<div class="col-md-6">
+
 				<div class="mb-3 p-1">
 					<label asp-for="product.Author" class="p-0"></label>
 					<input asp-for="product.Author" class="form-control" type="text" />
 					<span class="fs-6 text-danger" asp-validation-for="product.Author"></span>
 				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="mb-3 p-1">
-					<label asp-for="product.Description" class="p-0"></label>
-					<textarea rows="9" asp-for="product.Description" class="form-control"></textarea>
-					<span class="fs-6 text-danger" asp-validation-for="product.Description"></span>
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="mb-3 p-1">
+							<label asp-for="product.ISBN" class="p-0"></label>
+							<input asp-for="product.ISBN" class="form-control" type="text" />
+							<span class="fs-6 text-danger" asp-validation-for="product.ISBN"></span>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="mb-3 p-1">
+							<label asp-for="product.ImageURL" class="p-0"></label>
+							<input asp-for="product.ImageURL" class="form-control" type="file" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -73,20 +90,11 @@
 		</div>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<div class="mb-3 p-1">
-					<label asp-for="product.Category_ID" class="p-0"></label>
-					<select asp-for="product.Category_ID" asp-items="@Model.categoryList" class="form-select" type="text">
-						<option disabled selected>Select Category</option>
-					</select>
-					<span class="fs-6 text-danger" asp-validation-for="product.Category_ID"></span>
-				</div>
-			</div>
-
-			<div class="col-md-6">
-				<div class="mb-3 p-1">
-					<label asp-for="product.ImageURL" class="p-0"></label>
-					<input asp-for="product.ImageURL" class="form-control" type="file" />
+					<label asp-for="product.Description" class="p-0"></label>
+					<textarea rows="9" asp-for="product.Description" class="form-control"></textarea>
+					<span class="fs-6 text-danger" asp-validation-for="product.Description"></span>
 				</div>
 			</div>
 		</div>
@@ -103,7 +111,9 @@
 				{
 					<button class="btn btn-secondary btn-sm border clearBtn" type="reset">Clear</button>
 					<button class="btn btn-sm btn-primary" type="submit">Create</button>
-				}else{
+				}
+				else
+				{
 					<button class="btn btn-sm btn-primary" type="submit">Update</button>
 				}
 			</div>
@@ -112,6 +122,23 @@
 </form>
 
 @section Scripts {
+
+	<script>
+		tinymce.init({
+		  selector: 'textarea',
+		  skin: 'bootstrap',
+		  icons:'jam',
+		  toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+		  plugins: [
+			'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
+			'searchreplace', 'visualblocks', 'advcode', 'fullscreen','math',
+			'insertdatetime', 'media', 'table', 'powerpaste', 'code', 'tinymcespellchecker'
+		  ],
+		  height: 500
+		});
+
+	</script>
+
 	@{
 		<partial name="_ValidationScriptsPartial"></partial>
 	}
