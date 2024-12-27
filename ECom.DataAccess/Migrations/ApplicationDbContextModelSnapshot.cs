@@ -84,7 +84,7 @@ namespace ECom.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("Category_ID")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -95,6 +95,10 @@ namespace ECom.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -119,7 +123,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("Category_ID");
 
                     b.ToTable("Products");
 
@@ -128,9 +132,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 1,
                             Author = "Billy Spark",
-                            CategoryId = 1,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "SWD9999001",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 99.0,
                             Price = 90.0,
@@ -142,9 +147,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 2,
                             Author = "Nancy Hoover",
-                            CategoryId = 2,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "CAW777777701",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 40.0,
                             Price = 30.0,
@@ -156,9 +162,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 3,
                             Author = "Julian Button",
-                            CategoryId = 3,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "RITO5555501",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 55.0,
                             Price = 50.0,
@@ -170,9 +177,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 4,
                             Author = "Abby Muscles",
-                            CategoryId = 3,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "WS3333333301",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 70.0,
                             Price = 65.0,
@@ -184,9 +192,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 5,
                             Author = "Ron Parker",
-                            CategoryId = 2,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "SOTJ1111111101",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 30.0,
                             Price = 27.0,
@@ -198,9 +207,10 @@ namespace ECom.DataAccess.Migrations
                         {
                             Id = 6,
                             Author = "Laura Phantom",
-                            CategoryId = 1,
+                            Category_ID = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "FOT000000001",
+                            ImageURL = "",
                             IsDeleted = false,
                             ListPrice = 25.0,
                             Price = 23.0,
@@ -214,7 +224,7 @@ namespace ECom.DataAccess.Migrations
                 {
                     b.HasOne("ECom.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("Category_ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

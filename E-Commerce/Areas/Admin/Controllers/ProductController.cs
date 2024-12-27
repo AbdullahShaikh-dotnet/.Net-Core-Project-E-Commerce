@@ -1,6 +1,8 @@
 ﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using ECom.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {
@@ -14,23 +16,41 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> Products = _UnitOfWork.Product.GetAll().Where(data => !data.IsDeleted).ToList();
+            List<Product> Products = _UnitOfWork.Product.GetAll()
+                .Where(data => !data.IsDeleted).ToList();
             return View(Products);
         }
 
         public IActionResult Create()
         {
-            return View();
+            IEnumerable<SelectListItem> Category = _UnitOfWork.Category
+                .GetAll()
+                .Where(a => !a.IsDeleted)
+                .Select(d => new SelectListItem
+            {
+                Text = d.Name,
+                Value = d.Id.ToString(),
+            });
+
+            // ViewBag.Category = Category;
+
+            ProductVM productViewModel = new ProductVM()
+            {
+                categoryList = Category,
+                product = new Product()
+            };
+
+            return View(productViewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM obj)
         {
-            if (Validation(obj))
+            if (Validation(obj.product))
             {
                 if (!ModelState.IsValid) return View();
 
-                _UnitOfWork.Product.Add(obj);
+                _UnitOfWork.Product.Add(obj.product);
                 _UnitOfWork.Save();
                 TempData["success"] = "Product Created Successfully";
                 return RedirectToAction("Index");

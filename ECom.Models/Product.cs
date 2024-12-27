@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ECom.Models
 {
@@ -13,6 +14,7 @@ namespace ECom.Models
     {
         [Key]
         public int Id { get; set; }
+
         [Required]
         public string Title { get; set; }
 
@@ -21,6 +23,7 @@ namespace ECom.Models
 
         [Required]
         public string ISBN { get; set; }
+
         [Required]
         public string Author { get; set; }
 
@@ -34,25 +37,30 @@ namespace ECom.Models
         [Range(1, 1000)]
         public double Price { get; set; }
 
-
         [Required]
         [DisplayName("Price for 50+")]
         [Range(1, 1000)]
         public double Price50 { get; set; }
-
 
         [Required]
         [DisplayName("Price for 100+")]
         [Range(1, 1000)]
         public double Price100 { get; set; }
 
+        [ValidateNever]
         public bool IsDeleted { get; set; }
 
+        [ValidateNever]
         public DateTime? DeletedAt { get; set; }
 
-
-        public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
+        [ForeignKey("Category_ID")]
+        [ValidateNever]
         public Category Category { get; set; }
+
+        [DisplayName("Category")]
+        public int Category_ID { get; set; }
+
+        [ValidateNever]
+        public string ImageURL { get; set; }
     }
 }
