@@ -27,12 +27,10 @@ namespace E_Commerce.Areas.Admin.Controllers
                 .GetAll()
                 .Where(a => !a.IsDeleted)
                 .Select(d => new SelectListItem
-            {
-                Text = d.Name,
-                Value = d.Id.ToString(),
-            });
-
-            // ViewBag.Category = Category;
+                {
+                    Text = d.Name,
+                    Value = d.Id.ToString(),
+                });
 
             ProductVM productViewModel = new ProductVM()
             {
@@ -44,19 +42,30 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ProductVM obj)
+        public IActionResult Create(ProductVM _productVM)
         {
-            if (Validation(obj.product))
+            if (Validation(_productVM.product))
             {
-                if (!ModelState.IsValid) return View();
+                //if (!ModelState.IsValid) return View();
+                if (ModelState.IsValid)
+                {
+                    _UnitOfWork.Product.Add(_productVM.product);
+                    _UnitOfWork.Save();
+                    TempData["success"] = "Product Created Successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    _productVM.categoryList = _UnitOfWork.Category
+                        .GetAll().Where(a => !a.IsDeleted)
+                        .Select(d => new SelectListItem {
+                            Text = d.Name, Value = d.Id.ToString()
+                        });
 
-                _UnitOfWork.Product.Add(obj.product);
-                _UnitOfWork.Save();
-                TempData["success"] = "Product Created Successfully";
-                return RedirectToAction("Index");
+                    return View(_productVM);
+                }
             }
-
-            return View(obj);
+            return View(_productVM);
         }
 
 
