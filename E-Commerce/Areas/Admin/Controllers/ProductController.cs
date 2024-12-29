@@ -70,7 +70,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                         file.CopyTo(fileStream);
                     }
 
-                    _productVM.product.ImageURL = @$"Images\Products\{Filename}";
+                    _productVM.product.ImageURL = @$"\Images\Products\{Filename}";
                 }
 
 
