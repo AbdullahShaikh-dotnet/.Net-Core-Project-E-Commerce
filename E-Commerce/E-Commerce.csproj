@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
@@ -21,6 +21,10 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App"></FrameworkReference>
 		<ProjectReference Include="..\ECom.DataAccess\ECom.DataAccess.csproj" />
 		<ProjectReference Include="..\ECom.Models\ECom.Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Images\Products\" />
 	</ItemGroup>
 
 </Project>

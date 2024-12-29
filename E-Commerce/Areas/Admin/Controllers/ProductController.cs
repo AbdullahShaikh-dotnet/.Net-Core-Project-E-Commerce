@@ -65,9 +65,9 @@ namespace E_Commerce.Areas.Admin.Controllers
                     if (!Directory.Exists(ProductImagePath))
                         Directory.CreateDirectory(ProductImagePath);
 
-                    using (FileStream fs = new FileStream(CompleteFilePath, FileMode.Create))
+                    using (var fileStream = new FileStream(CompleteFilePath, FileMode.Create))
                     {
-                        fs.CopyTo(fs);
+                        file.CopyTo(fileStream);
                     }
 
                     _productVM.product.ImageURL = @$"Images\Products\{Filename}";
