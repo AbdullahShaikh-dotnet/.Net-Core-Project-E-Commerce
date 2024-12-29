@@ -11,9 +11,11 @@ namespace E_Commerce.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _UnitOfWork;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment iWebHostEnvironment)
         {
             _UnitOfWork = unitOfWork;
+            _webHostEnvironment = iWebHostEnvironment;
         }
 
         public IActionResult Index()
@@ -50,49 +52,47 @@ namespace E_Commerce.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(ProductVM _productVM, IFormFile? file)
         {
-            if (Validation(_productVM.product))
-            {
-                //if (!ModelState.IsValid) return View();
-                if (ModelState.IsValid)
-                {
-                    _UnitOfWork.Product.Add(_productVM.product);
-                    _UnitOfWork.Save();
-                    TempData["success"] = "Product Created Successfully";
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    _productVM.categoryList = _UnitOfWork.Category
-                        .GetAll().Where(a => !a.IsDeleted)
-                        .Select(d => new SelectListItem {
-                            Text = d.Name, Value = d.Id.ToString()
-                        });
 
-                    return View(_productVM);
+            if (ModelState.IsValid)
+            {
+                if (file != null)
+                {
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string ProductImagePath = Path.Combine(wwwRootPath, @"Images\Products");
+                    string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
+
+                    if (!Directory.Exists(ProductImagePath))
+                        Directory.CreateDirectory(ProductImagePath);
+
+                    using (FileStream fs = new FileStream(CompleteFilePath, FileMode.Create))
+                    {
+                        fs.CopyTo(fs);
+                    }
+
+                    _productVM.product.ImageURL = @$"Images\Products\{Filename}";
                 }
+
+
+                _UnitOfWork.Product.Add(_productVM.product);
+                _UnitOfWork.Save();
+                TempData["success"] = "Product Created Successfully";
+                return RedirectToAction("Index");
             }
-            return View(_productVM);
+            else
+            {
+                _productVM.categoryList = _UnitOfWork.Category
+                    .GetAll().Where(a => !a.IsDeleted)
+                    .Select(d => new SelectListItem
+                    {
+                        Text = d.Name,
+                        Value = d.Id.ToString()
+                    });
+
+                return View(_productVM);
+            }
         }
 
-        private bool Validation(Product obj)
-        {
-            if (int.TryParse(obj.Title, out int name))
-            {
-                ModelState.AddModelError("name", "Name Should not be Number");
-                return false;
-            }
-
-            List<Product> categories = _UnitOfWork.Product.GetAll().ToList();
-            var isAlreadyExists = categories.Exists(d => d.Title == obj.Title && !d.IsDeleted);
-
-            if (isAlreadyExists)
-            {
-                ModelState.AddModelError("name", $"{obj.Title} is Already Exists");
-                return false;
-            }
-
-            return true;
-        }
 
         public IActionResult Delete(int? Id)
         {
