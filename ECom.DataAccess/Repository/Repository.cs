@@ -24,16 +24,31 @@ namespace ECom.DataAccess.Repository
             dbset.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, string? includePropertiesList = null)
         {
             IQueryable<T> query = dbset;
             query = query.Where(filter);
+            if (string.IsNullOrEmpty(includePropertiesList))
+                return query.FirstOrDefault();
+
+            foreach (var property in includePropertiesList.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(property);
+            }
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includePropertiesList = null)
         {
             IQueryable<T> query = dbset;
+            if (string.IsNullOrEmpty(includePropertiesList))
+                return query.ToList();
+
+            foreach (var property in includePropertiesList.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(property);
+            }
+
             return query.ToList();
         }
 

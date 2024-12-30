@@ -21,10 +21,7 @@
 				<th class="bg-body-secondary">Description</th>
 				<th class="bg-body-secondary">Author</th>
 				<th class="bg-body-secondary">ISBN</th>
-				<th class="bg-body-secondary">List Price</th>
-				<th class="bg-body-secondary">Price</th>
-				<th class="bg-body-secondary">Price 50</th>
-				<th class="bg-body-secondary">Price 100</th>
+				<th class="bg-body-secondary">Category</th>
 				<th class="bg-body-secondary">Actions</th>
 			</tr>
 		</thead>
@@ -37,10 +34,7 @@
 					<td class="fs-6">@obj.product.Description</td>
 					<td class="fs-6">@obj.product.Author</td>
 					<td class="fs-6">@obj.product.ISBN</td>
-					<td class="fs-6">@obj.product.ListPrice.ToString("C2")</td>
-					<td class="fs-6">@obj.product.Price.ToString("C2")</td>
-					<td class="fs-6">@obj.product.Price50.ToString("C2")</td>
-					<td class="fs-6">@obj.product.Price100.ToString("C2")</td>
+					<td class="fs-6">@obj.product.Category.Name</td>
 					<td>
 						<div class="btn-group d-flex justify-content-center" role="group">
 							<a class="mx-4" asp-controller="Product" asp-action="Upsert" asp-route-Id="@obj.product.Id">

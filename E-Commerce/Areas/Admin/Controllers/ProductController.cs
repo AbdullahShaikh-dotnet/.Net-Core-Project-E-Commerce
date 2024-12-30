@@ -20,7 +20,7 @@ namespace E_Commerce.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> Products = _UnitOfWork.Product.GetAll()
+            List<Product> Products = _UnitOfWork.Product.GetAll(includePropertiesList:"Category")
                 .Where(data => !data.IsDeleted).ToList();
             return View(Products);
         }
