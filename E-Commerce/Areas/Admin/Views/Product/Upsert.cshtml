@@ -11,122 +11,131 @@
 
 
 <form method="post" enctype="multipart/form-data">
-	<div class="border p-3 mt-2">
-		<div class="row">
-			<div class="col-md-10">
+	<input type="hidden" asp-for="product.Id" />
+	<input type="hidden" asp-for="product.ImageURL" />
+	<div class="row">
+		<div class="col-md-10">
+			<div class="border p-3 mt-2">
 				<div class="row">
-					<div class="col-md-6">
-						<div class="mb-3 p-1">
-							<input type="hidden" asp-for="product.Id" />
-							<label asp-for="product.Title" class="p-0"></label>
-							<input asp-for="product.Title" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.Title"></span>
-						</div>
-
-						<div class="mb-3 p-1">
-							<label asp-for="product.Category_ID" class="p-0"></label>
-							<select asp-for="product.Category_ID" asp-items="@Model.categoryList" class="form-select" type="text">
-								<option disabled selected>Select Category</option>
-							</select>
-							<span class="fs-6 text-danger" asp-validation-for="product.Category_ID"></span>
-						</div>
-
-					</div>
-					<div class="col-md-6">
-
-						<div class="mb-3 p-1">
-							<label asp-for="product.Author" class="p-0"></label>
-							<input asp-for="product.Author" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.Author"></span>
-						</div>
-
+					<div class="col-md-12">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="mb-3 p-1">
-									<label asp-for="product.ISBN" class="p-0"></label>
-									<input asp-for="product.ISBN" class="form-control" type="text" />
-									<span class="fs-6 text-danger" asp-validation-for="product.ISBN"></span>
+									<label asp-for="product.Title" class="p-0"></label>
+									<input asp-for="product.Title" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.Title"></span>
 								</div>
-							</div>
 
-							<div class="col-md-6">
 								<div class="mb-3 p-1">
-									<label asp-for="product.ImageURL" class="p-0"></label>
-									<input asp-for="product.ImageURL" class="form-control" type="file" name="file" />
+									<label asp-for="product.Category_ID" class="p-0"></label>
+									<select asp-for="product.Category_ID" asp-items="@Model.categoryList" class="form-select" type="text">
+										<option disabled selected>Select Category</option>
+									</select>
+									<span class="fs-6 text-danger" asp-validation-for="product.Category_ID"></span>
+								</div>
+
+							</div>
+							<div class="col-md-6">
+
+								<div class="mb-3 p-1">
+									<label asp-for="product.Author" class="p-0"></label>
+									<input asp-for="product.Author" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.Author"></span>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6">
+										<div class="mb-3 p-1">
+											<label asp-for="product.ISBN" class="p-0"></label>
+											<input asp-for="product.ISBN" class="form-control" type="text" />
+											<span class="fs-6 text-danger" asp-validation-for="product.ISBN"></span>
+										</div>
+									</div>
+
+									<div class="col-md-6">
+										<div class="mb-3 p-1">
+											<label asp-for="product.ImageURL" class="p-0"></label>
+											<input asp-for="product.ImageURL" class="form-control" type="file" name="file" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="mb-3 p-1">
+									<label asp-for="product.ListPrice" class="p-0"></label>
+									<input asp-for="product.ListPrice" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.ListPrice"></span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="mb-3 p-1">
+									<label asp-for="product.Price" class="p-0"></label>
+									<input asp-for="product.Price" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.Price"></span>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="mb-3 p-1">
+									<label asp-for="product.Price50" class="p-0"></label>
+									<input asp-for="product.Price50" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.Price50"></span>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="mb-3 p-1">
+									<label asp-for="product.Price100" class="p-0"></label>
+									<input asp-for="product.Price100" class="form-control" type="text" />
+									<span class="fs-6 text-danger" asp-validation-for="product.Price100"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="mb-3 p-1">
+									<label asp-for="product.Description" class="p-0"></label>
+									<textarea rows="9" asp-for="product.Description" class="form-control"></textarea>
+									<span class="fs-6 text-danger" asp-validation-for="product.Description"></span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-md-3">
-						<div class="mb-3 p-1">
-							<label asp-for="product.ListPrice" class="p-0"></label>
-							<input asp-for="product.ListPrice" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.ListPrice"></span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="mb-3 p-1">
-							<label asp-for="product.Price" class="p-0"></label>
-							<input asp-for="product.Price" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.Price"></span>
-						</div>
-					</div>
 
-					<div class="col-md-3">
-						<div class="mb-3 p-1">
-							<label asp-for="product.Price50" class="p-0"></label>
-							<input asp-for="product.Price50" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.Price50"></span>
-						</div>
+				<div class="row d-flex justify-content-between">
+					<div class="col-6">
+						<a asp-controller="Product" asp-action="Index" class="btn btn-secondary btn-sm border">
+							<i class="fs-6 p-1 bi bi-arrow-return-left"></i>
+							Back to List
+						</a>
 					</div>
-					<div class="col-md-3">
-						<div class="mb-3 p-1">
-							<label asp-for="product.Price100" class="p-0"></label>
-							<input asp-for="product.Price100" class="form-control" type="text" />
-							<span class="fs-6 text-danger" asp-validation-for="product.Price100"></span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="mb-3 p-1">
-							<label asp-for="product.Description" class="p-0"></label>
-							<textarea rows="9" asp-for="product.Description" class="form-control"></textarea>
-							<span class="fs-6 text-danger" asp-validation-for="product.Description"></span>
-						</div>
+					<div class="col-6 text-end">
+						@if (Model.product.Id == 0)
+						{
+							<button class="btn btn-secondary btn-sm border clearBtn" type="reset">Clear</button>
+							<button class="btn btn-sm btn-primary" type="submit">Create</button>
+						}
+						else
+						{
+							<button class="btn btn-sm btn-primary" type="submit">Update</button>
+						}
 					</div>
 				</div>
 			</div>
-			<div class="col-md-2">
+		</div>
+		<div class="col-md-2">
+			<div class="border p-3 mt-2">
 				<img src="@Model.product.ImageURL" class="object-fit-contain h-auto w-100" />
 			</div>
-		</div>
 
-
-		<div class="row d-flex justify-content-between">
-			<div class="col-6">
-				<a asp-controller="Product" asp-action="Index" class="btn btn-secondary btn-sm border">
-					<i class="fs-6 p-1 bi bi-arrow-return-left"></i>
-					Back to List
-				</a>
-			</div>
-			<div class="col-6 text-end">
-				@if (Model.product.Id == 0)
-				{
-					<button class="btn btn-secondary btn-sm border clearBtn" type="reset">Clear</button>
-					<button class="btn btn-sm btn-primary" type="submit">Create</button>
-				}
-				else
-				{
-					<button class="btn btn-sm btn-primary" type="submit">Update</button>
-				}
-			</div>
 		</div>
 	</div>
+
 </form>
 
 @section Scripts {
