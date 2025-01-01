@@ -1,16 +1,16 @@
-﻿
-document.addEventListener("DOMContentLoaded", function () {
+﻿document.addEventListener("DOMContentLoaded", function () {
     LoadDataTables();
 })
 
+let DT;
 
 const LoadDataTables = function () {
     const tableElement = document.querySelector('.tblData');
-    new DataTable(tableElement, {
+     DT = new DataTable(tableElement, {
         ajax: { url: '/admin/product/getall' },
         columns: [
             {
-                title: 'No.',
+                title: 'Sr. No.',
                 data: null,
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
@@ -38,9 +38,8 @@ const LoadDataTables = function () {
 								<i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
 							</a>
 
-							<a class="text-danger mx-4" href="/admin/product/Delete?id=${d}">
-								<i class="bi bi-trash fs-4" style="cursor: pointer"></i>
-							</a>
+                            <i class="text-danger mx-4 bi bi-trash fs-4 btnDelete"
+                            data-url='/admin/product/Delete?id=${d}' style="cursor: pointer"></i>
 						</div>
                     `;
                 },
@@ -51,5 +50,42 @@ const LoadDataTables = function () {
         select: true,
         processing: true,
         info: true,
+        drawCallback: () => {
+            // This function is triggered after every table redraw (e.g., after data is loaded)
+            const deleteButtons = document.querySelectorAll('.btnDelete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const URL = e.target.dataset.url
+                    DeleteConfirmation(URL);
+                });
+            });
+        }
     });
+}
+
+const DeleteConfirmation = function (url) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (!result.isConfirmed) return;
+
+        fetch(url, {
+            method: "POST",
+        }).then(response => response.json())
+            .then(data => {
+                toastr.success(data.message)
+                ReloadTable('.tblData');
+            });
+
+    });
+}
+
+const ReloadTable = function (selector) {
+    DT.ajax.reload();
 }
