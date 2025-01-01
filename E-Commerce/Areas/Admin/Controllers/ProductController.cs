@@ -129,5 +129,12 @@ namespace E_Commerce.Areas.Admin.Controllers
             TempData["success"] = "Product Deleted Successfully";
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult GetAll() {
+            List<Product> ProductsList = _UnitOfWork.Product.GetAll(includePropertiesList: "Category")
+                .Where(data => !data.IsDeleted).ToList();
+            return Json(new {data = ProductsList });
+        }
     }
 }
