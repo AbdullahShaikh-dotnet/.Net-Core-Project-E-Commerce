@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 const LoadDataTables = function () {
-    $('#tblData').DataTable({
+    const tableElement = document.querySelector('.tblData');
+    new DataTable(tableElement, {
         ajax: { url: '/admin/product/getall' },
         columns: [
             {
