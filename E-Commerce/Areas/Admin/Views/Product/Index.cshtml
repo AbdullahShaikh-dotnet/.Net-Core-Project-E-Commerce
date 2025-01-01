@@ -13,19 +13,19 @@
 	</div>
 </div>
 <div class="table-responsive">
-	<table class="table table-bordered shadow-sm">
+	<table id="tblData" class="table table-bordered shadow-sm">
 		<thead class="border-bottom-0">
 			<tr class="text-center">
-				<th class="bg-body-secondary">Sr.No</th>
+@* 				<th class="bg-body-secondary">Sr.No</th>
 				<th class="bg-body-secondary">Title</th>
 				<th class="bg-body-secondary">Description</th>
 				<th class="bg-body-secondary">Author</th>
 				<th class="bg-body-secondary">ISBN</th>
 				<th class="bg-body-secondary">Category</th>
-				<th class="bg-body-secondary">Actions</th>
+				<th class="bg-body-secondary">Actions</th> *@
 			</tr>
 		</thead>
-		<tbody>
+		@* 		<tbody>
 			@foreach (var obj in Model.Select((product, index) => new { product, index }))
 			{
 				<tr>
@@ -48,6 +48,10 @@
 					</td>
 				</tr>
 			}
-		</tbody>
+		</tbody> *@
 	</table>
 </div>
+
+@section Scripts{
+<script src="~/js/Product.js"></script>
+}

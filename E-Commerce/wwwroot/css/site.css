@@ -50,3 +50,12 @@ select option:checked {
     background-color: #55595c !important;
     color: white;
 }
+
+table.table.dataTable > tbody > tr.selected > * {
+    box-shadow: inset 0 0 0 9999px rgb(247 247 249) !important;
+    color: rgb(26 26 26) !important;
+}
+
+div.dt-processing > div:last-child > div {
+    background: rgb(26 26 26) !important;
+}

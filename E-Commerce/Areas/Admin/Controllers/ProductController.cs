@@ -1,4 +1,5 @@
-﻿using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository;
+using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace E_Commerce.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> Products = _UnitOfWork.Product.GetAll(includePropertiesList:"Category")
+            List<Product> Products = _UnitOfWork.Product.GetAll(includePropertiesList: "Category")
                 .Where(data => !data.IsDeleted).ToList();
             return View(Products);
         }
@@ -105,36 +106,63 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Delete(int? Id)
-        {
-            if (Id == null || Id == 0) return NotFound();
+        //public IActionResult Delete(int? Id)
+        //{
+        //    if (Id == null || Id == 0) return NotFound();
 
-            Product? product = _UnitOfWork.Product.Get(cat => Id == cat.Id);
-            if (product == null) return NotFound();
+        //    Product? product = _UnitOfWork.Product.Get(cat => Id == cat.Id);
+        //    if (product == null) return NotFound();
 
-            return View(product);
-        }
+        //    return View(product);
+        //}
 
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(Product obj)
-        {
-            Product? Db_Product = _UnitOfWork.Product.Get(cat => obj.Id == cat.Id);
+        //[HttpPost, ActionName("Delete")]
+        //public IActionResult DeletePost(Product obj)
+        //{
+        //    Product? Db_Product = _UnitOfWork.Product.Get(cat => obj.Id == cat.Id);
 
-            if (Db_Product == null) return NotFound();
+        //    if (Db_Product == null) return NotFound();
 
 
-            Db_Product.IsDeleted = true;
-            Db_Product.DeletedAt = DateTime.Now;
-            _UnitOfWork.Save();
-            TempData["success"] = "Product Deleted Successfully";
-            return RedirectToAction("Index");
-        }
+        //    Db_Product.IsDeleted = true;
+        //    Db_Product.DeletedAt = DateTime.Now;
+        //    _UnitOfWork.Save();
+        //    TempData["success"] = "Product Deleted Successfully";
+        //    return RedirectToAction("Index");
+        //}
 
         [HttpGet]
-        public IActionResult GetAll() {
+        public IActionResult GetAll()
+        {
             List<Product> ProductsList = _UnitOfWork.Product.GetAll(includePropertiesList: "Category")
                 .Where(data => !data.IsDeleted).ToList();
-            return Json(new {data = ProductsList });
+            return Json(new { data = ProductsList });
+        }
+
+
+        public IActionResult Delete(int? id)
+        {
+            var productToBeDeleted = _UnitOfWork.Product.Get(d => d.Id == id);
+            if (productToBeDeleted == null)
+            {
+                return Json(new { success = false, message = "Error While Deletig" });
+            }
+
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            if (!string.IsNullOrEmpty(productToBeDeleted.ImageURL))
+            {
+                string OldFileName = Path.Combine(wwwRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
+
+                if (System.IO.File.Exists(OldFileName))
+                    System.IO.File.Delete(OldFileName);
+            }
+
+            productToBeDeleted.IsDeleted = true;
+            productToBeDeleted.DeletedAt = DateTime.Now;
+            _UnitOfWork.Product.Update(productToBeDeleted);
+            _UnitOfWork.Save();
+
+            return Json(new { success = true, message = "Deleted Successfully" });
         }
     }
 }
