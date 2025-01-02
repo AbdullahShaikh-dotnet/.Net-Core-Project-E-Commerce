@@ -6,8 +6,9 @@ let DT;
 
 const LoadDataTables = function () {
     const tableElement = document.querySelector('.tblData');
-     DT = new DataTable(tableElement, {
-        ajax: { url: '/admin/product/getall' },
+    const url = tableElement.dataset?.url;
+    DT = new DataTable(tableElement, {
+        ajax: { url },
         columns: [
             {
                 title: 'Sr. No.',
@@ -22,12 +23,24 @@ const LoadDataTables = function () {
             { data: 'title', title: 'title' },
             {
                 data: 'isbn', title: 'isbn', render: function (data) {
-                    return `<a href="https://www.isbnsearch.org/isbn/${data}">${data}</a>`;
+                    return `<a class="link-danger" target="_blank" href="https://www.isbnsearch.org/isbn/${data}">${data}</a>`;
                 }
             },
             { data: 'price', title: 'price' },
             { data: 'author', title: 'author' },
             { data: 'category.name', title: 'category name' },
+            {
+                title: 'Image',
+                data: 'imageURL',
+                render: function (d) {
+                    return d ? `<a href="${d}" target="_blank">
+                                    <img src=${d} width="auto" height="30" />
+                                </a>` : '';
+                },
+                className: 'text-center',
+                orderable: false,
+                searchable: false
+            },
             {
                 data: 'id',
                 title: 'Actions',
