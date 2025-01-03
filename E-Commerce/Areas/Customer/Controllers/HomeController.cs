@@ -26,6 +26,16 @@ namespace E_Commerce.Areas.Customer.Controllers
             return View(ProductsList);
         }
 
+
+        public IActionResult Details(int ProductID)
+        {
+            Product Product =
+                _unitOfWork.Product
+                .Get(data => data.Id == ProductID, includePropertiesList: "Category");
+
+            return View(Product);
+        }
+
         public IActionResult Privacy()
         {
             return View();
