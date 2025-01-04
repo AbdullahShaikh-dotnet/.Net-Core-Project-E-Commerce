@@ -23,6 +23,7 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App"></FrameworkReference>
 		<ProjectReference Include="..\ECom.DataAccess\ECom.DataAccess.csproj" />
 		<ProjectReference Include="..\ECom.Models\ECom.Models.csproj" />
+		<ProjectReference Include="..\ECom.Utility\ECom.Utility.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
