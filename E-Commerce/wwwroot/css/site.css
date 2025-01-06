@@ -64,6 +64,11 @@ div.dt-processing > div:last-child > div {
     background: rgb(26 26 26) !important;
 }
 
+.page-link {
+    border-radius: 3px;
+    margin: 0 5px;
+}
+
 ::-webkit-scrollbar {
     width: 12px;
     height: 10px;

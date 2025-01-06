@@ -7,14 +7,14 @@
 			<h2 class="text-primary">Product List</h2>
 		</div>
 		<div class="col-6 text-end">
-			<a asp-controller="Product" asp-action="Upsert" class="btn btn-sm btn-primary">
+			<a asp-controller="Product" asp-action="Upsert" class="btn btn-sm btn-outline-primary rounded-2 border-1">
 				<i class="fs-6 bi bi-plus-circle px-1"></i>Create Product
 			</a>
 		</div>
 	</div>
 </div>
 
-<table class="table table-bordered shadow-sm tblData" data-url="/admin/product/getall"></table>
+<table class="table table-bordered shadow-sm tblData border-1 rounded-2" data-url="/admin/product/getall"></table>
 
 @section Scripts {
 	<script src="~/js/Product.js"></script>

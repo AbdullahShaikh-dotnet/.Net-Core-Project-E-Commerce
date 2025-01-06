@@ -6,19 +6,24 @@ using Microsoft.AspNetCore.Identity;
 using E_Commerce.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ECom.Utility;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+string pcName = Environment.MachineName;
+string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
+string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
+
 builder.Services.AddDbContext<ApplicationDbContext>
-    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    (options => options.UseSqlServer(ConnectionString));
 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
 
 
 builder.Services.ConfigureApplicationCookie(option =>
