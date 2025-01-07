@@ -6,9 +6,12 @@ let DT;
 
 const LoadDataTables = function () {
     const tableElement = document.querySelector('.tblData');
-    const url = tableElement.dataset?.url;
+    const RootPath = tableElement.dataset?.root;
+    const GetURL = RootPath + tableElement.dataset?.geturl;
+    const EditURL = RootPath + tableElement.dataset?.editurl;
+    const DeleteURL = RootPath + tableElement.dataset?.deleteurl;
     DT = new DataTable(tableElement, {
-        ajax: { url },
+        ajax: { url: GetURL },
         columns: [
             {
                 title: 'Sr. No.',
@@ -47,12 +50,12 @@ const LoadDataTables = function () {
                 render: function (d) {
                     return `
                     	<div class="btn-group d-flex justify-content-center" role="group">
-							<a class="mx-4 " href="/admin/product/Upsert?id=${d}">
+							<a class="mx-4 " href="${ EditURL + d}">
 								<i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
 							</a>
 
                             <i class="text-danger mx-4 bi bi-trash fs-4 btnDelete"
-                            data-url='/admin/product/Delete?id=${d}' style="cursor: pointer"></i>
+                            data-url='${ DeleteURL+ d }' style="cursor: pointer"></i>
 						</div>
                     `;
                 },
@@ -78,12 +81,12 @@ const LoadDataTables = function () {
 
 const DeleteConfirmation = function (url) {
     Swal.fire({
-        title: "Are you sure?",
+        title: "Are you sure ?",
         text: "You won't be able to revert this!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
         confirmButtonText: "Yes, delete it!"
     }).then((result) => {
         if (!result.isConfirmed) return;

@@ -46,7 +46,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                 product = new Product()
             };
 
-            if (id == 0 || id == null)
+            if (id == 0 || id is null)
                 return View(productViewModel);
 
             productViewModel.product = _UnitOfWork.Product.Get(data => data.Id == id);
@@ -59,7 +59,7 @@ namespace E_Commerce.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                if (file != null)
+                if (file is not null)
                 {
                     string wwwRootPath = _webHostEnvironment.WebRootPath;
                     string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);

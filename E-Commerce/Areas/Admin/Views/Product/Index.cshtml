@@ -14,7 +14,11 @@
 	</div>
 </div>
 
-<table class="table table-bordered shadow-sm tblData border-1 rounded-2" data-url="/admin/product/getall"></table>
+<table class="table table-bordered shadow-sm tblData border-1 rounded-2" 
+	data-Root="/admin/product/" 
+	data-GetURL="getall"
+	data-DeleteURL="Delete?id="
+	data-EditURL="Upsert?id="></table>
 
 @section Scripts {
 	<script src="~/js/Product.js"></script>
