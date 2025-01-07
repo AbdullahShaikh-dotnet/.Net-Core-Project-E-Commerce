@@ -17,5 +17,7 @@ namespace ECom.Models
         public string? State { get; set; }
         public string? PostalCode { get; set; }
         public string? PhoneNumber { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }
