@@ -14,7 +14,7 @@
     <input type="hidden" asp-for="product.Id" />
     <input type="hidden" asp-for="product.ImageURL" />
     <div class="row">
-        <div class="@(Model.product.Id == 0 ? "col-md-12" : "col-md-10")">
+        <div class="@(string.IsNullOrEmpty(Model.product.ImageURL) ? "col-md-12" : "col-md-10")">
             <div class="border rounded-2 shadow p-3 mt-2">
                 <div class="row">
                     <div class="col-md-12">
@@ -128,14 +128,11 @@
                 </div>
             </div>
         </div>
-        @if (!string.IsNullOrEmpty(Model.product.ImageURL))
-        {
-            <div class="col-md-2">
-                <div class="border shadow p-3 mt-2 rounded-2">
-                    <img src="@Model.product.ImageURL" class="object-fit-contain h-auto w-100 rounded-2" />
-                </div>
+        <div class="col-md-2 @(string.IsNullOrEmpty(Model.product.ImageURL) ? "d-none" : "")">
+            <div class="border shadow p-3 mt-2 rounded-2">
+                <img src="@Model.product.ImageURL" class="object-fit-contain h-auto w-100 rounded-2" />
             </div>
-        }
+        </div>
     </div>
 
 </form>
