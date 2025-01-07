@@ -1,0 +1,23 @@
+﻿
+<div class="container-fluid mb-2">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Company List</h2>
+		</div>
+		<div class="col-6 text-end">
+			<a asp-controller="Company" asp-action="Upsert" class="btn btn-sm btn-outline-primary rounded-2 border-1">
+				<i class="fs-6 bi bi-plus-circle px-1"></i>Create Company
+			</a>
+		</div>
+	</div>
+</div>
+
+<table class="table table-bordered shadow-sm tblData border-1 rounded-2" 
+	data-Root="/admin/company/" 
+	data-GetURL="getall"
+	data-DeleteURL="Delete?id="
+	data-EditURL="Upsert?id="></table>
+
+@section Scripts {
+	<script src="~/js/Company.js"></script>
+}

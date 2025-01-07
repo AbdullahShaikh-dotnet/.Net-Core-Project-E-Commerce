@@ -1,0 +1,82 @@
+﻿@model Company
+
+
+<div class="container">
+    <div class="row pt-4">
+        <div class="col-md-6">
+            <h2 class="text-primary">@(Model.ID != 0 ? "Update" : "Create") Company</h2>
+        </div>
+    </div>
+</div>
+
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.ID" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="border rounded-2 shadow p-3 mt-2">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3 p-1">
+                            <label asp-for="@Model.Name" class="p-0"></label>
+                            <input asp-for="@Model.Name" class="form-control rounded-2" type="text" />
+                            <span class="fs-6 text-danger" asp-validation-for="@Model.Name"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3 p-1">
+                            <label asp-for="@Model.PhoneNumber" class="p-0"></label>
+                            <input asp-for="@Model.PhoneNumber" class="form-control rounded-2" type="text" />
+                            <span class="fs-6 text-danger" asp-validation-for="@Model.PhoneNumber"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3 p-1">
+                            <label asp-for="@Model.StreetAddress" class="p-0"></label>
+                            <input asp-for="@Model.StreetAddress" class="form-control rounded-2" rows="2" maxlength="500" type="text" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3 p-1">
+                            <label asp-for="@Model.City" class="p-0"></label>
+                            <input asp-for="@Model.City" class="form-control rounded-2" type="text" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3 p-1">
+                            <label asp-for="@Model.State" class="p-0"></label>
+                            <input asp-for="@Model.State" class="form-control rounded-2" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between">
+                    <div class="col-6">
+                        <a asp-controller="Company" asp-action="Index" class="btn btn-secondary btn-sm border rounded-2">
+                            <i class="fs-6 p-1 bi bi-arrow-return-left"></i>
+                            Back to List
+                        </a>
+                    </div>
+                    <div class="col-6 text-end">
+                        @if (Model.ID == 0)
+                        {
+                            <button class="btn btn-secondary border-black border-1 btn-sm border clearBtn rounded-2" type="reset">Clear</button>
+                            <button class="btn btn-sm btn-primary rounded-2" type="submit">Create</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-primary rounded-2" type="submit">Update</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial"></partial>
+    }
+}
