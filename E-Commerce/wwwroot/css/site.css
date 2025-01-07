@@ -69,6 +69,27 @@ div.dt-processing > div:last-child > div {
     margin: 0 5px;
 }
 
+
+.rounded-table {
+    border-radius: 10px; /* Rounds the outer corners of the table */
+    overflow: hidden; /* Ensures the content inside the table does not overflow the rounded corners */
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6; /* This ensures that the table still has borders between cells */
+}
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-bordered td {
+        border-bottom: none;
+    }
+
+
+
+
 ::-webkit-scrollbar {
     width: 12px;
     height: 10px;
