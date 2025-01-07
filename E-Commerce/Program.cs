@@ -7,6 +7,7 @@ using E_Commerce.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ECom.Utility;
 using Microsoft.Extensions.Options;
+using ECom.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>
     (options => options.UseSqlServer(ConnectionString));
 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 
