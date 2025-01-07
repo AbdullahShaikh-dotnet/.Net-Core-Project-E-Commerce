@@ -29,13 +29,13 @@
 							<span asp-validation-for="Input.ConfirmPassword" class="text-danger fs-6"></span>
 						</div>
 						<div class="form-floating mb-3">
-							<select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select rounded-2">
+							<select id="selectRole" asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select rounded-2">
 								<option disabled selected>Select Role</option>
 							</select>
 						</div>
 
 						<div class="form-floating mb-3">
-							<select asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList" class="form-select rounded-2">
+							<select id="selectCompany" asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList" class="form-select rounded-2 d-none">
 								<option disabled selected>Select Company</option>
 							</select>
 						</div>
@@ -124,5 +124,21 @@
 </div>
 
 @section Scripts {
+	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			const RoleDropdown = document.getElementById('selectRole');
+			const CompanyDropdown = document.getElementById('selectCompany');
+			if(!CompanyDropdown || !RoleDropdown) return;
+
+			RoleDropdown.addEventListener('change', function(){
+				if (this.value !== 'Company') {
+					CompanyDropdown.classList.add('d-none');
+				}
+				else {
+					CompanyDropdown.classList.remove('d-none');
+				}
+			})
+		})
+	</script>
 	<partial name="_ValidationScriptsPartial" />
 }
