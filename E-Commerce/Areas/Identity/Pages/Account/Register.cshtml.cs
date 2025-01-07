@@ -180,7 +180,10 @@ namespace E_Commerce.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.PostalCode = Input.PostalCode;
 
-
+                if(Input.Role == SD.Role_Company)
+                {
+                    user.CompanyID = Input.CompanyID;
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
