@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Areas.Customer.Controllers
@@ -33,8 +35,32 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _unitOfWork.Product
                 .Get(data => data.Id == ProductID, includePropertiesList: "Category");
 
-            return View(Product);
+            ShoppingCart shoppingCart = new ShoppingCart()
+            {
+                product = Product,
+                ProductID = ProductID,
+                Count = 1
+            };
+
+            return View(shoppingCart);
         }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var UserClaims = (ClaimsIdentity)User.Identity;
+            var Userid = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            shoppingCart.ApplicationUserID = Userid;
+
+            _unitOfWork.ShoppingCarts.Add(shoppingCart);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         public IActionResult Privacy()
         {
