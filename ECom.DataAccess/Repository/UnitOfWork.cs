@@ -13,8 +13,8 @@ namespace ECom.DataAccess.Repository
         private readonly ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
         public IProductRepository Product { get; private set; }
-
         public ICompanyRepository Company { get; private set; }
+        public IShoppingCart ShoppingCarts { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -22,6 +22,7 @@ namespace ECom.DataAccess.Repository
             Category = new CategoryRepository(_db);
             Product = new ProductRepository(_db);
             Company = new CompanyRepository(_db);
+            ShoppingCarts = new ShoppingCartRepository(_db);
         }
 
         public void Save()
