@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using E_Commerce.DataAccess.Data;
 using ECom.DataAccess.Repository.IRepository;
+using ECom.Models;
 
 namespace ECom.DataAccess.Repository
 {
@@ -15,6 +16,7 @@ namespace ECom.DataAccess.Repository
         public IProductRepository Product { get; private set; }
         public ICompanyRepository Company { get; private set; }
         public IShoppingCart ShoppingCarts { get; private set; }
+        public IApplicationUserRepository ApplicationUsers { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -23,6 +25,7 @@ namespace ECom.DataAccess.Repository
             Product = new ProductRepository(_db);
             Company = new CompanyRepository(_db);
             ShoppingCarts = new ShoppingCartRepository(_db);
+            ApplicationUsers = new ApplicationUserRepository(_db);
         }
 
         public void Save()
