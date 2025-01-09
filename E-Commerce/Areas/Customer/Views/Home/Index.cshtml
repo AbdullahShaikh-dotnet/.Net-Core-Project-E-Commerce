@@ -5,21 +5,24 @@
     {
         <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
             <div class="card h-100 shadow-sm border-light rounded-2">
-                @if (string.IsNullOrEmpty(product.ImageURL))
-                {
-                    <div class="card-img-top rounded-2 d-flex justify-content-center align-items-center rounded-bottom-0" style="height: 200px; background-color: #f0f0f0; color: #777; font-size: 1.2rem;">
-                        No Media Available
-                    </div>
-                }
-                else
-                {
-                    <img src="@product.ImageURL" class="card-img-top rounded-2 rounded-bottom-0" alt="Product Image" style="object-fit: cover; height: 200px;">
-                }
+                <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="text-decoration-none">
+                    @if (string.IsNullOrEmpty(product.ImageURL))
+                    {
+                        <div class="card-img-top rounded-2 d-flex justify-content-center align-items-center rounded-bottom-0" style="height: 200px; background-color: #f0f0f0; color: #777; font-size: 1.2rem;">
+                            No Media Available
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@product.ImageURL" class="card-img-top rounded-2 rounded-bottom-0" alt="Product Image" style="object-fit: cover; height: 200px;">
+                    }
+                </a>
 
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title text-truncate">@product.Title</h5>
                     <p class="card-text text-muted text-truncate" style="font-size: 0.9rem;">
-                        Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                    </p>
                     <div class="mt-auto">
                         <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="btn btn-primary w-100 btn-sm rounded-2">Details</a>
                     </div>
