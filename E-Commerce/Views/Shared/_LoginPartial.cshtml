@@ -5,28 +5,55 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="navbar-nav">
-	@if (SignInManager.IsSignedIn(User))
-	{
-		var currentUser = await UserManager.GetUserAsync(User);
-		var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = await UserManager.GetUserAsync(User);
+        var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
 
+        <li class="nav-item mx-2">
+            <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="bi bi-person-circle"></i>
+                Hello @Username!
+            </a>
+        </li>
+        <li class="nav-item mx-2">
+            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                <i class="bi bi-cart-fill"></i>
+                Cart
+            </a>
+        </li>
+        <li class="nav-item mx-2">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link border-0">
+                    Logout
+                    <i class="bi bi-caret-right-fill"></i>
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
 
-		<li class="nav-item">
-			<a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @Username!</a>
-		</li>
-		<li class="nav-item">
-			<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button id="logout" type="submit" class="nav-link btn btn-link border-0">Logout</button>
-			</form>
-		</li>
-	}
-	else
-	{
-		<li class="nav-item">
-			<a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-		</li>
-	}
+        <li class="nav-item dropdown mx-5">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i>
+                Login
+            </a>
+            <ul class="dropdown-menu rounded-2 shadow-sm" style="left: -20px !important;">
+                <li>
+                    <a class="dropdown-item fw-bold" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <i class="bi bi-person-circle fs-4 px-2"></i>
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item fw-bold" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <i class="bi bi-person-plus-fill fs-4 px-2"></i>
+                        Register
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+    }
 </ul>
