@@ -27,7 +27,8 @@ namespace E_Commerce.Areas.Customer.Controllers
 
             _shoppingCartVM = new()
             {
-                shoppingCartsList = _unitOfWork.ShoppingCarts.GetAll(Sdata => Sdata.ApplicationUserID == UserID, includePropertiesList: "product"),
+                shoppingCartsList = _unitOfWork.ShoppingCarts
+                .GetAll(Sdata => Sdata.ApplicationUserID == UserID && !Sdata.IsDeleted, includePropertiesList: "product"),
                 shoppingCartTotal = 0.0
             };
 
@@ -41,6 +42,54 @@ namespace E_Commerce.Areas.Customer.Controllers
             return View(_shoppingCartVM);
         }
 
+
+        public IActionResult CartPlus(int CartID)
+        {
+            var CartFromDB = _unitOfWork.ShoppingCarts.Get(data => data.ID == CartID && !data.IsDeleted);
+            if (CartFromDB is null) return RedirectToAction(nameof(Index));
+
+            CartFromDB.Count += 1;
+
+            _unitOfWork.ShoppingCarts.Update(CartFromDB);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult CartMinus(int CartID)
+        {
+            var CartFromDB = _unitOfWork.ShoppingCarts.Get(data => data.ID == CartID && !data.IsDeleted);
+            if (CartFromDB is null) return RedirectToAction(nameof(Index));
+
+
+            if (CartFromDB.Count <= 1)
+            {
+                CartFromDB.DeletedAt = DateTime.Now;
+                CartFromDB.IsDeleted = true;
+            }
+            else
+            {
+                CartFromDB.Count -= 1;
+            }
+
+            _unitOfWork.ShoppingCarts.Update(CartFromDB);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult CartRemove(int CartID)
+        {
+            var CartFromDB = _unitOfWork.ShoppingCarts.Get(data => data.ID == CartID && !data.IsDeleted);
+            if (CartFromDB is null) return RedirectToAction(nameof(Index));
+
+            CartFromDB.DeletedAt = DateTime.Now;
+            CartFromDB.IsDeleted = true;
+            _unitOfWork.ShoppingCarts.Update(CartFromDB);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
+        }
 
         private double GetPriceBasedOnCount(ShoppingCart shoppingCart)
         {

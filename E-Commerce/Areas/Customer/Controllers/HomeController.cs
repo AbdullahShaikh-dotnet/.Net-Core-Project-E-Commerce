@@ -54,7 +54,7 @@ namespace E_Commerce.Areas.Customer.Controllers
             var Userid = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var ShoppingCart_TableData = _unitOfWork.ShoppingCarts?
-                .Get(cart => cart.ProductID == shoppingCart.ProductID && cart.ApplicationUserID == Userid);
+                .Get(cart => cart.ProductID == shoppingCart.ProductID && cart.ApplicationUserID == Userid && !cart.IsDeleted);
 
             if (ShoppingCart_TableData is null)
             {

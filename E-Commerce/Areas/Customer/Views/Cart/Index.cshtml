@@ -54,18 +54,20 @@
                                 </div>
                                 <div class="col-6 col-md-5 pt-1">
                                     <div class="btn-group w-100" role="group">
-                                        <button type="button" class="btn border-1 btn-outline-primary btn-sm py-2 mx-1">
+                                        <a asp-action="CartPlus" asp-route-CartID="@cart.ID" type="button" 
+                                                class="btn border-1 btn-outline-primary btn-sm py-2 mx-1">
                                             <i class="bi bi-plus-lg fs-6"></i>
-                                        </button>
-                                        <button type="button" class="btn border-1 btn-outline-primary btn-sm py-2">
+                                        </a>
+                                        <a asp-action="CartMinus" asp-route-CartID="@cart.ID" type="button"
+                                                class="btn border-1 btn-outline-primary btn-sm py-2">
                                             <i class="bi bi-dash-lg fs-6"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-3 pt-1">
-                                    <button type="button" class="btn btn-danger btn-sm w-100">
+                                    <a asp-action="CartRemove" asp-route-CartID="@cart.ID" type="button" class="btn btn-danger btn-sm w-100">
                                         <i class="bi bi-trash-fill fs-5"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
