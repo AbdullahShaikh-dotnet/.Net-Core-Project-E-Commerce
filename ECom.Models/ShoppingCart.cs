@@ -34,5 +34,8 @@ namespace ECom.Models
 
         [ValidateNever]
         public DateTime? DeletedAt { get; set; }
+
+        [NotMapped]
+        public double ShoppingCartPrice { get; set; }
     }
 }

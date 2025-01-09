@@ -2,18 +2,56 @@ using System.Diagnostics;
 using System.Security.Claims;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using ECom.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class CartController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
+        public ShoppingCartVM _shoppingCartVM { get; set; }
+
+        public CartController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var UserClaims = (ClaimsIdentity)User.Identity;
+            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            _shoppingCartVM = new()
+            {
+                shoppingCartsList = _unitOfWork.ShoppingCarts.GetAll(Sdata => Sdata.ApplicationUserID == UserID, includePropertiesList: "product"),
+                shoppingCartTotal = 0.0
+            };
+
+            double CartTotal = 0;
+            foreach (var cart in _shoppingCartVM.shoppingCartsList)
+            {
+                cart.ShoppingCartPrice = GetPriceBasedOnCount(cart);
+                CartTotal += (cart.ShoppingCartPrice * cart.Count);
+            }
+            _shoppingCartVM.shoppingCartTotal = CartTotal;
+            return View(_shoppingCartVM);
         }
+
+
+        private double GetPriceBasedOnCount(ShoppingCart shoppingCart)
+        {
+            return shoppingCart.Count switch
+            {
+                <= 50 => shoppingCart.product.Price,
+                <= 100 => shoppingCart.product.Price50,
+                _ => shoppingCart.product.Price100
+            };
+        }
+
 
     }
 }

@@ -38,9 +38,13 @@ namespace ECom.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(string? includePropertiesList = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includePropertiesList = null)
         {
             IQueryable<T> query = dbset;
+            if (filter is not null)
+            {
+                query = query.Where(filter);
+            }
             if (string.IsNullOrEmpty(includePropertiesList))
                 return query.ToList();
 
