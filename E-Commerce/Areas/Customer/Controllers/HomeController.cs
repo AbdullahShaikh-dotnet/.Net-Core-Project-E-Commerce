@@ -53,11 +53,21 @@ namespace E_Commerce.Areas.Customer.Controllers
             var UserClaims = (ClaimsIdentity)User.Identity;
             var Userid = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            shoppingCart.ApplicationUserID = Userid;
+            var ShoppingCart_TableData = _unitOfWork.ShoppingCarts?
+                .Get(cart => cart.ProductID == shoppingCart.ProductID && cart.ApplicationUserID == Userid);
 
-            _unitOfWork.ShoppingCarts.Add(shoppingCart);
+            if (ShoppingCart_TableData is null)
+            {
+                shoppingCart.ApplicationUserID = Userid;
+                _unitOfWork.ShoppingCarts.Add(shoppingCart);
+            }
+            else
+            {
+                ShoppingCart_TableData.Count += shoppingCart.Count;
+                _unitOfWork.ShoppingCarts.Update(ShoppingCart_TableData);
+            }
+
             _unitOfWork.Save();
-
             return RedirectToAction(nameof(Index));
         }
 
