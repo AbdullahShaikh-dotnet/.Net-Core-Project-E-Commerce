@@ -67,6 +67,8 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _unitOfWork.ShoppingCarts.Update(ShoppingCart_TableData);
             }
 
+            TempData["success"] = "Product Added to Cart Successfully";
+            
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
