@@ -24,9 +24,9 @@ namespace ECom.DataAccess.Repository
             dbset.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includePropertiesList = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includePropertiesList = null, bool tracked = false)
         {
-            IQueryable<T> query = dbset;
+            IQueryable<T> query = tracked ? dbset : dbset.AsNoTracking();
             query = query.Where(filter);
             if (string.IsNullOrEmpty(includePropertiesList))
                 return query.FirstOrDefault();
