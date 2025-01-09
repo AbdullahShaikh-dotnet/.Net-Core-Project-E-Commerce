@@ -115,15 +115,23 @@
                         <div class="row border-bottom pb-3 px-2 px-md-4">
                             <!-- Product Image -->
                             <div class="col-12 col-lg-2 text-center py-2">
-                                <img src="@cart.product.ImageURL" class="rounded img-fluid" alt="Product Image" />
+                                <a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
+                                   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
+                                    <img src="@cart.product.ImageURL" class="rounded img-fluid" alt="Product Image" />
+                                </a>
                             </div>
+
                             <!-- Product Details -->
                             <div class="col-12 col-lg-6 pt-3">
                                 <h5 class="text-uppercase text-secondary">
-                                    <strong>@cart.product.Title</strong>
+                                    <a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
+                                       asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
+                                        <strong>@cart.product.Title</strong>
+                                    </a>
                                 </h5>
                                 <p><small>@Html.Raw(cart.product.Description)</small></p>
                             </div>
+
                             <!-- Product Actions -->
                             <div class="col-12 col-lg-4 text-center row d-flex align-items-center">
                                 <div class="col-6 col-md-4 text-md-right pt-2">
