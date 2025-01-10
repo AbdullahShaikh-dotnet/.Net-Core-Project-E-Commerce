@@ -29,7 +29,7 @@
                             <div class="col-12 col-lg-2 text-center py-2 d-none d-lg-block col-lg-1">
                                 <a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
                                    asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
-                                    <img src="@cart.product.ImageURL" class="rounded img-fluid" alt="Product Image" />
+                                    <img src="@cart.product.ImageURL" class="rounded ratio ratio-21x9" width="100%" alt="Product Image" />
                                 </a>
                             </div>
 
@@ -89,7 +89,8 @@
                     </div>
                     <div class="row justify-content-end">
                         <div class="col-md-2">
-                            <a href="#" class="btn btn-primary border-0 bg-gradient w-100 py-2">Summary</a>
+                            <a asp-action="Summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">
+                                Summary</a>
                         </div>
                     </div>
                 </div>

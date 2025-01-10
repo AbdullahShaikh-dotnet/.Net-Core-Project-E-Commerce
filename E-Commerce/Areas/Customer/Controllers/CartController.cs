@@ -91,6 +91,12 @@ namespace E_Commerce.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        public IActionResult Summary()
+        {
+            return View();
+        }
+
         private double GetPriceBasedOnCount(ShoppingCart shoppingCart)
         {
             return shoppingCart.Count switch

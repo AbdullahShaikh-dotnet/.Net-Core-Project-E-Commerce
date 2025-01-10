@@ -1,0 +1,123 @@
+﻿
+<div class="container">
+	<div class="row pt-4">
+		<div class="col-md-3">
+			<h2 class="text-primary">Cart Summary</h2>
+		</div>
+	</div>
+</div>
+
+<form method="post">
+	<div class="row">
+		<div class="col-12">
+			<div class="border rounded-2 shadow-sm p-3 mt-2">
+				<div class="row mb-3 pb-3">
+					<div class="col-12 col-md-3 mb-2 mt-4">
+						<a asp-action="Index" class="btn btn-secondary btn-sm border w-100 float-start">
+							<i class="fs-6 p-1 bi bi-arrow-return-left"></i>
+							Back to Cart
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="container rounded p-2">
+						<div class="row">
+							<div class="col-12 col-lg-6 pb-4">
+								<div class="row">
+									<h4 class="d-flex justify-content-between align-items-center mb-3">
+										<span>Shipping Details</span>
+									</h4>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>Name</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>Phone</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>Street Address</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>City</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>State</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">
+										<label>Postal Code</label>
+									</div>
+									<div class="col-9">
+										<input class="form-control" />
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-lg-5 offset-lg-1">
+								<h4 class="d-flex justify-content-between align-items-center mb-3">
+									<span>Order Summary</span>
+								</h4>
+								<ul class="list-group mb-3">
+									<li class="list-group-item d-flex justify-content-between rounded-2">
+										<div>
+											<h6 class="my-0">Title</h6>
+											<small class="text-muted">Quantity: Count</small>
+										</div>
+										<span class="text-muted">Price * Count </span>
+									</li>
+
+
+									<li class="list-group-item d-flex justify-content-between bg-white rounded-2 mt-5 border">
+										<small class="fw-bold">Total (INR)</small>
+										<strong>$$</strong>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="row">
+						<div class="col-12 col-md-8 pt-2">
+							<p class="text-danger fs-5">
+								Estimate Arrival Date:
+							</p>
+						</div>
+						<div class="col-12 col-md-4">
+							<button type="submit" value="Place Order"
+									class="btn btn-outline-primary border-1 border-secondary shadow-sm rounded-2
+									form-control transition-transform transform hover:scale-105 hover:shadow-lg">
+								<i class="bi bi-cart-check fs-4 px-2"></i>
+								Place Order
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
