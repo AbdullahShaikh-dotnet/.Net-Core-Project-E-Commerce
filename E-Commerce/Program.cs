@@ -8,8 +8,28 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using ECom.Utility;
 using Microsoft.Extensions.Options;
 using ECom.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// Added Serilog Logger
+//Log.Logger = new LoggerConfiguration()
+//    .Enrich.FromLogContext()                          // Adds contextual information to logs
+//    .Enrich.WithProperty("Application", "E-Commerce")      // Adds custom property to logs
+//    .WriteTo.Console()                                // Logs to console
+//    .WriteTo.File("logs/warning-log.txt",             // Logs warnings and above to this file
+//                  rollingInterval: RollingInterval.Day,
+//                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
+//    .WriteTo.File("logs/error-log.txt",               // Logs errors and above to this file
+//                  rollingInterval: RollingInterval.Day,
+//                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+//    .CreateLogger();
+
+//builder.Host.UseSerilog();
+builder.Host.UseSerilog((context, services, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
