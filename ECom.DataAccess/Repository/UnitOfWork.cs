@@ -34,7 +34,19 @@ namespace ECom.DataAccess.Repository
 
         public void Save()
         {
-            _db.SaveChanges();
+            using (var transaction = _db.Database.BeginTransaction())
+            {
+                try
+                {
+                    _db.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
         }
     }
 }

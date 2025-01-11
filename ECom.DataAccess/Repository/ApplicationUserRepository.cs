@@ -17,5 +17,10 @@ namespace ECom.DataAccess.Repository
         {
             _db = db;
         }
+
+        public void Update(ApplicationUser ApplicationUserObject)
+        {
+            _db.ApplicationUsers.Update(ApplicationUserObject);
+        }
     }
 }
