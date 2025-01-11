@@ -142,7 +142,14 @@ namespace E_Commerce.Areas.Customer.Controllers
             _shoppingCartVM.orderHeader.ApplicationUserID = UserID;
             _shoppingCartVM.orderHeader.OrderDate = DateTime.Now;
 
-            _shoppingCartVM.orderHeader._ApplicationUser = _unitOfWork.ApplicationUsers.Get(Userdata => Userdata.Id == UserID);
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUsers.Get(user => user.Id == UserID);
+            applicationUser.PhoneNumber ??= _shoppingCartVM.orderHeader.PhoneNumber;
+            applicationUser.StreetAddress ??= _shoppingCartVM.orderHeader.StreetAddress;
+            applicationUser.City ??= _shoppingCartVM.orderHeader.City;
+            applicationUser.State ??= _shoppingCartVM.orderHeader.State;
+            applicationUser.PostalCode ??= _shoppingCartVM.orderHeader.PostalCode;
+
+            _unitOfWork.ApplicationUsers.Update(applicationUser);
 
             double CartTotal = 0;
             foreach (var cart in _shoppingCartVM.shoppingCartsList)
@@ -152,13 +159,13 @@ namespace E_Commerce.Areas.Customer.Controllers
             }
             _shoppingCartVM.orderHeader.OrderTotal = CartTotal;
 
-            bool isCustomerUser = _shoppingCartVM.orderHeader._ApplicationUser.CompanyID.GetValueOrDefault() == 0;
-            if (isCustomerUser)
+            bool isCustomer = applicationUser.CompanyID.GetValueOrDefault() == 0;
+            if (isCustomer)
             {
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Pending;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Pending;
             }
-            else
+            else // Company User
             {
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Delayed_Payment;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Approved;
@@ -167,22 +174,34 @@ namespace E_Commerce.Areas.Customer.Controllers
             _unitOfWork.OrderHeaders.Add(_shoppingCartVM.orderHeader);
             _unitOfWork.Save();
 
+            int OrderID = _shoppingCartVM.orderHeader.ID;
 
-            foreach(var cart in _shoppingCartVM.shoppingCartsList)
+            foreach (var cart in _shoppingCartVM.shoppingCartsList)
             {
                 OrderDetail Orderdetails = new()
                 {
                     ProductID = cart.ProductID,
                     Price = cart.ShoppingCartPrice,
-                    OrderHeaderID = _shoppingCartVM.orderHeader.ID,
+                    OrderHeaderID = OrderID,
                     Count = cart.Count,
                 };
                 _unitOfWork.OrderDetails.Add(Orderdetails);
                 _unitOfWork.Save();
             }
-            return View(_shoppingCartVM);
+
+            if (isCustomer)
+            {
+
+            }
+
+            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = OrderID });
         }
 
+
+        public IActionResult OrderConfirmation(int OrderID)
+        {
+            return View(OrderID);
+        }
 
 
         private double GetPriceBasedOnCount(ShoppingCart shoppingCart)

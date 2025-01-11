@@ -34,8 +34,8 @@
 										<label>Name</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.Name" />
-										<span asp-validation-for="@Model.orderHeader.Name"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.Name" type="text" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.Name"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -43,8 +43,8 @@
 										<label>Phone</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.PhoneNumber" />
-										<span asp-validation-for="@Model.orderHeader.PhoneNumber"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.PhoneNumber" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.PhoneNumber"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -52,8 +52,8 @@
 										<label>Street Address</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.StreetAddress" />
-										<span asp-validation-for="@Model.orderHeader.StreetAddress"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.StreetAddress" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.StreetAddress"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -61,8 +61,8 @@
 										<label>City</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.City" />
-										<span asp-validation-for="@Model.orderHeader.City"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.City" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.City"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -70,8 +70,8 @@
 										<label>State</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.State" />
-										<span asp-validation-for="@Model.orderHeader.State"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.State" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.State"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -79,8 +79,8 @@
 										<label>Postal Code</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control rounded-2" asp-for="@Model.orderHeader.PostalCode" />
-										<span asp-validation-for="@Model.orderHeader.PostalCode"></span>
+										<input class="form-control rounded-2" asp-for="orderHeader.PostalCode" />
+										<span class="fs-6 text-danger" asp-validation-for="orderHeader.PostalCode"></span>
 									</div>
 								</div>
 							</div>
@@ -99,8 +99,6 @@
 											<span class="text-muted">@((item.product.Price * item.Count).ToString("C"))</span>
 										</li>
 									}
-
-
 									<li class="list-group-item d-flex justify-content-between bg-white mt-5 border">
 										<small class="fw-bold">Total (INR)</small>
 										<strong>@Model.orderHeader.OrderTotal.ToString("C")</strong>
@@ -134,3 +132,10 @@
 		</div>
 	</div>
 </form>
+
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial"></partial>
+	}
+}
