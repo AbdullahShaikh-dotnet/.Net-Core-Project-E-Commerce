@@ -1,8 +1,9 @@
-﻿
+﻿@model ShoppingCartVM
+
 <div class="container">
 	<div class="row pt-4">
 		<div class="col-md-3">
-			<h2 class="text-primary">Cart Summary</h2>
+			<h2 class="text-primary">Order Summary</h2>
 		</div>
 	</div>
 </div>
@@ -33,7 +34,8 @@
 										<label>Name</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.Name" />
+										<span asp-validation-for="@Model.orderHeader.Name"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -41,7 +43,8 @@
 										<label>Phone</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.PhoneNumber" />
+										<span asp-validation-for="@Model.orderHeader.PhoneNumber"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -49,7 +52,8 @@
 										<label>Street Address</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.StreetAddress" />
+										<span asp-validation-for="@Model.orderHeader.StreetAddress"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -57,7 +61,8 @@
 										<label>City</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.City" />
+										<span asp-validation-for="@Model.orderHeader.City"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -65,7 +70,8 @@
 										<label>State</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.State" />
+										<span asp-validation-for="@Model.orderHeader.State"></span>
 									</div>
 								</div>
 								<div class="row my-1">
@@ -73,7 +79,8 @@
 										<label>Postal Code</label>
 									</div>
 									<div class="col-9">
-										<input class="form-control" />
+										<input class="form-control rounded-2" asp-for="@Model.orderHeader.PostalCode" />
+										<span asp-validation-for="@Model.orderHeader.PostalCode"></span>
 									</div>
 								</div>
 							</div>
@@ -82,18 +89,21 @@
 									<span>Order Summary</span>
 								</h4>
 								<ul class="list-group mb-3">
-									<li class="list-group-item d-flex justify-content-between rounded-2">
-										<div>
-											<h6 class="my-0">Title</h6>
-											<small class="text-muted">Quantity: Count</small>
-										</div>
-										<span class="text-muted">Price * Count </span>
-									</li>
+									@foreach (var item in Model.shoppingCartsList)
+									{
+										<li class="list-group-item d-flex justify-content-between">
+											<div>
+												<h6 class="my-0">@item.product.Title</h6>
+												<small class="text-muted">Quantity: @item.Count</small>
+											</div>
+											<span class="text-muted">@((item.product.Price * item.Count).ToString("C"))</span>
+										</li>
+									}
 
 
-									<li class="list-group-item d-flex justify-content-between bg-white rounded-2 mt-5 border">
+									<li class="list-group-item d-flex justify-content-between bg-white mt-5 border">
 										<small class="fw-bold">Total (INR)</small>
-										<strong>$$</strong>
+										<strong>@Model.orderHeader.OrderTotal.ToString("C")</strong>
 									</li>
 								</ul>
 							</div>
@@ -105,6 +115,9 @@
 						<div class="col-12 col-md-8 pt-2">
 							<p class="text-danger fs-5">
 								Estimate Arrival Date:
+								<span class="fw-bold">
+									@DateTime.Now.AddDays(7).ToString("dd/MM/yyyy") <span class="fw-normal text-primary">to</span> @DateTime.Now.AddDays(14).ToString("dd/MM/yyyy")
+								</span>
 							</p>
 						</div>
 						<div class="col-12 col-md-4">

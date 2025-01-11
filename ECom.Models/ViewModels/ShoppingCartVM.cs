@@ -10,6 +10,7 @@ namespace ECom.Models.ViewModels
     {
         public IEnumerable<ShoppingCart> shoppingCartsList { get; set; }
 
-        public double? shoppingCartTotal { get; set; }
+        public OrderHeader orderHeader { get; set; }
+        //public double? shoppingCartTotal { get; set; }
     }
 }
