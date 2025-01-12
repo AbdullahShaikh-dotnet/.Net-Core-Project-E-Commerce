@@ -27,6 +27,9 @@ namespace ECom.Models
         public string? Carrier { get; set; }
         public DateTime PaymentDate { get; set; }
         public DateOnly PaymentDueDate { get; set; }
+
+
+        public string? SessionId { get; set; }
         public string? PaymentIntendID { get; set; }
 
         [Required]
