@@ -17,7 +17,6 @@ namespace E_Commerce.Areas.Admin.Controllers
             _UnitOfWork = UnitOfWork;
         }
 
-
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -28,7 +27,6 @@ namespace E_Commerce.Areas.Admin.Controllers
 
             return Json(new { data = orderHeaders });
         }
-
 
         public IActionResult Index()
         {

@@ -1,4 +1,31 @@
-﻿
+﻿@{
+	string? Status = Context.Request.Query["status"];
+	var pending = "text-primary";
+	var inprocess = "text-primary";
+	var completed = "text-primary"; 
+	var approved = "text-primary"; 
+	var all = "text-primary";
+	string Active = "shadow-none border-primary-subtle";
+
+	switch (Status)
+	{
+		case "pending":
+			pending = Active;
+			break;
+		case "inprocess":
+			inprocess = Active;
+			break;
+		case "completed":
+			completed = Active;
+			break;
+		case "approved":
+			approved = Active;
+			break;
+		default:
+			all = Active;
+			break;
+	}
+}
 <div class="container-fluid mb-2">
 	<div class="row pt-4">
 		<div class="col-6">
@@ -7,11 +34,35 @@
 	</div>
 </div>
 
+<div class="container-fluid mt-4 mb-5">
+	<div class="row justify-content-end text-center">
+		<div class="col-auto border me-1 rounded-2 shadow-sm @inprocess">
+			<a asp-action="Index" asp-controller="Order" asp-route-status="inprocess" class="fw-bolder text-decoration-none d-block py-1 px-1">In process</a>
+		</div>
+
+		<div class="col-auto border me-1 rounded-2 shadow-sm @pending">
+			<a asp-action="Index" asp-controller="Order" asp-route-status="pending" class="fw-bolder text-decoration-none d-block py-1 px-1">Payment Pending</a>
+		</div>
+
+		<div class="col-auto border me-1 rounded-2 shadow-sm @completed">
+			<a asp-action="Index" asp-controller="Order" asp-route-status="completed" class="fw-bolder text-decoration-none d-block py-1 px-1">Completed</a>
+		</div>
+
+		<div class="col-auto border me-1 rounded-2 shadow-sm @approved">
+			<a asp-action="Index" asp-controller="Order" asp-route-status="approved" class="fw-bolder text-decoration-none d-block py-1 px-1">Approved</a>
+		</div>
+
+		<div class="col-auto border rounded-2 shadow-sm @all">
+			<a asp-action="Index" asp-controller="Order" asp-route-status="all" class="fw-bolder text-decoration-none d-block py-1 px-1 active">All</a>
+		</div>
+	</div>
+</div>
+
+
 <table class="table table-bordered shadow-sm tblData border-0 rounded-table"
 	   data-Root="/admin/order/"
 	   data-GetURL="getall"
-	   data-DeleteURL="Delete?id="
-	   data-EditURL="Upsert?id="></table>
+	   data-EditURL="Details?OrderId="></table>
 
 @section Scripts {
 	<script src="~/js/Order.js"></script>
