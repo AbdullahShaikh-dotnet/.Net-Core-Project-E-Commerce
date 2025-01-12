@@ -13,6 +13,6 @@ namespace ECom.DataAccess.Repository.IRepository
 
         void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
 
-        void UpdatePaymentGatewayID(int id, string sessionID, string? PaymentIntendID);
+        void UpdatePaymentGatewayID(int id, string? sessionID = null, string? PaymentIntendID = null);
     }
 }

@@ -188,21 +188,49 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _unitOfWork.OrderDetails.Add(Orderdetails);
                 _unitOfWork.Save();
             }
-
-            if (isCustomer)
-            {
-
-            }
-
-            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = OrderID });
+            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = OrderID, isCustomer = isCustomer });
         }
 
-
-        public IActionResult OrderConfirmation(int OrderID)
+        public IActionResult OrderConfirmation(int OrderID, bool isCustomer)
         {
+            try
+            {
+                _unitOfWork.OrderHeaders.UpdateStatus(
+                        OrderID, SD.Status_Approved,
+                        isCustomer ? SD.Payment_Status_Approved : SD.Payment_Status_Delayed_Payment
+                    );
+
+                _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(OrderID);
+                DeleteCartDataIfSuccessfull();
+            }
+            catch { }
+
             return View(OrderID);
         }
 
+
+        private void DeleteCartDataIfSuccessfull()
+        {
+            ClaimsIdentity UserClaims = (ClaimsIdentity)User.Identity;
+            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            try
+            {
+                List<ShoppingCart> shoppingCarts = _unitOfWork
+                    .ShoppingCarts.GetAll(cartData => cartData.ApplicationUserID == UserID && !cartData.IsDeleted)
+                    .ToList();
+
+                foreach (var cart in shoppingCarts)
+                {
+                    cart.IsDeleted = true;
+                    cart.DeletedAt = DateTime.Now;
+                    cart.isOrderPlaced = true;
+                    _unitOfWork.ShoppingCarts.Update(cart);
+                }
+                _unitOfWork.Save();
+            }
+            catch { }
+        }
 
         private double GetPriceBasedOnCount(ShoppingCart shoppingCart)
         {

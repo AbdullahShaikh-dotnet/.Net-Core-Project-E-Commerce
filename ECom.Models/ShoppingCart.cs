@@ -37,5 +37,7 @@ namespace ECom.Models
 
         [NotMapped]
         public double ShoppingCartPrice { get; set; }
+
+        public bool isOrderPlaced { get; set; } = false;
     }
 }
