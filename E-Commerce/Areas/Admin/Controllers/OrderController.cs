@@ -6,6 +6,7 @@ using ECom.Models;
 using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {
@@ -14,6 +15,8 @@ namespace E_Commerce.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
+        [BindProperty]
+        public OrderVM orderVM { get; set; }
         public OrderController(IUnitOfWork UnitOfWork)
         {
             _UnitOfWork = UnitOfWork;
@@ -57,12 +60,38 @@ namespace E_Commerce.Areas.Admin.Controllers
 
         public IActionResult Details(int OrderId)
         {
-            OrderVM orderVM = new()
+            orderVM = new()
             {
                 orderHeader = _UnitOfWork.OrderHeaders.Get(data => data.ID == OrderId, includePropertiesList: "_ApplicationUser"),
                 orderDetails = _UnitOfWork.OrderDetails.GetAll(data => data.OrderHeaderID == OrderId, includePropertiesList: "_Product")
             };
             return View(orderVM);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
+        public IActionResult UpdateOrderDetails()
+        {
+            var OrderHeaderDB = _UnitOfWork.OrderHeaders.Get(data => data.ID == orderVM.orderHeader.ID);
+
+            OrderHeaderDB.Name = orderVM.orderHeader.Name;
+            OrderHeaderDB.PhoneNumber = orderVM.orderHeader.PhoneNumber;
+            OrderHeaderDB.StreetAddress = orderVM.orderHeader.StreetAddress;
+            OrderHeaderDB.City = orderVM.orderHeader.City;
+            OrderHeaderDB.State = orderVM.orderHeader.State;
+            OrderHeaderDB.PostalCode = orderVM.orderHeader.PostalCode;
+
+            OrderHeaderDB.Carrier = !string.IsNullOrEmpty(orderVM.orderHeader.Carrier)
+                ? orderVM.orderHeader.Carrier : string.Empty;
+
+            OrderHeaderDB.TrackingNumber = !string.IsNullOrEmpty(orderVM.orderHeader.TrackingNumber)
+            ? orderVM.orderHeader.TrackingNumber : string.Empty;
+
+            _UnitOfWork.OrderHeaders.Update(OrderHeaderDB);
+            _UnitOfWork.Save();
+
+            TempData["success"] = "Order Update Sucessfully";
+            return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderDB.ID });
         }
 
     }

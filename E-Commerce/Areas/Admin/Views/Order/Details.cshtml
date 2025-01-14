@@ -2,6 +2,27 @@
 
 @{
 	bool canEdit = User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee);
+
+	string CssBasedOnStatus = "";
+	string OrderStatus = Model.orderHeader.OrderStatus.ToLower();
+
+	if (OrderStatus == "pending" || OrderStatus == "processing")
+	{
+		CssBasedOnStatus = "border-warning text-warning bg-warning-subtle";
+	}
+	else if (OrderStatus == "approved" || OrderStatus == "Shipped" || OrderStatus == "refunded")
+	{
+		CssBasedOnStatus = $"border-success text-success bg-success-subtle {(OrderStatus == "Shipped" ? "text-muted" : "")}";
+	}
+	else if (OrderStatus == "cancelled")
+	{
+		CssBasedOnStatus = "border-danger text-danger bg-danger-subtle";
+	}
+	else
+	{
+		CssBasedOnStatus = "border-primary text-primary bg-primary-subtle";
+	}
+
 }
 
 <div class="container mb-5">
@@ -18,6 +39,7 @@
 </div>
 
 <form method="post">
+	<input asp-for="orderHeader.ID" type="hidden" />
 	<div class="row">
 		<!-- PickUp Details Section -->
 		<div class="col-12 col-lg-6 mb-4 border rounded-2 p-3 shadow-sm">
@@ -247,7 +269,8 @@
 			</div>
 			@if (canEdit)
 			{
-				<button type="submit" class="btn btn-outline-primary border-1 w-100 d-flex align-items-center justify-content-center btn-sm rounded-2">
+				<button asp-action="UpdateOrderDetails" type="submit"
+						class="btn btn-outline-primary border-1 w-100 d-flex align-items-center justify-content-center btn-sm rounded-2">
 					<i class="bi bi-save me-2 fs-5 px-2"></i>Update Details
 				</button>
 			}
@@ -258,12 +281,12 @@
 			<h4 class="mb-3 text-primary d-flex align-items-center">
 				<i class="bi bi-receipt me-2"></i>Order Summary
 			</h4>
-			<label class="btn btn-outline-primary border-1 rounded-2 w-100 mb-2 d-flex align-items-center justify-content-between">
+			<label class="btn @(CssBasedOnStatus)
+				border-1 rounded-2 w-100 mb-2 d-flex align-items-center justify-content-between">
 				<span>Order Status - @Model.orderHeader.OrderStatus</span>
-				<i class="bi bi-info-circle"></i>
+				<i class="bi bi-info-circle fs-4"></i>
 			</label>
 			<ul class="list-group mb-3">
-
 				@foreach (var detail in Model.orderDetails)
 				{
 					<li class="list-group-item d-flex justify-content-between align-items-center rounded-top-2">
@@ -272,15 +295,12 @@
 							<small class="text-muted fs-6">Price : @detail.Price.ToString("C")</small><br />
 							<small class="text-muted fs-6">Quantity : @detail.Count</small>
 						</div>
-						<p class="text-success mb-0">@((detail.Count * detail.Price).ToString("C"))</p>
+						<p class="mb-0">@((detail.Count * detail.Price).ToString("C"))</p>
 					</li>
 				}
-
-
-
 				<li class="list-group-item d-flex justify-content-between rounded-bottom-2">
 					<span>Total</span>
-					<strong>@Model.orderHeader.OrderTotal.ToString("C")</strong>
+					<strong class="fw-bolder">@Model.orderHeader.OrderTotal.ToString("C")</strong>
 				</li>
 			</ul>
 			<button type="submit" class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
@@ -292,7 +312,8 @@
 			<button type="submit" class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
 				<i class="bi bi-truck me-2 fs-4 px-2"></i>Ship Order
 			</button>
-			<button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center btn-sm rounded border-1 fs-6">
+			<button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center
+				justify-content-center btn-sm rounded border-1 fs-6">
 				<i class="bi bi-x-circle me-2 fs-4 px-2"></i>Cancel Order
 			</button>
 		</div>
