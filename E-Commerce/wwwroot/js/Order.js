@@ -5,9 +5,13 @@
 let DT;
 
 const LoadDataTables = function () {
+    const params = new URLSearchParams(window.location.search);
+    const statusValue = params.get('status');
+
+
     const tableElement = document.querySelector('.tblData');
     const RootPath = tableElement.dataset?.root;
-    const GetURL = RootPath + tableElement.dataset?.geturl;
+    const GetURL = `${RootPath}${tableElement.dataset?.geturl}?Status=${statusValue}`;
     const EditURL = RootPath + tableElement.dataset?.editurl;
     const DeleteURL = RootPath + tableElement.dataset?.deleteurl;
     DT = new DataTable(tableElement, {

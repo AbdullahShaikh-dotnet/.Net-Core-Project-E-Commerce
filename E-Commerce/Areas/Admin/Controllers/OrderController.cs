@@ -1,4 +1,6 @@
-﻿using ECom.DataAccess.Repository;
+﻿using System.Diagnostics;
+using System;
+using ECom.DataAccess.Repository;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility;
@@ -18,12 +20,35 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string Status)
         {
-            List<OrderHeader> orderHeaders = _UnitOfWork
+            IEnumerable<OrderHeader> orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted, includePropertiesList: "_ApplicationUser")
                 .ToList();
+
+
+
+            switch (Status)
+            {
+                case "pending":
+                    orderHeaders = orderHeaders.Where(data => data.PaymentStatus == SD.Payment_Status_Delayed_Payment);
+                    break;
+                case "inprocess":
+                    orderHeaders = orderHeaders.Where(data => data.OrderStatus == SD.Status_In_Process);
+                    break;
+                case "completed":
+                    orderHeaders = orderHeaders.Where(data => data.OrderStatus == SD.Status_Shipped);
+                    break;
+                case "approved":
+                    orderHeaders = orderHeaders.Where(data => data.OrderStatus == SD.Status_Approved);
+                    break;
+                default:
+                    break;
+            }
+
+
+
 
             return Json(new { data = orderHeaders });
         }
