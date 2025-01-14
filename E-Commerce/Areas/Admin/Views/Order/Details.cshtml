@@ -1,0 +1,300 @@
+﻿@model OrderVM
+
+@{
+	bool canEdit = User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee);
+}
+
+<div class="container mb-5">
+	<div class="row pt-4 align-items-center">
+		<div class="col-12 col-md-10">
+			<h2 class="text-primary fw-bold">Order Summary</h2>
+		</div>
+		<div class="col-12 col-md-2 text-md-end">
+			<a asp-action="Index" class="btn btn-secondary btn-sm border rounded-2">
+				<i class="bi bi-arrow-return-left me-1"></i> Back to Orders
+			</a>
+		</div>
+	</div>
+</div>
+
+<form method="post">
+	<div class="row">
+		<!-- PickUp Details Section -->
+		<div class="col-12 col-lg-6 mb-4 border rounded-2 p-3 shadow-sm">
+			<h4 class="mb-3 text-primary d-flex align-items-center">
+				<i class="bi bi-person-circle me-2"></i>PickUp Details
+			</h4>
+
+			<div class="row mb-3">
+				<div class="accordion" id="Orderaccordion">
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button bg-transparent border-1 border-black" type="button" data-bs-toggle="collapse" data-bs-target="#PersonalDetails" aria-expanded="true" aria-controls="collapseOne">
+								Personal Details
+							</button>
+						</h2>
+						<div id="PersonalDetails" class="accordion-collapse collapse" data-bs-parent="#Orderaccordion">
+							<div class="accordion-body">
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Name</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="@Model.orderHeader.Name"
+												   type="text"
+												   class="form-control rounded-2 form-control-sm"
+												   placeholder="Enter your name" />
+											<span asp-validation-for="@Model.orderHeader.Name" class="text-danger"></span>
+										}
+										else
+										{
+											<input asp-for="@Model.orderHeader.Name"
+												   type="text" readonly
+												   class="form-control rounded-2 form-control-sm"
+												   placeholder="Enter your name" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Phone</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.PhoneNumber" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your phone number" />
+											<span asp-validation-for="orderHeader.PhoneNumber"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader.PhoneNumber" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your phone number" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Address</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.StreetAddress" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+											<span asp-validation-for="orderHeader.StreetAddress"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader.StreetAddress" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">City</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.City" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+											<span asp-validation-for="orderHeader.City"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader.City" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">State</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.State" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+											<span asp-validation-for="orderHeader.State"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader.State" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Zip Code</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.PostalCode" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+											<span asp-validation-for="orderHeader.PostalCode"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader.PostalCode" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Email</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader._ApplicationUser.Email" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+											<span asp-validation-for="orderHeader._ApplicationUser.Email"></span>
+										}
+										else
+										{
+											<input asp-for="orderHeader._ApplicationUser.Email" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="accordion-item rounded-2">
+						<h2 class="accordion-header">
+							<button class="accordion-button bg-transparent border-1 border-black" type="button" data-bs-toggle="collapse" data-bs-target="#OrderDetails" aria-expanded="true" aria-controls="collapseOne">
+								Order Details
+							</button>
+						</h2>
+						<div id="OrderDetails" class="accordion-collapse collapse show" data-bs-parent="#Orderaccordion">
+							<div class="accordion-body">
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Order Date</label>
+									<div class="col-12 col-md-8">
+										<input readonly value="@Model.orderHeader.OrderDate.ToShortDateString()" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Carrier</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.Carrier" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+										else
+										{
+											<input asp-for="orderHeader.Carrier" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Tracking</label>
+									<div class="col-12 col-md-8">
+										@if (canEdit)
+										{
+											<input asp-for="orderHeader.TrackingNumber" type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+										else
+										{
+											<input asp-for="orderHeader.TrackingNumber" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										}
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Shipping Date</label>
+									<div class="col-12 col-md-8">
+										<input value="@Model.orderHeader.ShippingDate.ToShortDateString()" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+									</div>
+								</div>
+
+								@if (canEdit)
+								{
+									<div class="row mb-3">
+										<label class="col-12 col-md-4 col-form-label col-form-label-sm">Session ID</label>
+										<div class="col-12 col-md-8">
+											<input value="@Model.orderHeader.SessionId" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										</div>
+									</div>
+
+									<div class="row mb-3">
+										<label class="col-12 col-md-4 col-form-label col-form-label-sm">Payment Intent ID</label>
+										<div class="col-12 col-md-8">
+											<input value="@Model.orderHeader.PaymentIntendID" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										</div>
+									</div>
+								}
+
+								@if (Model.orderHeader.SessionId is null)
+								{
+									<div class="row mb-3">
+										<label class="col-12 col-md-4 col-form-label col-form-label-sm">Payment Due Date</label>
+										<div class="col-12 col-md-8">
+											<input value="@Model.orderHeader.PaymentDueDate.ToShortDateString()" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										</div>
+									</div>
+								}
+								else
+								{
+									<div class="row mb-3">
+										<label class="col-12 col-md-4 col-form-label col-form-label-sm">Payment Date</label>
+										<div class="col-12 col-md-8">
+											<input value="@Model.orderHeader.PaymentDate.ToShortDateString()" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+										</div>
+									</div>
+								}
+
+								<div class="row mb-3">
+									<label class="col-12 col-md-4 col-form-label col-form-label-sm">Payment Status</label>
+									<div class="col-12 col-md-8">
+										<input asp-for="orderHeader.PaymentStatus" readonly type="text" class="form-control rounded-2 form-control-sm" placeholder="Enter your address" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			@if (canEdit)
+			{
+				<button type="submit" class="btn btn-outline-primary border-1 w-100 d-flex align-items-center justify-content-center btn-sm rounded-2">
+					<i class="bi bi-save me-2 fs-5 px-2"></i>Update Details
+				</button>
+			}
+		</div>
+
+		<!-- Order Summary Section -->
+		<div class="col-12 col-lg-5 offset-lg-1 mb-4 p-3">
+			<h4 class="mb-3 text-primary d-flex align-items-center">
+				<i class="bi bi-receipt me-2"></i>Order Summary
+			</h4>
+			<label class="btn btn-outline-primary border-1 rounded-2 w-100 mb-2 d-flex align-items-center justify-content-between">
+				<span>Order Status - @Model.orderHeader.OrderStatus</span>
+				<i class="bi bi-info-circle"></i>
+			</label>
+			<ul class="list-group mb-3">
+
+				@foreach (var detail in Model.orderDetails)
+				{
+					<li class="list-group-item d-flex justify-content-between align-items-center rounded-top-2">
+						<div>
+							<h6 class="text-primary mb-1">@detail._Product.Title</h6>
+							<small class="text-muted fs-6">Price : @detail.Price.ToString("C")</small><br />
+							<small class="text-muted fs-6">Quantity : @detail.Count</small>
+						</div>
+						<p class="text-success mb-0">@((detail.Count * detail.Price).ToString("C"))</p>
+					</li>
+				}
+
+
+
+				<li class="list-group-item d-flex justify-content-between rounded-bottom-2">
+					<span>Total</span>
+					<strong>@Model.orderHeader.OrderTotal.ToString("C")</strong>
+				</li>
+			</ul>
+			<button type="submit" class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+				<i class="bi bi-cash-stack me-2 fs-4 px-2"></i>Pay Now
+			</button>
+			<button type="submit" class="btn btn-outline-primary border-1 w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+				<i class="bi bi-gear me-2 fs-4 px-2"></i>Start Processing
+			</button>
+			<button type="submit" class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+				<i class="bi bi-truck me-2 fs-4 px-2"></i>Ship Order
+			</button>
+			<button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center btn-sm rounded border-1 fs-6">
+				<i class="bi bi-x-circle me-2 fs-4 px-2"></i>Cancel Order
+			</button>
+		</div>
+	</div>
+</form>

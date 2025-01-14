@@ -46,10 +46,6 @@ namespace E_Commerce.Areas.Admin.Controllers
                 default:
                     break;
             }
-
-
-
-
             return Json(new { data = orderHeaders });
         }
 
@@ -57,5 +53,17 @@ namespace E_Commerce.Areas.Admin.Controllers
         {
             return View();
         }
+
+
+        public IActionResult Details(int OrderId)
+        {
+            OrderVM orderVM = new()
+            {
+                orderHeader = _UnitOfWork.OrderHeaders.Get(data => data.ID == OrderId, includePropertiesList: "_ApplicationUser"),
+                orderDetails = _UnitOfWork.OrderDetails.GetAll(data => data.OrderHeaderID == OrderId, includePropertiesList: "_Product")
+            };
+            return View(orderVM);
+        }
+
     }
 }
