@@ -7,11 +7,12 @@ using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    //[Authorize(Roles = SD.Role_Admin )]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
@@ -25,11 +26,25 @@ namespace E_Commerce.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll(string Status)
         {
-            IEnumerable<OrderHeader> orderHeaders = _UnitOfWork
+            IEnumerable<OrderHeader> orderHeaders;
+
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted, includePropertiesList: "_ApplicationUser")
                 .ToList();
+            }
+            else
+            {
+                var UserClaims = (ClaimsIdentity)User.Identity;
+                var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+                orderHeaders = _UnitOfWork
+                .OrderHeaders
+                .GetAll(orderData => !orderData.IsDeleted && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
+                .ToList();
+            }
 
 
             switch (Status)
@@ -49,6 +64,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                 default:
                     break;
             }
+
             return Json(new { data = orderHeaders });
         }
 

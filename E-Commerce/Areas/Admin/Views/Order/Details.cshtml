@@ -2,7 +2,6 @@
 
 @{
 	bool canEdit = User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee);
-
 	string CssBasedOnStatus = "";
 	string OrderStatus = Model.orderHeader.OrderStatus.ToLower();
 
@@ -23,12 +22,15 @@
 		CssBasedOnStatus = "border-primary text-primary bg-primary-subtle";
 	}
 
+	ViewData["Title"] = "Order Summary";
 }
 
+
+@* Header *@
 <div class="container mb-5">
 	<div class="row pt-4 align-items-center">
 		<div class="col-12 col-md-10">
-			<h2 class="text-primary fw-bold">Order Summary</h2>
+			<h2 class="text-primary fw-bold">@ViewData["Title"]</h2>
 		</div>
 		<div class="col-12 col-md-2 text-md-end">
 			<a asp-action="Index" class="btn btn-secondary btn-sm border rounded-2">
@@ -37,6 +39,7 @@
 		</div>
 	</div>
 </div>
+
 
 <form method="post">
 	<input asp-for="orderHeader.ID" type="hidden" />
@@ -287,35 +290,37 @@
 				<i class="bi bi-info-circle fs-4"></i>
 			</label>
 			<ul class="list-group mb-3">
-				@foreach (var detail in Model.orderDetails)
-				{
-					<li class="list-group-item d-flex justify-content-between align-items-center rounded-top-2">
+				<div class="rounded-2 border">
+					@foreach (var detail in Model.orderDetails)
+					{
+					<li class="list-group-item border-0 d-flex justify-content-between align-items-center">
 						<div>
 							<h6 class="text-primary mb-1">@detail._Product.Title</h6>
-							<small class="text-muted fs-6">Price : @detail.Price.ToString("C")</small><br />
-							<small class="text-muted fs-6">Quantity : @detail.Count</small>
+							<small class="p-2 text-muted fs-6">Price : @detail.Price.ToString("C")</small><br />
+							<small class="p-2 text-muted fs-6">Quantity : @detail.Count</small>
 						</div>
-						<p class="mb-0">@((detail.Count * detail.Price).ToString("C"))</p>
+						<p class="mb-0 fs-6">@((detail.Count * detail.Price).ToString("C"))</p>
 					</li>
-				}
-				<li class="list-group-item d-flex justify-content-between rounded-bottom-2">
+					}
+				<li class="list-group-item d-flex justify-content-between border-1 rounded-2 m-2">
 					<span>Total</span>
 					<strong class="fw-bolder">@Model.orderHeader.OrderTotal.ToString("C")</strong>
 				</li>
-			</ul>
-			<button type="submit" class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
-				<i class="bi bi-cash-stack me-2 fs-4 px-2"></i>Pay Now
-			</button>
-			<button type="submit" class="btn btn-outline-primary border-1 w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
-				<i class="bi bi-gear me-2 fs-4 px-2"></i>Start Processing
-			</button>
-			<button type="submit" class="btn btn-primary w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
-				<i class="bi bi-truck me-2 fs-4 px-2"></i>Ship Order
-			</button>
-			<button type="submit" class="btn btn-outline-danger w-100 d-flex align-items-center
-				justify-content-center btn-sm rounded border-1 fs-6">
-				<i class="bi bi-x-circle me-2 fs-4 px-2"></i>Cancel Order
-			</button>
 		</div>
+		</ul>
+		<button type="submit" class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+			<i class="bi bi-cash-stack me-2 fs-4"></i>Pay Now
+		</button>
+		<button type="submit" class="btn btn-outline-info bg-info-subtle text-info border-1 w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+			<i class="bi bi-gear me-2 fs-4"></i>Start Processing
+		</button>
+		<button type="submit" class="btn border-primary text-black border-1 w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+			<i class="bi bi-truck me-2 fs-4"></i>Ship Order
+		</button>
+		<button type="submit" class="btn btn-danger w-100 d-flex align-items-center
+				justify-content-center btn-sm rounded border-1 fs-6">
+			<i class="bi bi-x-circle me-2 fs-4"></i>Cancel Order
+		</button>
+	</div>
 	</div>
 </form>
