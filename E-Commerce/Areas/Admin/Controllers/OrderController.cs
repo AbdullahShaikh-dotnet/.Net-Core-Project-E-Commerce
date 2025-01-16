@@ -28,6 +28,9 @@ namespace E_Commerce.Areas.Admin.Controllers
         {
             IEnumerable<OrderHeader> orderHeaders;
 
+            var UserClaims = (ClaimsIdentity)User.Identity;
+            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
             {
                 orderHeaders = _UnitOfWork
@@ -35,17 +38,17 @@ namespace E_Commerce.Areas.Admin.Controllers
                 .GetAll(orderData => !orderData.IsDeleted, includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
-            else
+            else if(UserID is not null)
             {
-                var UserClaims = (ClaimsIdentity)User.Identity;
-                var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
                 orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
-
+            else
+            {
+                return Json(new { data = new OrderHeader() });
+            }
 
             switch (Status)
             {
