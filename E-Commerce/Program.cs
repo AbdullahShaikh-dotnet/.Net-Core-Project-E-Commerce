@@ -9,6 +9,7 @@ using ECom.Utility;
 using Microsoft.Extensions.Options;
 using ECom.Models;
 using Serilog;
+using Razorpay.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ string pcName = Environment.MachineName;
 string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
 string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
 
+
 builder.Services.AddDbContext<ApplicationDbContext>
     (options => options.UseSqlServer(ConnectionString));
 
@@ -58,6 +60,7 @@ builder.Services.ConfigureApplicationCookie(option =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddSingleton<RazorPayService>();
 
 var app = builder.Build();
 
@@ -76,7 +79,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
-
 
 app.MapControllerRoute(
     name: "default",

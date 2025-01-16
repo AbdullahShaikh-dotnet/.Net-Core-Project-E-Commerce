@@ -13,8 +13,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Razorpay" Version="3.1.4" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\ECom.Models\ECom.Models.csproj" />
+	  <ProjectReference Include="..\ECom.Utility\ECom.Utility.csproj" />
 	</ItemGroup>
 </Project>

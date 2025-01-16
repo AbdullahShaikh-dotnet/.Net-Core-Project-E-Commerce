@@ -6,6 +6,7 @@ using ECom.Models.ViewModels;
 using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Razorpay.Api;
 
 namespace E_Commerce.Areas.Customer.Controllers
 {
@@ -14,13 +15,15 @@ namespace E_Commerce.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private RazorPayService _RazorPayService;
 
         [BindProperty]
         public ShoppingCartVM _shoppingCartVM { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, RazorPayService razorPayService)
         {
             _unitOfWork = unitOfWork;
+            _RazorPayService = razorPayService;
         }
 
         public IActionResult Index()
@@ -164,6 +167,32 @@ namespace E_Commerce.Areas.Customer.Controllers
             {
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Pending;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Pending;
+
+
+
+
+                //foreach (var item in _shoppingCartVM.shoppingCartsList)
+                //{
+                //    var RazorPayOrder = _RazorPayService.CreateOrder((decimal)(item.ShoppingCartPrice * 100));
+                //    var Payment = RazorPayOrder.Payments()?.FirstOrDefault();
+
+                //    if (Payment is not null)
+                //    {
+                //        string PaymentIntentId = Payment["id"];
+                //        string SessionId = RazorPayOrder["id"];
+                //        string signatureID = Payment["razorpay_signature"];
+                //        bool isVerified = _RazorPayService.VerifyPayment(SessionId, PaymentIntentId, signatureID);
+
+                //        if (isVerified)
+                //        {
+                //            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = SessionId, isCustomer });
+                //        }
+                //    }
+                //}
+
+
+
+
             }
             else // Company User
             {
@@ -178,6 +207,34 @@ namespace E_Commerce.Areas.Customer.Controllers
 
             foreach (var cart in _shoppingCartVM.shoppingCartsList)
             {
+
+
+
+
+
+
+                var RazorPayOrder = _RazorPayService.CreateOrder((decimal)(cart.ShoppingCartPrice * 100));
+                var Payment = RazorPayOrder.Payments()?.FirstOrDefault();
+
+                if (Payment is not null)
+                {
+                    string PaymentIntentId = Payment["id"];
+                    string SessionId = RazorPayOrder["id"];
+                    string signatureID = Payment["razorpay_signature"];
+                    bool isVerified = _RazorPayService.VerifyPayment(SessionId, PaymentIntentId, signatureID);
+
+                    if (isVerified)
+                    {
+                        return RedirectToAction(nameof(OrderConfirmation), new { OrderID = SessionId, isCustomer });
+                    }
+                }
+
+
+
+
+
+
+
                 OrderDetail Orderdetails = new()
                 {
                     ProductID = cart.ProductID,
