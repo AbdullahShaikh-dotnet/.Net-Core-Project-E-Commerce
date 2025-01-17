@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using ECom.Models.ViewModels;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {

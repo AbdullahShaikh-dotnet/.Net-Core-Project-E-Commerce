@@ -15,6 +15,7 @@ namespace ECom.DataAccess.Repository.IRepository
         IShoppingCart ShoppingCarts { get; }
         IOrderDetailRepository OrderDetails { get; }
         IOrderHeaderRepository OrderHeaders { get; }
+        IOrderPaymentRepository OrderPayments { get; }
         void Save();
     }
 }

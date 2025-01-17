@@ -19,6 +19,7 @@ namespace ECom.DataAccess.Repository
         public IShoppingCart ShoppingCarts { get; private set; }
         public IOrderHeaderRepository OrderHeaders { get; private set; }
         public IOrderDetailRepository OrderDetails { get; private set; }
+        public IOrderPaymentRepository OrderPayments { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -30,6 +31,7 @@ namespace ECom.DataAccess.Repository
             ShoppingCarts = new ShoppingCartRepository(_db);
             OrderDetails = new OrderDetailRepository(_db);
             OrderHeaders = new OrderHeaderRepository(_db);
+            OrderPayments = new OrderPaymentRepository(_db);
         }
 
         public void Save()

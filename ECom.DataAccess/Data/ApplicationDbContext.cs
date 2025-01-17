@@ -1,4 +1,5 @@
 ﻿using ECom.Models;
+using ECom.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace E_Commerce.DataAccess.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderPayment> OrderPayments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

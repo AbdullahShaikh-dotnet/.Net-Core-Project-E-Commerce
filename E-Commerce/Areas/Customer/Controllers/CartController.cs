@@ -18,6 +18,9 @@ namespace E_Commerce.Areas.Customer.Controllers
         private RazorPayService _RazorPayService;
 
         [BindProperty]
+        public PaymentVM _PaymentVM { get; set; }
+
+        [BindProperty]
         public ShoppingCartVM _shoppingCartVM { get; set; }
 
         public CartController(IUnitOfWork unitOfWork, RazorPayService razorPayService)
@@ -204,37 +207,25 @@ namespace E_Commerce.Areas.Customer.Controllers
             _unitOfWork.Save();
 
             int OrderID = _shoppingCartVM.orderHeader.ID;
+            decimal OrderTotal = (decimal)_shoppingCartVM.orderHeader.OrderTotal;
+            var RazorPayOrder = _RazorPayService.CreateOrder(OrderTotal);
+            string SessionId = RazorPayOrder["id"]; // OrderID
+
+            _PaymentVM = new()
+            {
+                Email = _shoppingCartVM.orderHeader._ApplicationUser.Email,
+                Name = _shoppingCartVM.orderHeader._ApplicationUser.Name,
+                ContactNo = _shoppingCartVM.orderHeader._ApplicationUser.PhoneNumber,
+                Amount = OrderTotal,
+                OrderID = OrderID,
+                razorpay_order_id = SessionId,
+                Description = "Testing Enviroment",
+                Key = _RazorPayService._key,
+            };
+
 
             foreach (var cart in _shoppingCartVM.shoppingCartsList)
             {
-
-
-
-
-
-
-                var RazorPayOrder = _RazorPayService.CreateOrder((decimal)(cart.ShoppingCartPrice * 100));
-                var Payment = RazorPayOrder.Payments()?.FirstOrDefault();
-
-                if (Payment is not null)
-                {
-                    string PaymentIntentId = Payment["id"];
-                    string SessionId = RazorPayOrder["id"];
-                    string signatureID = Payment["razorpay_signature"];
-                    bool isVerified = _RazorPayService.VerifyPayment(SessionId, PaymentIntentId, signatureID);
-
-                    if (isVerified)
-                    {
-                        return RedirectToAction(nameof(OrderConfirmation), new { OrderID = SessionId, isCustomer });
-                    }
-                }
-
-
-
-
-
-
-
                 OrderDetail Orderdetails = new()
                 {
                     ProductID = cart.ProductID,
@@ -245,24 +236,68 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _unitOfWork.OrderDetails.Add(Orderdetails);
                 _unitOfWork.Save();
             }
-            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = OrderID, isCustomer = isCustomer });
+            return View("Payment", _PaymentVM);
         }
 
-        public IActionResult OrderConfirmation(int OrderID, bool isCustomer)
+        public IActionResult OrderConfirmation(bool isCustomer)
         {
+            var UserClaims = (ClaimsIdentity)User.Identity;
+            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var _OrderPayment = _unitOfWork.OrderPayments.Get(data => data.ApplicationUserID == UserID && data.OrderID == _PaymentVM.OrderID);
+
             try
             {
-                _unitOfWork.OrderHeaders.UpdateStatus(
-                        OrderID, SD.Status_Approved,
-                        isCustomer ? SD.Payment_Status_Approved : SD.Payment_Status_Delayed_Payment
-                    );
 
-                _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(OrderID);
-                DeleteCartDataIfSuccessfull();
+
+                if (_OrderPayment.isPaymentSuccessfull)
+                {
+                    _unitOfWork.OrderHeaders.UpdateStatus(
+                            _OrderPayment.OrderID, SD.Status_Approved,
+                            isCustomer ? SD.Payment_Status_Approved : SD.Payment_Status_Delayed_Payment
+                        );
+
+                    _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_OrderPayment.OrderID);
+                    DeleteCartDataIfSuccessfull();
+
+                    return View(_OrderPayment.OrderID);
+                }
+                else
+                {
+                    return View(0);
+                }
             }
             catch { }
+            return View(_OrderPayment.OrderID);
+        }
 
-            return View(OrderID);
+
+        [HttpPost]
+        public IActionResult PaymentVerification()
+        {
+            _PaymentVM.isPaymentSuccessfull = _RazorPayService.VerifyPayment(_PaymentVM.razorpay_order_id, _PaymentVM.razorpay_payment_id, _PaymentVM.razorpay_signature);
+            var UserClaims = (ClaimsIdentity)User.Identity;
+            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var orderPayment = new OrderPayment
+            {
+                ApplicationUserID = UserID,
+                Name = _PaymentVM.Name,
+                Email = _PaymentVM.Email,
+                ContactNo = _PaymentVM.ContactNo,
+                Amount = (double)_PaymentVM.Amount,
+                Description = _PaymentVM.Description,
+                Public_Key = _PaymentVM.Key,
+                isPaymentSuccessfull = _PaymentVM.isPaymentSuccessfull,
+                OrderID = _PaymentVM.OrderID,
+                razorpay_order_id = _PaymentVM.razorpay_order_id,
+                razorpay_payment_id = _PaymentVM.razorpay_payment_id,
+                razorpay_signature = _PaymentVM.razorpay_signature
+            };
+
+            _unitOfWork.OrderPayments.Add(orderPayment);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = true });
         }
 
 
@@ -298,7 +333,5 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _ => shoppingCart.product.Price100
             };
         }
-
-
     }
 }

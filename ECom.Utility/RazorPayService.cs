@@ -7,7 +7,7 @@ namespace ECom.Utility
 {
     public class RazorPayService
     {
-        private static string _key = "";
+        public string _key = "";
         private static string _secret = "";
         
         public RazorPayService(IConfiguration configuration)

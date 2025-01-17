@@ -4,6 +4,7 @@ using E_Commerce.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECom.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250117110135_addedOrderPaymentTable")]
+    partial class addedOrderPaymentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,7 +49,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -107,7 +110,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("ECom.Models.OrderDetail", b =>
@@ -136,7 +139,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderDetails", (string)null);
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("ECom.Models.OrderHeader", b =>
@@ -224,7 +227,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.ToTable("OrderHeaders", (string)null);
+                    b.ToTable("OrderHeaders");
                 });
 
             modelBuilder.Entity("ECom.Models.Product", b =>
@@ -279,7 +282,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasIndex("Category_ID");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -410,7 +413,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("ShoppingCarts", (string)null);
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("ECom.Models.ViewModels.OrderPayment", b =>
@@ -474,7 +477,7 @@ namespace ECom.DataAccess.Migrations
 
                     b.HasIndex("ApplicationUserID");
 
-                    b.ToTable("OrderPayments", (string)null);
+                    b.ToTable("OrderPayments");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
