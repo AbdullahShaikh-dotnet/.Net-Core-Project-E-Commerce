@@ -31,7 +31,10 @@ namespace ECom.Models
 
 
         public string? SessionId { get; set; }
+
         public string? PaymentIntendID { get; set; }
+
+        public string? PaymentSignature { get; set; }
 
         [Required]
         public string PhoneNumber { get; set; }

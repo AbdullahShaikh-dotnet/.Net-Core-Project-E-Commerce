@@ -23,18 +23,29 @@ namespace ECom.DataAccess.Repository
             _db.OrderHeaders.Update(OrderHeaderObject);
         }
 
-        public void UpdatePaymentGatewayID(int id, string? sessionID = null, string? PaymentIntendID = null)
+        public void UpdatePaymentGatewayID(int OrderID)
         {
-            var orderHeaderDB = _db.OrderHeaders.FirstOrDefault(x => x.ID == id);
-            if (orderHeaderDB is null) return;
+            var orderPaymentDb = _db.OrderPayments.FirstOrDefault(x => x.OrderID == OrderID);
+            if (orderPaymentDb is null) return;
 
-            // By default Payment is Sucessfull
-            sessionID ??= Guid.NewGuid().ToString();
-            PaymentIntendID ??= Guid.NewGuid().ToString();
+            if (orderPaymentDb.isPaymentSuccessfull)
+            {
+                var orderHeaderDB = _db.OrderHeaders.FirstOrDefault(x => x.ID == OrderID);
+                if (orderHeaderDB is null) return;
 
-            orderHeaderDB.SessionId = sessionID;
-            orderHeaderDB.PaymentIntendID = PaymentIntendID;
+                orderHeaderDB.SessionId = orderPaymentDb.razorpay_order_id;
 
+                if (!string.IsNullOrEmpty(orderPaymentDb.razorpay_payment_id))
+                {
+                    orderHeaderDB.PaymentIntendID = orderPaymentDb.razorpay_payment_id;
+                }
+
+                if (!string.IsNullOrEmpty(orderPaymentDb.razorpay_signature))
+                {
+                    orderHeaderDB.PaymentSignature = orderPaymentDb.razorpay_signature;
+                }
+
+            }
         }
 
         public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)

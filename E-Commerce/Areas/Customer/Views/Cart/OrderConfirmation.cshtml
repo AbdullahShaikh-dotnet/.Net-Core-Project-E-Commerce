@@ -1,26 +1,56 @@
-﻿@model int
+﻿@model OrderPayment
 
-<div class="container mt-5">
-    <div class="row justify-content-center align-content-center">
-        <div class="col-md-6">
-            <div class="card text-center shadow-sm rounded-2">
-                <div class="card-header bg-success text-white pt-2">
-                    <h3>Order Confirmed</h3>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Thank you for your purchase!</h5>
-                    <p class="card-text">Your order has been successfully placed. We will process it shortly.</p>
-                    <div class="alert alert-success" role="alert">
-                        <strong>Order ID:</strong> @Model
+@if (Model.isPaymentSuccessfull)
+{
+    <div class="container mt-5">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6">
+                <div class="card text-center shadow-sm rounded-2">
+                    <div class="card-header bg-success text-white pt-2">
+                        <h3>Order Confirmed</h3>
                     </div>
-                    <div class="mb-3">
-                        <a asp-action="Index" asp-area="Customer" asp-controller="Home" class="btn btn-primary rounded-2">Continue Shopping</a>
+                    <div class="card-body">
+                        <h5 class="card-title">Thank you for your purchase!</h5>
+                        <p class="card-text">Your order has been successfully placed. We will process it shortly.</p>
+                        <div class="alert alert-success" role="alert">
+                            <strong>Order ID:</strong> @Model.OrderID
+                        </div>
+                        <div class="mb-3">
+                            <a asp-action="Index" asp-area="Customer" asp-controller="Home" class="btn btn-primary rounded-2">Continue Shopping</a>
+                        </div>
                     </div>
-                </div>
-                <div class="card-footer text-muted">
-                    <small>For any inquiries, please contact customer support.</small>
+                    <div class="card-footer text-muted">
+                        <small>For any inquiries, please contact customer support.</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="container mt-5">
+        <div class="row justify-content-center align-content-center">
+            <div class="col-md-6">
+                <div class="card text-center shadow-sm rounded-2">
+                    <div class="card-header bg-danger text-white pt-2">
+                        <h3>Payment Failed</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">We're sorry, your payment could not be processed.</h5>
+                        <p class="card-text">There was an issue processing your payment. Please check your payment details or try again later.</p>
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Error:</strong> Something went wrong. If the issue persists, contact customer support.
+                        </div>
+                        <div class="mb-3">
+                            <a asp-action="Index" asp-area="Customer" asp-controller="Cart" class="btn btn-primary rounded-2">Back to Cart</a>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>For assistance, please reach out to customer support.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

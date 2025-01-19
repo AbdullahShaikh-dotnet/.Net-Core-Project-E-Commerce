@@ -239,16 +239,14 @@ namespace E_Commerce.Areas.Customer.Controllers
             return View("Payment", _PaymentVM);
         }
 
-        public IActionResult OrderConfirmation(bool isCustomer)
+        public IActionResult OrderConfirmation(bool isCustomer, int OrderID)
         {
             var UserClaims = (ClaimsIdentity)User.Identity;
             var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var _OrderPayment = _unitOfWork.OrderPayments.Get(data => data.ApplicationUserID == UserID && data.OrderID == _PaymentVM.OrderID);
+            var _OrderPayment = _unitOfWork.OrderPayments.Get(data => data.ApplicationUserID == UserID && data.OrderID == OrderID);
 
             try
             {
-
-
                 if (_OrderPayment.isPaymentSuccessfull)
                 {
                     _unitOfWork.OrderHeaders.UpdateStatus(
@@ -259,15 +257,15 @@ namespace E_Commerce.Areas.Customer.Controllers
                     _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_OrderPayment.OrderID);
                     DeleteCartDataIfSuccessfull();
 
-                    return View(_OrderPayment.OrderID);
+                    return View(_OrderPayment);
                 }
                 else
                 {
-                    return View(0);
+                    return View(_OrderPayment);
                 }
             }
             catch { }
-            return View(_OrderPayment.OrderID);
+            return View(_OrderPayment);
         }
 
 
@@ -278,26 +276,34 @@ namespace E_Commerce.Areas.Customer.Controllers
             var UserClaims = (ClaimsIdentity)User.Identity;
             var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var orderPayment = new OrderPayment
+
+            if (_PaymentVM.isPaymentSuccessfull)
             {
-                ApplicationUserID = UserID,
-                Name = _PaymentVM.Name,
-                Email = _PaymentVM.Email,
-                ContactNo = _PaymentVM.ContactNo,
-                Amount = (double)_PaymentVM.Amount,
-                Description = _PaymentVM.Description,
-                Public_Key = _PaymentVM.Key,
-                isPaymentSuccessfull = _PaymentVM.isPaymentSuccessfull,
-                OrderID = _PaymentVM.OrderID,
-                razorpay_order_id = _PaymentVM.razorpay_order_id,
-                razorpay_payment_id = _PaymentVM.razorpay_payment_id,
-                razorpay_signature = _PaymentVM.razorpay_signature
-            };
 
-            _unitOfWork.OrderPayments.Add(orderPayment);
-            _unitOfWork.Save();
+                var orderPayment = new OrderPayment
+                {
+                    ApplicationUserID = UserID,
+                    Name = _PaymentVM.Name,
+                    Email = _PaymentVM.Email,
+                    ContactNo = _PaymentVM.ContactNo,
+                    Amount = (double)_PaymentVM.Amount,
+                    Description = _PaymentVM.Description,
+                    Public_Key = _PaymentVM.Key,
+                    isPaymentSuccessfull = _PaymentVM.isPaymentSuccessfull,
+                    OrderID = _PaymentVM.OrderID,
+                    razorpay_order_id = _PaymentVM.razorpay_order_id,
+                    razorpay_payment_id = _PaymentVM.razorpay_payment_id,
+                    razorpay_signature = _PaymentVM.razorpay_signature
+                };
 
-            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = true });
+                _unitOfWork.OrderPayments.Add(orderPayment);
+
+                _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_PaymentVM.OrderID);
+
+                _unitOfWork.Save();
+            }
+
+            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = true, OrderID = _PaymentVM.OrderID });
         }
 
 

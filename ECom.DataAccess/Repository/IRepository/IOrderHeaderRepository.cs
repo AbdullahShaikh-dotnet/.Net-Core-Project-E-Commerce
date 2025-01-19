@@ -12,7 +12,6 @@ namespace ECom.DataAccess.Repository.IRepository
         void Update(OrderHeader OrderHeaderObject);
 
         void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
-
-        void UpdatePaymentGatewayID(int id, string? sessionID = null, string? PaymentIntendID = null);
+        void UpdatePaymentGatewayID(int OrderID);
     }
 }

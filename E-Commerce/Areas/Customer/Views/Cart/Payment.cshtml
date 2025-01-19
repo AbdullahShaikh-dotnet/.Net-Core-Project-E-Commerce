@@ -5,83 +5,74 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head runat="server">
-    <title>Razorpay .Net Sample App</title>
-    <form asp-action="PaymentVerification" method="post" name="razorpayForm">
-        <input asp-for="razorpay_payment_id" id="razorpay_payment_id" type="hidden" name="razorpay_payment_id" />
-        <input asp-for="razorpay_order_id" id="razorpay_order_id" type="hidden" name="razorpay_order_id" />
-        <input asp-for="razorpay_signature" id="razorpay_signature" type="hidden" name="razorpay_signature" />
+	<title>Razorpay .Net Sample App</title>
+	<form asp-action="PaymentVerification" method="post" name="razorpayForm">
+		<input asp-for="razorpay_payment_id" id="razorpay_payment_id" type="hidden" name="razorpay_payment_id" />
+		<input asp-for="razorpay_order_id" id="razorpay_order_id" type="hidden" name="razorpay_order_id" />
+		<input asp-for="razorpay_signature" id="razorpay_signature" type="hidden" name="razorpay_signature" />
 
-        <input asp-for="OrderID" type="hidden" name="OrderID" />
-        <input asp-for="Name" type="hidden" name="Name" />
-        <input asp-for="Email" type="hidden" name="Email" />
-        <input asp-for="ContactNo" type="hidden" name="ContactNo" />
-        <input asp-for="Key" type="hidden" name="Key" />
-        <input asp-for="Amount" type="hidden" name="Amount" />
-        <input asp-for="Currency" type="hidden" name="Currency" />
-        <input asp-for="Description" type="hidden" name="Description" />
+		<input asp-for="OrderID" type="hidden" name="OrderID" />
+		<input asp-for="Name" type="hidden" name="Name" />
+		<input asp-for="Email" type="hidden" name="Email" />
+		<input asp-for="ContactNo" type="hidden" name="ContactNo" />
+		<input asp-for="Key" type="hidden" name="Key" />
+		<input asp-for="Amount" type="hidden" name="Amount" />
+		<input asp-for="Currency" type="hidden" name="Currency" />
+		<input asp-for="Description" type="hidden" name="Description" />
 
-    </form>
+	</form>
 </head>
 
 <body>
-    <button id="rzp-button1" class="btn btn-outline-success d-flex justify-content-center align-content-center d-none">Payment</button>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        const orderId = "@Html.DisplayFor(model => model.razorpay_order_id)";
-        const nameCustomer = "@Html.DisplayFor(model => model.Name)";
-        const email = "@Html.DisplayFor(model => model.Email)";
-        const mobileNo = "@Html.DisplayFor(model => model.ContactNo)";
-        const key = "@Html.DisplayFor(model => model.Key)";
-        debugger;
-        const amount = "@Html.DisplayFor(model => model.Amount)";
-        const currency = "@Html.DisplayFor(model => model.Currency)";
-        const description = "@Html.DisplayFor(model => model.Description)";
-        const options = {
-            "key": key, // Enter the Key ID generated from the Dashboard
-            "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            "currency": currency,
-            "name": nameCustomer,
-            "description": description,
-            "order_id": orderId,
-            "image": "https://example.com/your_logo",
-            "prefill": {
-                "name": nameCustomer,
-                "email": email,
-                "contact": mobileNo,
-            },
-            "notes": {
-                "address": "Hello World"
-            },
-            "theme": {
-                "color": "#3399cc"
-            }
-        }
-        // Boolean whether to show image inside a white frame. (default: true)
-        options.theme.image_padding = false;
-        options.handler = function (response) {
-            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
-            document.getElementById('razorpay_order_id').value = orderId;
-            document.getElementById('razorpay_signature').value = response.razorpay_signature;
-            document.razorpayForm.submit();
-        };
-        options.modal = {
-            ondismiss: function () {
-                console.log("This code runs when the popup is closed");
-                location.href = "/customer/cart/summary";
-            },
-            // Boolean indicating whether pressing escape key
-            // should close the checkout form. (default: true)
-            escape: true,
-            // Boolean indicating whether clicking translucent blank
-            // space outside checkout form should close the form. (default: false)
-            backdropclose: false
-        };
-        var rzp = new Razorpay(options);
-        rzp.open();
-        document.getElementById('rzp-button1').onclick = function (e) {
-            rzp.open();
-            e.preventDefault();
-        }
-    </script>
+	<button id="rzp-button1" class="btn btn-outline-success d-flex justify-content-center align-content-center d-none">Payment</button>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<script>
+		const orderId = "@Html.DisplayFor(model => model.razorpay_order_id)";
+		const nameCustomer = "@Html.DisplayFor(model => model.Name)";
+		const email = "@Html.DisplayFor(model => model.Email)";
+		const mobileNo = "@Html.DisplayFor(model => model.ContactNo)";
+		const key = "@Html.DisplayFor(model => model.Key)";
+		const amount = "@Html.DisplayFor(model => model.Amount)";
+		const currency = "@Html.DisplayFor(model => model.Currency)";
+		const description = "@Html.DisplayFor(model => model.Description)";
+		const options = {
+			"key": key, // Enter the Key ID generated from the Dashboard
+			"amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": currency,
+			"name": nameCustomer,
+			"description": description,
+			"order_id": orderId,
+			"image": "https://example.com/your_logo",
+			"prefill": {
+				"name": nameCustomer,
+				"email": email,
+				"contact": mobileNo,
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		}
+		// Boolean whether to show image inside a white frame. (default: true)
+		options.theme.image_padding = false;
+		options.handler = function (response) {
+			document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+			document.getElementById('razorpay_order_id').value = orderId;
+			document.getElementById('razorpay_signature').value = response.razorpay_signature;
+			document.razorpayForm.submit();
+		};
+		options.modal = {
+			ondismiss: function () {
+				location.href = "/customer/cart/summary";
+			},
+			escape: true,
+			backdropclose: false
+		};
+		var rzp = new Razorpay(options);
+		rzp.open();
+		document.getElementById('rzp-button1').onclick = function (e) {
+			rzp.open();
+			e.preventDefault();
+		}
+	</script>
 </body>
 </html>
