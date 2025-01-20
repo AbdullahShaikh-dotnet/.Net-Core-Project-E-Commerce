@@ -13,7 +13,7 @@ using ECom.Models.ViewModels;
 namespace E_Commerce.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = SD.Role_Admin )]
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
@@ -112,6 +112,41 @@ namespace E_Commerce.Areas.Admin.Controllers
 
             TempData["success"] = "Order Update Sucessfully";
             return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderDB.ID });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
+        public IActionResult StartProcessing()
+        {
+            int OrderHeaderID = orderVM.orderHeader.ID;
+            _UnitOfWork.OrderHeaders.UpdateStatus(OrderHeaderID, SD.Status_In_Process);
+            _UnitOfWork.Save();
+            TempData["success"] = "Order Update Sucessfully";
+            return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderID });
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
+        public IActionResult ShipOrder()
+        {
+            int OrderHeaderID = orderVM.orderHeader.ID;
+            var OrderHeaderdb = _UnitOfWork.OrderHeaders.Get(data => data.ID == OrderHeaderID);
+            OrderHeaderdb.TrackingNumber = orderVM.orderHeader.TrackingNumber;
+            OrderHeaderdb.Carrier = orderVM.orderHeader.Carrier;
+            OrderHeaderdb.OrderStatus = SD.Status_Shipped;
+            OrderHeaderdb.ShippingDate = DateTime.Now;
+
+            if(OrderHeaderdb.PaymentStatus == SD.Payment_Status_Delayed_Payment)
+            {
+                OrderHeaderdb.PaymentDueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(30));
+            }
+
+            _UnitOfWork.OrderHeaders.Update(OrderHeaderdb);
+            _UnitOfWork.Save();
+            TempData["success"] = "Order Shipped Sucessfully";
+            return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderID });
         }
 
     }
