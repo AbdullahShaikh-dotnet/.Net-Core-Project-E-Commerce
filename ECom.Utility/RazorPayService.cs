@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
 
@@ -87,5 +88,25 @@ namespace ECom.Utility
                 throw;
             }
         }
+
+        public JsonResult Refund(string paymentId, decimal amount)
+        {
+            try
+            {
+                RazorpayClient client = new RazorpayClient(_key, _secret);
+                var options = new Dictionary<string, object>
+                {
+                    { "amount", (int)(amount * 100) } // Amount in paise
+                };
+
+                Refund refund = client.Payment.Fetch(paymentId).Refund(options);
+                return new JsonResult(new { success = true, message = "Refund initiated successfully", refund });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
     }
+
 }

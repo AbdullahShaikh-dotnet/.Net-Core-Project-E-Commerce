@@ -17,11 +17,14 @@ namespace E_Commerce.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
+        private RazorPayService _RazorPayService;
+
         [BindProperty]
         public OrderVM orderVM { get; set; }
-        public OrderController(IUnitOfWork UnitOfWork)
+        public OrderController(IUnitOfWork UnitOfWork, RazorPayService razorPayService)
         {
             _UnitOfWork = UnitOfWork;
+            _RazorPayService = razorPayService;
         }
 
         [HttpGet]
@@ -39,11 +42,12 @@ namespace E_Commerce.Areas.Admin.Controllers
                 .GetAll(orderData => !orderData.IsDeleted, includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
-            else if(UserID is not null)
+            else if (UserID is not null)
             {
                 orderHeaders = _UnitOfWork
                 .OrderHeaders
-                .GetAll(orderData => !orderData.IsDeleted && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
+                .GetAll(orderData => !orderData.IsDeleted && orderData.PaymentStatus == SD.Payment_Status_Approved
+                    && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
             else
@@ -138,7 +142,7 @@ namespace E_Commerce.Areas.Admin.Controllers
             OrderHeaderdb.OrderStatus = SD.Status_Shipped;
             OrderHeaderdb.ShippingDate = DateTime.Now;
 
-            if(OrderHeaderdb.PaymentStatus == SD.Payment_Status_Delayed_Payment)
+            if (OrderHeaderdb.PaymentStatus == SD.Payment_Status_Delayed_Payment)
             {
                 OrderHeaderdb.PaymentDueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(30));
             }
@@ -147,6 +151,30 @@ namespace E_Commerce.Areas.Admin.Controllers
             _UnitOfWork.Save();
             TempData["success"] = "Order Shipped Sucessfully";
             return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderID });
+        }
+
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult CancelOrder()
+        {
+            var OrderHeader = _UnitOfWork.OrderHeaders.Get(data => data.ID == orderVM.orderHeader.ID);
+            var OrderPayment = _UnitOfWork.OrderPayments.Get(data => data.OrderID == OrderHeader.ID);
+
+            if (OrderHeader.PaymentStatus == SD.Payment_Status_Approved)
+            {
+                var Result = _RazorPayService.Refund(OrderHeader.PaymentIntendID, (decimal)OrderPayment.Amount);
+                _UnitOfWork.OrderHeaders.UpdateStatus(OrderHeader.ID, SD.Status_Cancelled, SD.Status_Refunded);
+            }
+            else
+            {
+                _UnitOfWork.OrderHeaders.UpdateStatus(OrderHeader.ID, SD.Status_Cancelled, SD.Status_Cancelled);
+            }
+
+            _UnitOfWork.Save();
+            TempData["success"] = "Order Cancelled Sucessfully";
+            return RedirectToAction(nameof(Details), new { OrderId = orderVM.orderHeader.ID });
         }
 
     }
