@@ -308,9 +308,10 @@
                     </li>
                 </ul>
             </div>
-            @if (Model.orderHeader.PaymentStatus == SD.Payment_Status_Delayed_Payment && Model.orderHeader.OrderStatus == SD.Status_Shipped)
+            @if (Model.orderHeader.PaymentStatus == SD.Payment_Status_Delayed_Payment && Model.orderHeader.OrderStatus == SD.Status_Shipped && !canEdit)
             {
-                <button type="submit" class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
+                <button asp-action="DelayedPayNow" asp-controller="Cart" asp-area="Customer" asp-route-OrderHeaderID="@Model.orderHeader.ID" type="submit"
+                        class="btn btn-success w-100 mb-2 d-flex align-items-center justify-content-center rounded-2 btn-sm fs-6">
                     <i class="bi bi-cash-stack me-2 fs-4"></i>Pay Now
                 </button>
             }

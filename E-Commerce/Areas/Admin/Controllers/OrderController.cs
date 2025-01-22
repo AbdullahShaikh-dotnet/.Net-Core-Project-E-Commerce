@@ -42,13 +42,21 @@ namespace E_Commerce.Areas.Admin.Controllers
                 .GetAll(orderData => !orderData.IsDeleted, includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
-            else if (UserID is not null)
+            else if (UserID is not null && !User.IsInRole(SD.Role_Company))
             {
                 orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted && orderData.PaymentStatus == SD.Payment_Status_Approved
                     && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
                 .ToList();
+            }
+            else if (User.IsInRole(SD.Role_Company))
+            {
+                orderHeaders = _UnitOfWork
+                    .OrderHeaders
+                    .GetAll(orderData => !orderData.IsDeleted && orderData.ApplicationUserID == UserID,
+                    includePropertiesList: "_ApplicationUser")
+                    .ToList();
             }
             else
             {

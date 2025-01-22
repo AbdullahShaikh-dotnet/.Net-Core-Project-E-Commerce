@@ -1,6 +1,7 @@
 ﻿using ECom.Utility;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECom.Models.ViewModels
 {

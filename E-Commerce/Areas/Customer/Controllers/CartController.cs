@@ -136,7 +136,7 @@ namespace E_Commerce.Areas.Customer.Controllers
 
 
         [HttpPost]
-        [ActionName("Summary")]
+        [ActionName("PlaceOrder")]
         public IActionResult SummaryPost()
         {
             var UserClaims = (ClaimsIdentity)User.Identity;
@@ -171,72 +171,65 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Pending;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Pending;
 
+                _unitOfWork.OrderHeaders.Add(_shoppingCartVM.orderHeader);
+                _unitOfWork.Save();
 
 
+                int OrderID = _shoppingCartVM.orderHeader.ID;
+                decimal OrderTotal = (decimal)_shoppingCartVM.orderHeader.OrderTotal;
+                var RazorPayOrder = _RazorPayService.CreateOrder(OrderTotal);
+                string SessionId = RazorPayOrder["id"]; // OrderID
 
-                //foreach (var item in _shoppingCartVM.shoppingCartsList)
-                //{
-                //    var RazorPayOrder = _RazorPayService.CreateOrder((decimal)(item.ShoppingCartPrice * 100));
-                //    var Payment = RazorPayOrder.Payments()?.FirstOrDefault();
-
-                //    if (Payment is not null)
-                //    {
-                //        string PaymentIntentId = Payment["id"];
-                //        string SessionId = RazorPayOrder["id"];
-                //        string signatureID = Payment["razorpay_signature"];
-                //        bool isVerified = _RazorPayService.VerifyPayment(SessionId, PaymentIntentId, signatureID);
-
-                //        if (isVerified)
-                //        {
-                //            return RedirectToAction(nameof(OrderConfirmation), new { OrderID = SessionId, isCustomer });
-                //        }
-                //    }
-                //}
+                _PaymentVM = new()
+                {
+                    Email = _shoppingCartVM.orderHeader._ApplicationUser.Email,
+                    Name = _shoppingCartVM.orderHeader._ApplicationUser.Name,
+                    ContactNo = _shoppingCartVM.orderHeader._ApplicationUser.PhoneNumber,
+                    Amount = OrderTotal,
+                    OrderID = OrderID,
+                    razorpay_order_id = SessionId,
+                    Description = "Testing Enviroment",
+                    Key = _RazorPayService._key,
+                };
 
 
-
+                foreach (var cart in _shoppingCartVM.shoppingCartsList)
+                {
+                    OrderDetail Orderdetails = new()
+                    {
+                        ProductID = cart.ProductID,
+                        Price = cart.ShoppingCartPrice,
+                        OrderHeaderID = OrderID,
+                        Count = cart.Count,
+                    };
+                    _unitOfWork.OrderDetails.Add(Orderdetails);
+                }
+                _unitOfWork.Save();
+                return View("Payment", _PaymentVM);
 
             }
             else // Company User
             {
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Delayed_Payment;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Approved;
-            }
-
-            _unitOfWork.OrderHeaders.Add(_shoppingCartVM.orderHeader);
-            _unitOfWork.Save();
-
-            int OrderID = _shoppingCartVM.orderHeader.ID;
-            decimal OrderTotal = (decimal)_shoppingCartVM.orderHeader.OrderTotal;
-            var RazorPayOrder = _RazorPayService.CreateOrder(OrderTotal);
-            string SessionId = RazorPayOrder["id"]; // OrderID
-
-            _PaymentVM = new()
-            {
-                Email = _shoppingCartVM.orderHeader._ApplicationUser.Email,
-                Name = _shoppingCartVM.orderHeader._ApplicationUser.Name,
-                ContactNo = _shoppingCartVM.orderHeader._ApplicationUser.PhoneNumber,
-                Amount = OrderTotal,
-                OrderID = OrderID,
-                razorpay_order_id = SessionId,
-                Description = "Testing Enviroment",
-                Key = _RazorPayService._key,
-            };
+                _unitOfWork.OrderHeaders.Add(_shoppingCartVM.orderHeader);
 
 
-            foreach (var cart in _shoppingCartVM.shoppingCartsList)
-            {
-                OrderDetail Orderdetails = new()
+                foreach (var cart in _shoppingCartVM.shoppingCartsList)
                 {
-                    ProductID = cart.ProductID,
-                    Price = cart.ShoppingCartPrice,
-                    OrderHeaderID = OrderID,
-                    Count = cart.Count,
-                };
-                _unitOfWork.OrderDetails.Add(Orderdetails);
+                    OrderDetail Orderdetails = new()
+                    {
+                        ProductID = cart.ProductID,
+                        Price = cart.ShoppingCartPrice,
+                        OrderHeaderID = _shoppingCartVM.orderHeader.ID,
+                        Count = cart.Count,
+                    };
+                    _unitOfWork.OrderDetails.Add(Orderdetails);
+                }
                 _unitOfWork.Save();
+
+                return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = false, OrderID = _shoppingCartVM.orderHeader.ID });
             }
-            return View("Payment", _PaymentVM);
         }
 
         public IActionResult OrderConfirmation(bool isCustomer, int OrderID)
@@ -244,24 +237,43 @@ namespace E_Commerce.Areas.Customer.Controllers
             var UserClaims = (ClaimsIdentity)User.Identity;
             var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
             var _OrderPayment = _unitOfWork.OrderPayments.Get(data => data.ApplicationUserID == UserID && data.OrderID == OrderID);
+            _OrderPayment.isCustomer = isCustomer;
 
             try
             {
-                if (_OrderPayment.isPaymentSuccessfull)
+                if (isCustomer)
                 {
-                    _unitOfWork.OrderHeaders.UpdateStatus(
-                            _OrderPayment.OrderID, SD.Status_Approved,
-                            isCustomer ? SD.Payment_Status_Approved : SD.Payment_Status_Delayed_Payment
-                        );
+                    if (_OrderPayment.isPaymentSuccessfull)
+                    {
+                        _unitOfWork.OrderHeaders.UpdateStatus(
+                                _OrderPayment.OrderID, SD.Status_Approved, SD.Payment_Status_Approved
+                            );
 
-                    _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_OrderPayment.OrderID);
-                    DeleteCartDataIfSuccessfull();
+                        _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_OrderPayment.OrderID);
+                        DeleteCartDataIfSuccessfull();
+                        _unitOfWork.Save();
 
-                    return View(_OrderPayment);
+                        return View(_OrderPayment);
+                    }
+                    else
+                    {
+                        return View(_OrderPayment);
+                    }
                 }
                 else
                 {
-                    return View(_OrderPayment);
+                    _unitOfWork.OrderHeaders.UpdateStatus
+                        (OrderID, SD.Status_Approved, SD.Payment_Status_Delayed_Payment);
+
+                    DeleteCartDataIfSuccessfull();
+                    OrderPayment OrderPaymentObject = new OrderPayment
+                    {
+                        isPaymentSuccessfull = true,
+                        OrderID = OrderID,
+                        isCustomer = isCustomer
+                    };
+                    _unitOfWork.Save();
+                    return View(OrderPaymentObject);
                 }
             }
             catch { }
@@ -276,9 +288,9 @@ namespace E_Commerce.Areas.Customer.Controllers
             var UserClaims = (ClaimsIdentity)User.Identity;
             var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-
             if (_PaymentVM.isPaymentSuccessfull)
             {
+                var OrderHeaderDb = _unitOfWork.OrderHeaders.Get(data => data.ID == _PaymentVM.OrderID, includePropertiesList: "_ApplicationUser");
 
                 var orderPayment = new OrderPayment
                 {
@@ -297,15 +309,38 @@ namespace E_Commerce.Areas.Customer.Controllers
                 };
 
                 _unitOfWork.OrderPayments.Add(orderPayment);
-
                 _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_PaymentVM.OrderID);
-
+                _unitOfWork.OrderHeaders.UpdateStatus(_PaymentVM.OrderID, OrderHeaderDb.OrderStatus, SD.Payment_Status_Approved);
                 _unitOfWork.Save();
             }
 
-            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = true, OrderID = _PaymentVM.OrderID });
+            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = User.IsInRole(SD.Role_Customer), OrderID = _PaymentVM.OrderID });
         }
 
+
+        [HttpPost]
+        [ActionName("DelayedPayNow")]
+        public IActionResult PayNow(int OrderHeaderID)
+        {
+            var OrderHeaderDb = _unitOfWork.OrderHeaders.Get(data => data.ID == OrderHeaderID, includePropertiesList: "_ApplicationUser");
+
+            decimal OrderTotal = (decimal)OrderHeaderDb.OrderTotal;
+            var RazorPayOrder = _RazorPayService.CreateOrder(OrderTotal);
+            string SessionId = RazorPayOrder["id"]; // Razor Pay OrderID
+
+            _PaymentVM = new()
+            {
+                Email = OrderHeaderDb._ApplicationUser.Email,
+                Name = OrderHeaderDb._ApplicationUser.Name,
+                ContactNo = OrderHeaderDb._ApplicationUser.PhoneNumber,
+                Amount = OrderTotal,
+                OrderID = OrderHeaderID,
+                razorpay_order_id = SessionId,
+                Description = "Testing Enviroment",
+                Key = _RazorPayService._key,
+            };
+            return View("Payment", _PaymentVM);
+        }
 
         private void DeleteCartDataIfSuccessfull()
         {

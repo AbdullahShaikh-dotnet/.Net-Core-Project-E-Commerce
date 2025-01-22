@@ -44,5 +44,8 @@ namespace ECom.Models.ViewModels
         public string? razorpay_signature { get; set; }
         public bool isPaymentSuccessfull { get; set; } = false;
         public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        [NotMapped]
+        public bool isCustomer {  get; set; } = true;
     }
 }
