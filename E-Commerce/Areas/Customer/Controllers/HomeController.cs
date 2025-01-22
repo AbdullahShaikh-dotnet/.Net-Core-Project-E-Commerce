@@ -14,10 +14,12 @@ namespace E_Commerce.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork iUnitOfWork)
+        private readonly IUserService _userService;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork iUnitOfWork, IUserService UserService)
         {
             _logger = logger;
             _unitOfWork = iUnitOfWork;
+            _userService = UserService;
         }
 
         public IActionResult Index()
@@ -52,8 +54,7 @@ namespace E_Commerce.Areas.Customer.Controllers
         [Authorize]
         public IActionResult Details(ShoppingCart shoppingCart)
         {
-            var UserClaims = (ClaimsIdentity)User.Identity;
-            var Userid = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var Userid = _userService.GetUserId();
 
             var ShoppingCart_TableData = _unitOfWork.ShoppingCarts?
                 .Get(cart => cart.ProductID == shoppingCart.ProductID && cart.ApplicationUserID == Userid && !cart.IsDeleted);
