@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using ECom.Models;
 using Serilog;
 using Razorpay.Api;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,15 @@ builder.Services.ConfigureApplicationCookie(option =>
 });
 
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(100);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+}); // Configured Session
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -78,6 +88,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession(); // Added Session
 app.MapRazorPages();
 
 app.MapControllerRoute(

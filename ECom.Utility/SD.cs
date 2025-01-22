@@ -30,6 +30,11 @@ namespace ECom.Utility
         public const string Role_Company = "Company";
 
 
+        /// <summary>
+        /// Shopping Cart Session Key 
+        /// </summary>
+        public const string ShoppingCartSessionKey = "ShoppingCartSession";
+
 
 
         /// <summary>

@@ -2,7 +2,9 @@ using System.Diagnostics;
 using System.Security.Claims;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Areas.Customer.Controllers
@@ -60,16 +62,20 @@ namespace E_Commerce.Areas.Customer.Controllers
             {
                 shoppingCart.ApplicationUserID = Userid;
                 _unitOfWork.ShoppingCarts.Add(shoppingCart);
+                _unitOfWork.Save();
             }
             else
             {
                 ShoppingCart_TableData.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCarts.Update(ShoppingCart_TableData);
+                _unitOfWork.Save();
             }
 
+            int CartCount = _unitOfWork.ShoppingCarts.GetAll(cart => cart.ApplicationUserID == Userid && !cart.IsDeleted).Count();
+            HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, CartCount);
+
             TempData["success"] = "Product Added to Cart Successfully";
-            
-            _unitOfWork.Save();
+
             return RedirectToAction(nameof(Index));
         }
 

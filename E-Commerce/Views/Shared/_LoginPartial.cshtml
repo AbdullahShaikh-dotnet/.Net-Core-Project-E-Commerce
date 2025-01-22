@@ -1,59 +1,65 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using ECom.Models
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor ContextAccessor
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+	int? CartCount = ContextAccessor.HttpContext.Session.GetInt32(SD.ShoppingCartSessionKey);
+}
 <ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        var currentUser = await UserManager.GetUserAsync(User);
-        var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
+	@if (SignInManager.IsSignedIn(User))
+	{
+		var currentUser = await UserManager.GetUserAsync(User);
+		var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
 
-        <li class="nav-item mx-2">
-            <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                <i class="bi bi-person-circle"></i>
-                Hello @Username!
-            </a>
-        </li>
-        <li class="nav-item mx-2">
-            <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                <i class="bi bi-cart-fill"></i>
-                Cart
-            </a>
-        </li>
-        <li class="nav-item mx-2">
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link border-0">
-                    Logout
-                    <i class="bi bi-caret-right-fill"></i>
-                </button>
-            </form>
-        </li>
-    }
-    else
-    {
+		<li class="nav-item mx-2">
+			<a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+				<i class="bi bi-person-circle"></i>
+				Hello @Username!
+			</a>
+		</li>
+		<li class="nav-item mx-2 position-relative mx-4">
+			<a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+				<i class="bi bi-cart-fill fs-5"></i>
+					<span class="badge rounded-5 ms-2 position-absolute top-25 start-75 translate-middle"
+					  style="font-size:8px; background:#b70000;">@(CartCount is not null ? CartCount : 0)</span>
+			</a>
+		</li>
+		<li class="nav-item mx-2">
+			<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+				<button id="logout" type="submit" class="nav-link btn btn-link border-0">
+					Logout
+					<i class="bi bi-caret-right-fill"></i>
+				</button>
+			</form>
+		</li>
+	}
+	else
+	{
 
-        <li class="nav-item dropdown mx-5">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-circle"></i>
-                Login
-            </a>
-            <ul class="dropdown-menu rounded-2 shadow-sm" style="left: -20px !important;">
-                <li>
-                    <a class="dropdown-item fw-bold" id="login" asp-area="Identity" asp-page="/Account/Login">
-                        <i class="bi bi-person-circle fs-4 px-2"></i>
-                        Login
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item fw-bold" id="register" asp-area="Identity" asp-page="/Account/Register">
-                        <i class="bi bi-person-plus-fill fs-4 px-2"></i>
-                        Register
-                    </a>
-                </li>
-            </ul>
-        </li>
+		<li class="nav-item dropdown mx-5">
+			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<i class="bi bi-person-circle"></i>
+				Login
+			</a>
+			<ul class="dropdown-menu rounded-2 shadow-sm" style="left: -20px !important;">
+				<li>
+					<a class="dropdown-item fw-bold" id="login" asp-area="Identity" asp-page="/Account/Login">
+						<i class="bi bi-person-circle fs-4 px-2"></i>
+						Login
+					</a>
+				</li>
+				<li>
+					<a class="dropdown-item fw-bold" id="register" asp-area="Identity" asp-page="/Account/Register">
+						<i class="bi bi-person-plus-fill fs-4 px-2"></i>
+						Register
+					</a>
+				</li>
+			</ul>
+		</li>
 
-    }
+	}
 </ul>
