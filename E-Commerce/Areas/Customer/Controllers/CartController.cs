@@ -15,6 +15,7 @@ namespace E_Commerce.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserService _userService;
         private RazorPayService _RazorPayService;
 
         [BindProperty]
@@ -23,10 +24,11 @@ namespace E_Commerce.Areas.Customer.Controllers
         [BindProperty]
         public ShoppingCartVM _shoppingCartVM { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork, RazorPayService razorPayService)
+        public CartController(IUnitOfWork unitOfWork, RazorPayService razorPayService, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _RazorPayService = razorPayService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -58,33 +60,31 @@ namespace E_Commerce.Areas.Customer.Controllers
             if (CartFromDB is null) return RedirectToAction(nameof(Index));
 
             CartFromDB.Count += 1;
-
             _unitOfWork.ShoppingCarts.Update(CartFromDB);
             _unitOfWork.Save();
-
             return RedirectToAction(nameof(Index));
         }
-
 
         public IActionResult CartMinus(int CartID)
         {
             var CartFromDB = _unitOfWork.ShoppingCarts.Get(data => data.ID == CartID && !data.IsDeleted);
             if (CartFromDB is null) return RedirectToAction(nameof(Index));
 
-
             if (CartFromDB.Count <= 1)
             {
-                CartFromDB.DeletedAt = DateTime.Now;
-                CartFromDB.IsDeleted = true;
+                _unitOfWork.ShoppingCarts.Remove(CartFromDB);
+                int CartCount = _unitOfWork.ShoppingCarts
+                    .GetAll(cart => cart.ApplicationUserID == _userService.GetUserId() && !cart.IsDeleted)
+                    .Count() - 1;
+                HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, CartCount);
             }
             else
             {
                 CartFromDB.Count -= 1;
+                _unitOfWork.ShoppingCarts.Update(CartFromDB);
             }
 
-            _unitOfWork.ShoppingCarts.Update(CartFromDB);
             _unitOfWork.Save();
-
             return RedirectToAction(nameof(Index));
         }
 
@@ -92,10 +92,13 @@ namespace E_Commerce.Areas.Customer.Controllers
         {
             var CartFromDB = _unitOfWork.ShoppingCarts.Get(data => data.ID == CartID && !data.IsDeleted);
             if (CartFromDB is null) return RedirectToAction(nameof(Index));
+            _unitOfWork.ShoppingCarts.Remove(CartFromDB);
 
-            CartFromDB.DeletedAt = DateTime.Now;
-            CartFromDB.IsDeleted = true;
-            _unitOfWork.ShoppingCarts.Update(CartFromDB);
+            int CartCount = _unitOfWork.ShoppingCarts
+                .GetAll(cart => cart.ApplicationUserID == _userService.GetUserId() && !cart.IsDeleted)
+                .Count() - 1;
+            HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, CartCount);
+
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }

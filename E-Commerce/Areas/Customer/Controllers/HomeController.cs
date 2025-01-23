@@ -29,6 +29,13 @@ namespace E_Commerce.Areas.Customer.Controllers
                 .GetAll(includePropertiesList: "Category")
                 .Where(data => !data.IsDeleted);
 
+            var Userid = _userService.GetUserId();
+            if (Userid is not null)
+            {
+                int CartCount = _unitOfWork.ShoppingCarts.GetAll(cart => cart.ApplicationUserID == Userid && !cart.IsDeleted).Count();
+                HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, CartCount);
+            }
+
             return View(ProductsList);
         }
 
