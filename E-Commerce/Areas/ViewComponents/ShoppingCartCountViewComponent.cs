@@ -23,7 +23,7 @@ namespace E_Commerce.Areas.ViewComponents
                 {
                     int CartCount = _unitOfWork.ShoppingCarts
                         .GetAll(cart => cart.ApplicationUserID == _userService.GetUserId() && !cart.IsDeleted)
-                        .Count() - 1;
+                        .Count();
                     _userService.SetCartCount(CartCount);
                 }
                 return View(_userService.GetCartCount());
