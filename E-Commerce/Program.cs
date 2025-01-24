@@ -11,6 +11,7 @@ using ECom.Models;
 using Serilog;
 using Razorpay.Api;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,15 @@ builder.Services.ConfigureApplicationCookie(option =>
     option.LogoutPath = $"/Identity/Account/Logout";
     option.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    var FacebookSettings = builder.Configuration.GetSection("Facebook").Get<FacebookSettings>();
+    option.AppId = FacebookSettings?.AppID;
+    option.AppSecret = FacebookSettings?.AppSecret;
+});
+
 
 
 builder.Services.AddDistributedMemoryCache();

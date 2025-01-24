@@ -49,11 +49,18 @@
 				</div>
 			</div>
 		</div>
-		<div class="card-footer bg-transparent mt-2">
-			<div class="row mt-4">
+		<div class="container">
+			<div class="d-flex align-items-center">
+				<div class="flex-grow-1 border-top"></div>
+				<span class="mx-3">OR</span>
+				<div class="flex-grow-1 border-top"></div>
+			</div>
+		</div>
+		<div class="px-4 bg-transparent mt-2">
+			<div class="row mt-2">
 				<div class="col-md-12 col-md-offset-2">
 					<section>
-						<h4>Use another service to log in.</h4>
+						@* <h4>Use another service to log in.</h4> *@
 						@{
 							if ((Model.ExternalLogins?.Count ?? 0) == 0)
 							{
@@ -73,7 +80,20 @@
 										<p>
 											@foreach (var provider in Model.ExternalLogins!)
 											{
-												<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+												@if (provider.Name == "Facebook")
+												{
+													<button type="submit" style="background-color:#4267b2" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														<i class="fs-5 bi bi-facebook"></i>
+														Login With @provider.DisplayName
+													</button>
+												}
+												else
+												{
+													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider" 
+													value="@provider.Name" title="Log in using your @provider.DisplayName account">
+													</button>
+												}
 											}
 										</p>
 									</div>
