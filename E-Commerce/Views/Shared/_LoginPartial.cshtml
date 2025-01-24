@@ -24,8 +24,9 @@
 		<li class="nav-item mx-2 position-relative mx-4">
 			<a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
 				<i class="bi bi-cart-fill fs-5"></i>
-					<span class="badge rounded-5 ms-2 position-absolute top-25 start-75 translate-middle"
-					  style="font-size:8px; background:#b70000;">@(CartCount is not null ? CartCount : 0)</span>
+				@* 	<span class="badge rounded-5 ms-2 position-absolute top-25 start-75 translate-middle"
+					  style="font-size:8px; background:#b70000;">@(CartCount is not null ? CartCount : 0)</span> *@
+					  @await Component.InvokeAsync("ShoppingCartCount")
 			</a>
 		</li>
 		<li class="nav-item mx-2">
