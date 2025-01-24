@@ -80,16 +80,25 @@
 
 					</div>
 				</div>
-				<div class="d-flex justify-content-center">
-					<button id="registerSubmit" type="submit" class="w-50 btn btn-outline-primary shadow-sm border-1 rounded-2 mt-1">Register</button>
+				<div class="d-flex justify-content-around">
+					<button id="registerSubmit" type="submit" class="w-100 btn btn-outline-primary shadow-sm border-1 rounded-2 mt-1">Register</button>
 				</div>
+				<a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-decoration-none text-center text-uppercase fs-6 d-block mt-4">Login</a>
 			</form>
 		</div>
-		<div class="card-footer bg-transparent mt-2">
+
+		<div class="container">
+			<div class="d-flex align-items-center">
+				<div class="flex-grow-1 border-top"></div>
+				<span class="mx-3">OR</span>
+				<div class="flex-grow-1 border-top"></div>
+			</div>
+		</div>
+
+		<div class="px-4 bg-transparent mt-2">
 			<div class="row mt-4">
 				<div class="col-12">
 					<section>
-						<h4>Use another service to register.</h4>
 						@{
 							if ((Model.ExternalLogins?.Count ?? 0) == 0)
 							{
@@ -104,12 +113,46 @@
 							}
 							else
 							{
+								// <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+								// 	<div>
+								// 		<p>
+								// 			@foreach (var provider in Model.ExternalLogins!)
+								// 			{
+								// 				<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+								// 			}
+								// 		</p>
+								// 	</div>
+								// </form>
+
+
 								<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
 									<div>
-										<p>
+										<p class="d-flex justify-content-lg-around">
 											@foreach (var provider in Model.ExternalLogins!)
 											{
-												<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+												@if (provider.Name == "Facebook")
+												{
+													<button type="submit" style="background-color:#4267b2" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														<i class="fs-5 bi bi-facebook"></i>
+														Login With @provider.DisplayName
+													</button>
+												}
+												else if (provider.Name == "Google")
+												{
+													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														<i class="fs-5 bi bi-google"></i>
+														Login With @provider.DisplayName
+													</button>
+												}
+												else
+												{
+													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														Login With @provider.DisplayName
+													</button>
+												}
 											}
 										</p>
 									</div>
