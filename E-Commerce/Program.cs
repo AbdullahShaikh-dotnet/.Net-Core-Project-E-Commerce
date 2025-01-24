@@ -64,6 +64,35 @@ builder.Services.AddAuthentication().AddFacebook(option =>
     var FacebookSettings = builder.Configuration.GetSection("Facebook").Get<FacebookSettings>();
     option.AppId = FacebookSettings?.AppID;
     option.AppSecret = FacebookSettings?.AppSecret;
+
+    // Handle if User Cancel the External Login request
+    option.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
+    {
+        OnRemoteFailure = context =>
+        {
+            context.HandleResponse(); // Prevents the exception
+            context.Response.Redirect("/Identity/Account/Login?error=FacebookAuthCancelled");
+            return Task.CompletedTask;
+        }
+    };
+});
+
+
+builder.Services.AddAuthentication().AddGoogle(option => {
+    var GoogleSettings = builder.Configuration.GetSection("Google").Get<GoogleSettings>();
+    option.ClientId = GoogleSettings?.ClientID;
+    option.ClientSecret = GoogleSettings?.ClientSecret;
+
+    // Handle if User Cancel the External Login request
+    option.Events = new Microsoft.AspNetCore.Authentication.OAuth.OAuthEvents
+    {
+        OnRemoteFailure = context =>
+        {
+            context.HandleResponse(); // Prevents the exception
+            context.Response.Redirect("/Identity/Account/Login?error=GoogleAuthCancelled");
+            return Task.CompletedTask;
+        },
+    };
 });
 
 

@@ -77,7 +77,7 @@
 							{
 								<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
 									<div>
-										<p>
+										<p class="d-flex justify-content-lg-around">
 											@foreach (var provider in Model.ExternalLogins!)
 											{
 												@if (provider.Name == "Facebook")
@@ -88,10 +88,19 @@
 														Login With @provider.DisplayName
 													</button>
 												}
+												else if (provider.Name == "Google")
+												{
+													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														<i class="fs-5 bi bi-google"></i>
+														Login With @provider.DisplayName
+													</button>
+												}
 												else
 												{
-													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider" 
-													value="@provider.Name" title="Log in using your @provider.DisplayName account">
+													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+															value="@provider.Name" title="Log in using your @provider.DisplayName account">
+														Login With @provider.DisplayName
 													</button>
 												}
 											}
