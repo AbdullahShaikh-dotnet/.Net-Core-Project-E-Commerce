@@ -180,7 +180,7 @@ namespace E_Commerce.Areas.Identity.Pages.Account
                 user.City = Input.City;
                 user.PostalCode = Input.PostalCode;
 
-                if(Input.Role == SD.Role_Company)
+                if (Input.Role == SD.Role_Company)
                 {
                     user.CompanyID = Input.CompanyID;
                 }
@@ -216,8 +216,15 @@ namespace E_Commerce.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if (User.IsInRole(SD.Role_Admin))
+                        {
+                            TempData["success"] = "User Created Successfully";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
