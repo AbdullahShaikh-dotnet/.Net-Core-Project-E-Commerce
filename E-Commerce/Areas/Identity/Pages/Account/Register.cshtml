@@ -1,78 +1,80 @@
 ﻿@page
+@using ECom.Utility
 @model RegisterModel
 @{
 	ViewData["Title"] = "Register";
 }
 
-<h1 class="text-center pt-5 m-2 p-1">@ViewData["Title"]</h1>
+@{
+	bool isAdmin = User.IsInRole(SD.Role_Admin);
+}
 
+@if (isAdmin)
+{
+	<h1 class="text-center pt-5 m-2 p-1">@ViewData["Title"] Admin Portal</h1>
+}
+else
+{
+	<h1 class="text-center pt-5 m-2 p-1">@ViewData["Title"]</h1>
+}
 <div class="container-fluid d-flex justify-content-center">
-	<div class="card shadow-sm border-1 rounded-1">
+	<div class="card shadow-sm border-1 rounded-1 w-75">
 		<div class="card-body">
 			<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+				<div asp-validation-summary="ModelOnly" class="mt-2 text-danger text-decoration-none alert alert-danger fs-6 rounded-2" role="alert"></div>
 				<div class="row">
 					<div class="col-12 col-md-6">
-						<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-						<div class="form-floating mb-3">
-							<input asp-for="Input.Email" class="form-control rounded-2" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-							<label asp-for="Input.Email">Email</label>
+						<div class="form-floating mb-3 w-100">
+							<input asp-for="Input.Email" class="form-control form-control-sm rounded-2" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+							<label asp-for="Input.Email" class="fs-6">Email</label>
 							<span asp-validation-for="Input.Email" class="text-danger fs-6"></span>
 						</div>
 						<div class="form-floating mb-3">
-							<input asp-for="Input.Password" class="form-control rounded-2" autocomplete="new-password" aria-required="true" placeholder="password" />
-							<label asp-for="Input.Password">Password</label>
+							<input asp-for="Input.Password" class="form-control form-control-sm rounded-2" autocomplete="new-password" aria-required="true" placeholder="password" />
+							<label asp-for="Input.Password" class="fs-6">Password</label>
 							<span asp-validation-for="Input.Password" class="text-danger fs-6"></span>
 						</div>
 						<div class="form-floating mb-3">
-							<input asp-for="Input.ConfirmPassword" class="form-control rounded-2" autocomplete="new-password" aria-required="true" placeholder="password" />
-							<label asp-for="Input.ConfirmPassword">Confirm Password</label>
+							<input asp-for="Input.ConfirmPassword" class="form-control form-control-sm rounded-2" autocomplete="new-password" aria-required="true" placeholder="password" />
+							<label asp-for="Input.ConfirmPassword" class="fs-6">Confirm Password</label>
 							<span asp-validation-for="Input.ConfirmPassword" class="text-danger fs-6"></span>
-						</div>
-						<div class="form-floating mb-3">
-							<select id="selectRole" asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select rounded-2">
-								<option disabled selected>Select Role</option>
-							</select>
 						</div>
 
 						<div class="form-floating mb-3">
-							<select id="selectCompany" asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList" class="form-select rounded-2 d-none">
-								<option disabled selected>Select Company</option>
-							</select>
+							<input asp-for="Input.State" class="form-control form-control-sm rounded-2" placeholder="State" />
+							<label asp-for="Input.State" class="fs-6">State</label>
+							<span asp-validation-for="Input.State" class="text-danger fs-6"></span>
 						</div>
 					</div>
 					<div class="col-12 col-md-6">
 						<div class="form-floating mb-3">
-							<input asp-for="Input.Name" class="form-control rounded-2" placeholder="Name" />
-							<label asp-for="Input.Name">Name</label>
+							<input asp-for="Input.Name" class="form-control form-control-sm rounded-2" placeholder="Name" />
+							<label asp-for="Input.Name" class="fs-6">Name</label>
 							<span asp-validation-for="Input.Name" class="text-danger fs-6"></span>
 						</div>
 						<div class="form-floating mb-3">
-							<input asp-for="Input.StreetAddress" class="form-control rounded-2" placeholder="Address" />
-							<label asp-for="Input.StreetAddress">Street Address</label>
+							<input asp-for="Input.StreetAddress" class="form-control form-control-sm rounded-2" placeholder="Address" />
+							<label asp-for="Input.StreetAddress" class="fs-6">Street Address</label>
 							<span asp-validation-for="Input.StreetAddress" class="text-danger fs-6"></span>
 						</div>
 						<div class="form-floating mb-3">
-							<input asp-for="Input.City" class="form-control rounded-2" placeholder="City" />
-							<label asp-for="Input.City">City</label>
+							<input asp-for="Input.City" class="form-control form-control-sm rounded-2" placeholder="City" />
+							<label asp-for="Input.City" class="fs-6">City</label>
 							<span asp-validation-for="Input.City" class="text-danger fs-6"></span>
 						</div>
-						<div class="form-floating mb-3">
-							<input asp-for="Input.State" class="form-control rounded-2" placeholder="State" />
-							<label asp-for="Input.State">State</label>
-							<span asp-validation-for="Input.State" class="text-danger fs-6"></span>
-						</div>
+
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-floating mb-3">
-									<input asp-for="Input.PostalCode" class="form-control rounded-2" placeholder="PostalCode" />
-									<label asp-for="Input.PostalCode">PostalCode</label>
+									<input asp-for="Input.PostalCode" class="form-control form-control-sm rounded-2" placeholder="PostalCode" />
+									<label asp-for="Input.PostalCode" class="fs-6">PostalCode</label>
 									<span asp-validation-for="Input.PostalCode" class="text-danger fs-6"></span>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-floating mb-3">
-									<input asp-for="Input.PhoneNumber" class="form-control rounded-2" placeholder="Phone Number" />
-									<label asp-for="Input.PhoneNumber">Phone Number</label>
+									<input asp-for="Input.PhoneNumber" class="form-control rounded-2 form-control-sm" placeholder="Phone Number" />
+									<label asp-for="Input.PhoneNumber" class="fs-6">Phone Number</label>
 									<span asp-validation-for="Input.PhoneNumber" class="text-danger fs-6"></span>
 								</div>
 							</div>
@@ -80,89 +82,103 @@
 
 					</div>
 				</div>
-				<div class="d-flex justify-content-around">
-					<button id="registerSubmit" type="submit" class="w-100 btn btn-outline-primary shadow-sm border-1 rounded-2 mt-1">Register</button>
+				<div class="row">
+					@if (isAdmin)
+					{
+						<div class="col-12 col-md-6">
+							<div class="form-floating mb-3">
+								<select id="selectRole" asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select rounded-2 fs-6">
+									<option disabled selected>Select Role</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-12 col-md-6">
+							<div class="form-floating mb-3">
+								<select id="selectCompany" asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList" class="form-select rounded-2 d-none fs-6">
+									<option disabled selected>Select Company</option>
+								</select>
+							</div>
+						</div>
+					}
 				</div>
-				<a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-decoration-none text-center text-uppercase fs-6 d-block mt-4">Login</a>
+				<div class="d-flex justify-content-around">
+					<button id="registerSubmit" type="submit" class="w-100 btn btn-outline-primary shadow-sm border-1 rounded-2 mt-1 border-primary-subtle">Register</button>
+				</div>
+				@if (!isAdmin)
+				{
+					<a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-decoration-none text-center text-uppercase fs-6 d-block mt-3">Login</a>
+				}
 			</form>
 		</div>
 
-		<div class="container">
-			<div class="d-flex align-items-center">
-				<div class="flex-grow-1 border-top"></div>
-				<span class="mx-3">OR</span>
-				<div class="flex-grow-1 border-top"></div>
-			</div>
-		</div>
-
-		<div class="px-4 bg-transparent mt-2">
-			<div class="row mt-4">
-				<div class="col-12">
-					<section>
-						@{
-							if ((Model.ExternalLogins?.Count ?? 0) == 0)
-							{
-								<div>
-									<p class="fs-6">
-										There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-											article
-											about setting up this ASP.NET application to support logging in via external services
-										</a>.
-									</p>
-								</div>
-							}
-							else
-							{
-								// <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-								// 	<div>
-								// 		<p>
-								// 			@foreach (var provider in Model.ExternalLogins!)
-								// 			{
-								// 				<button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-								// 			}
-								// 		</p>
-								// 	</div>
-								// </form>
-
-
-								<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-									<div>
-										<p class="d-flex justify-content-lg-around">
-											@foreach (var provider in Model.ExternalLogins!)
-											{
-												@if (provider.Name == "Facebook")
-												{
-													<button type="submit" style="background-color:#4267b2" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
-															value="@provider.Name" title="Log in using your @provider.DisplayName account">
-														<i class="fs-5 bi bi-facebook"></i>
-														Login With @provider.DisplayName
-													</button>
-												}
-												else if (provider.Name == "Google")
-												{
-													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
-															value="@provider.Name" title="Log in using your @provider.DisplayName account">
-														<i class="fs-5 bi bi-google"></i>
-														Login With @provider.DisplayName
-													</button>
-												}
-												else
-												{
-													<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
-															value="@provider.Name" title="Log in using your @provider.DisplayName account">
-														Login With @provider.DisplayName
-													</button>
-												}
-											}
-										</p>
-									</div>
-								</form>
-							}
-						}
-					</section>
+		@if (!isAdmin)
+		{
+			<div class="container mt-4">
+				<div class="d-flex align-items-center">
+					<div class="flex-grow-1 border-top"></div>
+					<span class="mx-3">OR</span>
+					<div class="flex-grow-1 border-top"></div>
 				</div>
 			</div>
-		</div>
+
+			<div class="px-4 bg-transparent mt-2">
+				<div class="row mt-4">
+					<div class="col-12">
+						<section>
+							@{
+								if ((Model.ExternalLogins?.Count ?? 0) == 0)
+								{
+									<div>
+										<p class="fs-6">
+											There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+												article
+												about setting up this ASP.NET application to support logging in via external services
+											</a>.
+										</p>
+									</div>
+								}
+								else
+								{
+									<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+										<div>
+											<p class="d-flex justify-content-lg-around">
+												@foreach (var provider in Model.ExternalLogins!)
+												{
+													@if (provider.Name == "Facebook")
+													{
+														<button type="submit" style="background-color:#4267b2" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+																value="@provider.Name" title="Log in using your @provider.DisplayName account">
+															<i class="fs-5 bi bi-facebook"></i>
+															Login With @provider.DisplayName
+														</button>
+													}
+													else if (provider.Name == "Google")
+													{
+														<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+																value="@provider.Name" title="Log in using your @provider.DisplayName account">
+															<i class="fs-5 bi bi-google"></i>
+															Login With @provider.DisplayName
+														</button>
+													}
+													else
+													{
+														<button type="submit" class="btn btn-primary fs-6 btn-sm rounded-2" name="provider"
+																value="@provider.Name" title="Log in using your @provider.DisplayName account">
+															Login With @provider.DisplayName
+														</button>
+													}
+												}
+											</p>
+										</div>
+									</form>
+								}
+							}
+						</section>
+					</div>
+				</div>
+			</div>
+		}
 	</div>
 </div>
 
