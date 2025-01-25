@@ -33,7 +33,7 @@ public class UserService : IUserService
 
     public void SetCartCount(int CartCount)
     {
-        _httpContextAccessor.HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, CartCount);
+        _httpContextAccessor.HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, (int)CartCount);
     }
 
     public void ClearCart()
