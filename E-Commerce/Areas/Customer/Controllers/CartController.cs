@@ -347,9 +347,7 @@ namespace E_Commerce.Areas.Customer.Controllers
 
         private void DeleteCartDataIfSuccessfull()
         {
-            ClaimsIdentity UserClaims = (ClaimsIdentity)User.Identity;
-            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+            var UserID = _userService.GetUserId();
             try
             {
                 List<ShoppingCart> shoppingCarts = _unitOfWork
@@ -364,6 +362,9 @@ namespace E_Commerce.Areas.Customer.Controllers
                     _unitOfWork.ShoppingCarts.Update(cart);
                 }
                 _unitOfWork.Save();
+
+                _userService.ClearCart();
+                _userService.SetCartCount((int)_userService.GetCartCount());
             }
             catch { }
         }
