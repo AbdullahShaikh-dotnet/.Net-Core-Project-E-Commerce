@@ -12,6 +12,7 @@ using Serilog;
 using Razorpay.Api;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Configuration;
+using ECom.DataAccess.Data.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +108,7 @@ builder.Services.AddSession(option =>
 
 
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<RazorPayService>();
@@ -130,6 +132,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession(); // Added Session
+InIt_Database(); // Initialize Database
 app.MapRazorPages();
 
 app.MapControllerRoute(
@@ -137,3 +140,14 @@ app.MapControllerRoute(
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+
+
+void InIt_Database()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        dbInitializer.Initialize();
+    }
+}
