@@ -4,20 +4,17 @@ using ECom.Utility.Interface;
 using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Razorpay.Api;
 
 namespace ECom.Utility.Services
 {
     public class RazorPayService : IRazorPayService
     {
-        public string _key = "";
-        private static string _secret = "";
-
-        public RazorPayService(IConfiguration configuration)
+        private readonly RazorPaySettings _razorPaySettings;
+        public RazorPayService(IConfiguration configuration, IOptions<RazorPaySettings> razorPaySettings)
         {
-            var razorPaySettings = configuration.GetSection("Razorpay").Get<RazorPaySettings>();
-            _key = razorPaySettings?.PublishableKey;
-            _secret = razorPaySettings?.SecretKey;
+            _razorPaySettings = razorPaySettings.Value;
         }
 
 
@@ -29,7 +26,7 @@ namespace ECom.Utility.Services
         /// <returns>The created Razorpay order.</returns>
         public Order CreateOrder(decimal amount, string currency = "INR")
         {
-            var client = new RazorpayClient(_key, _secret);
+            var client = new RazorpayClient(_razorPaySettings.PublishableKey, _razorPaySettings.SecretKey);
 
             var options = new Dictionary<string, object>
             {
@@ -61,7 +58,7 @@ namespace ECom.Utility.Services
 
             try
             {
-                RazorpayClient client = new RazorpayClient(_key, _secret);
+                RazorpayClient client = new RazorpayClient(_razorPaySettings.PublishableKey, _razorPaySettings.SecretKey);
                 Utils.verifyPaymentSignature(attributes);
                 return true; // Payment is verified
             }
@@ -81,7 +78,7 @@ namespace ECom.Utility.Services
         {
             try
             {
-                RazorpayClient client = new RazorpayClient(_key, _secret);
+                RazorpayClient client = new RazorpayClient(_razorPaySettings.PublishableKey, _razorPaySettings.SecretKey);
                 return client.Payment.Fetch(paymentId);
             }
             catch (Exception ex)
@@ -102,7 +99,7 @@ namespace ECom.Utility.Services
         {
             try
             {
-                RazorpayClient client = new RazorpayClient(_key, _secret);
+                RazorpayClient client = new RazorpayClient(_razorPaySettings.PublishableKey, _razorPaySettings.SecretKey);
                 var options = new Dictionary<string, object>
                 {
                     { "amount", (int)(amount * 100) } // Amount in paise
