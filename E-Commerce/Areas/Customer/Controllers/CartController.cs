@@ -4,9 +4,12 @@ using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;
+using ECom.Utility.Interface;
 using ECom.Utility.Services;
+using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Razorpay.Api;
 
 namespace E_Commerce.Areas.Customer.Controllers
@@ -17,7 +20,10 @@ namespace E_Commerce.Areas.Customer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private RazorPayService _RazorPayService;
+        private readonly IMailJetService _mailJetService;
+        private IRazorPayService _RazorPayService;
+        private readonly RazorPaySettings _razorPaySettings;
+
 
         [BindProperty]
         public PaymentVM _PaymentVM { get; set; }
@@ -25,11 +31,17 @@ namespace E_Commerce.Areas.Customer.Controllers
         [BindProperty]
         public ShoppingCartVM _shoppingCartVM { get; set; }
 
-        public CartController(IUnitOfWork unitOfWork, RazorPayService razorPayService, IUserService userService)
+        public CartController(IUnitOfWork unitOfWork,
+            IRazorPayService razorPayService,
+            IUserService userService,
+            IMailJetService mailJetService,
+            IOptions<RazorPaySettings> razorPaySettings)
         {
             _unitOfWork = unitOfWork;
             _RazorPayService = razorPayService;
             _userService = userService;
+            _mailJetService = mailJetService;
+            _razorPaySettings = razorPaySettings.Value;
         }
 
         public IActionResult Index()
@@ -193,7 +205,7 @@ namespace E_Commerce.Areas.Customer.Controllers
                     OrderID = OrderID,
                     razorpay_order_id = SessionId,
                     Description = "Testing Enviroment",
-                    Key = _RazorPayService._key,
+                    Key = _razorPaySettings.PublishableKey,
                 };
 
 
@@ -286,11 +298,12 @@ namespace E_Commerce.Areas.Customer.Controllers
 
 
         [HttpPost]
-        public IActionResult PaymentVerification()
+        public async Task<IActionResult> PaymentVerification()
         {
-            _PaymentVM.isPaymentSuccessfull = _RazorPayService.VerifyPayment(_PaymentVM.razorpay_order_id, _PaymentVM.razorpay_payment_id, _PaymentVM.razorpay_signature);
-            var UserClaims = (ClaimsIdentity)User.Identity;
-            var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
+            _PaymentVM.isPaymentSuccessfull = _RazorPayService.VerifyPayment(_PaymentVM.razorpay_order_id, _PaymentVM.razorpay_payment_id,
+                _PaymentVM.razorpay_signature);
+
+            var UserID = _userService.GetUserId();
 
             if (_PaymentVM.isPaymentSuccessfull)
             {
@@ -316,9 +329,72 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _unitOfWork.OrderHeaders.UpdatePaymentGatewayID(_PaymentVM.OrderID);
                 _unitOfWork.OrderHeaders.UpdateStatus(_PaymentVM.OrderID, OrderHeaderDb.OrderStatus, SD.Payment_Status_Approved);
                 _unitOfWork.Save();
+
+                await SendConfirmationMail(_PaymentVM.OrderID);
+            }
+            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = User.IsInRole(SD.Role_Customer), OrderID = _PaymentVM.OrderID });
+        }
+
+
+        private async Task SendConfirmationMail(int OrderID)
+        {
+            var OrderDetailDB = _unitOfWork.OrderDetails.GetAll(data => data.OrderHeaderID == OrderID);
+            string ProductTitles = string.Empty;
+
+            foreach (var OrderDetails in OrderDetailDB)
+            {
+                var ProductListDB = _unitOfWork.Product.Get(data => data.Id == OrderDetails.ProductID);
+                ProductTitles += $"<li style='font-size: 14px; color: #374151; margin-bottom: 8px;'>{ProductListDB.Title}</li>";
             }
 
-            return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = User.IsInRole(SD.Role_Customer), OrderID = _PaymentVM.OrderID });
+            string htmlBody = $@"
+                    <!DOCTYPE html>
+                    <html lang='en'>
+                    <head>
+                        <meta charset='UTF-8'>
+                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                        <title>Order Confirmation</title>
+                    </head>
+                    <body style='font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px;'>
+                        <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 24px;'>
+                            <!-- Header -->
+                            <div style='text-align: center; margin-bottom: 24px;'>
+                                <h1 style='font-size: 24px; font-weight: 600; color: #111827;'>?? Order Confirmed!</h1>
+                                <p style='font-size: 16px; color: #6b7280;'>Thank you for your purchase. Your order has been successfully confirmed.</p>
+                            </div>
+
+                            <!-- Order Details -->
+                            <div style='margin-bottom: 24px;'>
+                                <h2 style='font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 12px;'>Order Details</h2>
+                                <div style='background-color: #f3f4f6; border-radius: 6px; padding: 16px;'>
+                                    <p style='font-size: 14px; color: #374151; margin: 0;'>
+                                        <strong>Order ID:</strong> <span style='color: #111827;'>{OrderID}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Product List -->
+                            <div style='margin-bottom: 24px;'>
+                                <h2 style='font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 12px;'>Products Ordered</h2>
+                                <ol style='list-style-type: decimal; padding-left: 20px; margin: 0;'>
+                                    {ProductTitles}
+                                </ol>
+                            </div>
+
+                            <!-- Footer -->
+                            <div style='text-align: center; color: #6b7280; font-size: 14px;'>
+                                <p>If you have any questions, feel free to <a href='mailto:support@example.com' style='color: #3b82f6; text-decoration: none;'>contact us</a>.</p>
+                                <p>© 2023 Your Company. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>";
+
+            await _mailJetService.SendEmailAsync(
+                "abdullah.goldmedalindia@gmail.com",
+                "Order Confirmed",
+                htmlBody
+            );
         }
 
 
@@ -341,7 +417,7 @@ namespace E_Commerce.Areas.Customer.Controllers
                 OrderID = OrderHeaderID,
                 razorpay_order_id = SessionId,
                 Description = "Testing Enviroment",
-                Key = _RazorPayService._key,
+                Key = _razorPaySettings.PublishableKey,
             };
             return View("Payment", _PaymentVM);
         }
