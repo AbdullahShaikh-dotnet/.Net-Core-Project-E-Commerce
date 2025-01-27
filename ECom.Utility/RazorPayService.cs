@@ -6,7 +6,7 @@ using Razorpay.Api;
 
 namespace ECom.Utility
 {
-    public class RazorPayService
+    public class RazorPayService : IRazorPayService
     {
         public string _key = "";
         private static string _secret = "";
@@ -89,6 +89,13 @@ namespace ECom.Utility
             }
         }
 
+        /// <summary>
+        /// Refund the payment using Razorpay API.
+        /// </summary>
+        /// <param name="paymentId">The payment ID from Razorpay.</param>
+        /// <param name="amount">The payment Amount.</param>
+        /// <returns>The JsonResult object containing Refund details.</returns>
+        /// 
         public JsonResult Refund(string paymentId, decimal amount)
         {
             try
