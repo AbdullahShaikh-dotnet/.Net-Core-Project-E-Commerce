@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECom.Utility
+namespace ECom.Utility.Settings
 {
     public class FacebookSettings
     {

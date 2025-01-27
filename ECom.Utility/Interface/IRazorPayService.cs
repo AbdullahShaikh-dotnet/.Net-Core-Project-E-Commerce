@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
 
-namespace ECom.Utility
+namespace ECom.Utility.Interface
 {
     public interface IRazorPayService
     {

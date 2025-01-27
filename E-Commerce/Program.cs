@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using E_Commerce.Areas.Identity.Pages.Account;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using ECom.Utility;
 using Microsoft.Extensions.Options;
 using ECom.Models;
 using Serilog;
@@ -13,6 +12,9 @@ using Razorpay.Api;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using System.Configuration;
 using ECom.DataAccess.Data.DbInitializer;
+using ECom.Utility.Interface;
+using ECom.Utility.Settings;
+using ECom.Utility.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace ECom.Utility
+namespace ECom.Utility.Services
 {
     public class EmailSender : IEmailSender
     {

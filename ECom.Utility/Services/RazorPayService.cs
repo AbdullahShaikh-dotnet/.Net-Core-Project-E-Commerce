@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using ECom.Utility.Interface;
+using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Razorpay.Api;
 
-namespace ECom.Utility
+namespace ECom.Utility.Services
 {
     public class RazorPayService : IRazorPayService
     {
         public string _key = "";
         private static string _secret = "";
-        
+
         public RazorPayService(IConfiguration configuration)
         {
             var razorPaySettings = configuration.GetSection("Razorpay").Get<RazorPaySettings>();
