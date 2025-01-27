@@ -113,9 +113,15 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddSingleton<IRazorPayService, RazorPayService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
+
+
+builder.Services.Configure<RazorPaySettings>(builder.Configuration.GetSection("Razorpay"));
+builder.Services.AddSingleton<IRazorPayService, RazorPayService>();
+
+builder.Services.Configure<MailJetSettings>(builder.Configuration.GetSection("MailJet"));
+builder.Services.AddSingleton<IMailJetService, MailJetService>();
 
 var app = builder.Build();
 
