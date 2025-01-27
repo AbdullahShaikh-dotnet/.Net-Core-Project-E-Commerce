@@ -1,41 +1,34 @@
-﻿using ECom.Utility.Settings;
+﻿using ECom.Utility.Interface;
+using ECom.Utility.Settings;
 using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-public class MailJetService
+public class MailJetService : IMailJetService
 {
-    private readonly IConfiguration _configuration;
-    public string APIKey { get; set; }
-    public string SecretKey { get; set; }
-    public string EmailFrom { get; set; }
-    public string SenderName { get; set; }
-    public MailJetService(IConfiguration configuration)
+    private readonly MailJetSettings _mailJetSettings;
+    public MailJetService(IOptions<MailJetSettings> mailJetSettings)
     {
-        _configuration = configuration;
-        var MailJetCredential = _configuration.GetSection("MailJet").Get<MailJetSettings>();
-        APIKey =  MailJetCredential.APIKey;
-        SecretKey = MailJetCredential.SecretKey;
-        EmailFrom = MailJetCredential.EmailFrom;
-        SenderName = MailJetCredential.SenderName;
+        _mailJetSettings = mailJetSettings.Value;
     }
 
     public async Task SendEmailAsync(string toEmail, string subject, string body)
     {
-        var client = new MailjetClient(APIKey, SecretKey);
+        var client = new MailjetClient(_mailJetSettings.APIKey, _mailJetSettings.SecretKey);
 
         var request = new MailjetRequest
         {
             Resource = Send.Resource,
         }
-        .Property(Send.FromEmail, EmailFrom)
-        .Property(Send.FromName, SenderName)
+        .Property(Send.FromEmail, _mailJetSettings.EmailFrom)
+        .Property(Send.FromName, _mailJetSettings.SenderName)
         .Property(Send.Subject, subject)
-        .Property(Send.TextPart, body)
+        .Property(Send.HtmlPart, body)
         .Property(Send.Recipients, new JArray
         {
             new JObject
@@ -49,17 +42,17 @@ public class MailJetService
 
     public async Task SendEmailWithAttachmentAsync(string toEmail, string subject, string body, byte[] attachment, string fileName)
     {
-        var client = new MailjetClient(APIKey, SecretKey);
+        var client = new MailjetClient(_mailJetSettings.APIKey, _mailJetSettings.SecretKey);
         var attachmentBase64 = System.Convert.ToBase64String(attachment);
 
         var request = new MailjetRequest
         {
             Resource = Send.Resource,
         }
-        .Property(Send.FromEmail, EmailFrom)
-        .Property(Send.FromName, SenderName)
+        .Property(Send.FromEmail, _mailJetSettings.EmailFrom)
+        .Property(Send.FromName, _mailJetSettings.SenderName)
         .Property(Send.Subject, subject)
-        .Property(Send.TextPart, body)
+        .Property(Send.HtmlPart, body)
         .Property(Send.Recipients, new JArray
         {
             new JObject
@@ -81,7 +74,7 @@ public class MailJetService
 
     public async Task SendBulkEmailAsync(List<string> toEmails, string subject, string body)
     {
-        var client = new MailjetClient(APIKey, SecretKey);
+        var client = new MailjetClient(_mailJetSettings.APIKey, _mailJetSettings.SecretKey);
         var recipients = new JArray();
 
         foreach (var email in toEmails)
@@ -95,10 +88,10 @@ public class MailJetService
         {
             Resource = Send.Resource,
         }
-        .Property(Send.FromEmail, EmailFrom)
-        .Property(Send.FromName, SenderName)
+        .Property(Send.FromEmail, _mailJetSettings.EmailFrom)
+        .Property(Send.FromName, _mailJetSettings.SenderName)
         .Property(Send.Subject, subject)
-        .Property(Send.TextPart, body)
+        .Property(Send.HtmlPart, body)
         .Property(Send.Recipients, recipients);
 
         await client.PostAsync(request);
