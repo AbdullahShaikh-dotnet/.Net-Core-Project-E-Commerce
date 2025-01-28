@@ -15,6 +15,7 @@ using ECom.DataAccess.Data.DbInitializer;
 using ECom.Utility.Interface;
 using ECom.Utility.Settings;
 using ECom.Utility.Services;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,6 +123,10 @@ builder.Services.AddSingleton<IRazorPayService, RazorPayService>();
 
 builder.Services.Configure<MailJetSettings>(builder.Configuration.GetSection("MailJet"));
 builder.Services.AddSingleton<IMailJetService, MailJetService>();
+
+
+QuestPDF.Settings.License = LicenseType.Community;
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 var app = builder.Build();
 
