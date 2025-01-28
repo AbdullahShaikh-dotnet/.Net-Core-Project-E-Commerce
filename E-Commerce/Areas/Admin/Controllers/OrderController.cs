@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using ECom.Models.ViewModels;
 using ECom.Utility.Services;
+using ECom.Utility.Interface;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {
@@ -18,11 +19,12 @@ namespace E_Commerce.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
-        private RazorPayService _RazorPayService;
+        //private readonly RazorPayService _RazorPayService;
+        private IRazorPayService _RazorPayService;
 
         [BindProperty]
         public OrderVM orderVM { get; set; }
-        public OrderController(IUnitOfWork UnitOfWork, RazorPayService razorPayService)
+        public OrderController(IUnitOfWork UnitOfWork, IRazorPayService razorPayService)
         {
             _UnitOfWork = UnitOfWork;
             _RazorPayService = razorPayService;
