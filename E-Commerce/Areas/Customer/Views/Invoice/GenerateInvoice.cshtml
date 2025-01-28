@@ -1,0 +1,3 @@
+﻿<a href="@Url.Action("DownloadInvoice", new { OrderID = Model.OrderID })" class="btn btn-primary mb-3">Download Invoice</a>
+
+<iframe src="@Url.Action("ViewInvoice", new { OrderID = Model.OrderID })" width="100%" height="600px"></iframe>

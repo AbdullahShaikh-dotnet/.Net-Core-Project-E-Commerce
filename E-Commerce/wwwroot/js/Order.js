@@ -32,7 +32,7 @@ const LoadDataTables = function () {
             { data: 'phoneNumber', title: 'Phone Number' },
             { data: '_ApplicationUser.email', title: 'Email' },
             { data: 'orderStatus', title: 'Order Status' },
-            { data: 'orderTotal', title:'Order Total' },
+            { data: 'orderTotal', title: 'Order Total' },
             {
                 data: 'id',
                 title: 'Actions',
@@ -41,6 +41,11 @@ const LoadDataTables = function () {
                     	<div class="btn-group d-flex justify-content-center" role="group">
 							<a class="mx-4 " href="${EditURL + d}">
 								<i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
+							</a>
+
+                            <a class="mx-4 text-decoration-none" href="/customer/Invoice/GenerateInvoice?OrderID=${d}"> 
+                            <i class="bi bi-download"></i>
+                            Invoice
 							</a>
 						</div>
                     `;
