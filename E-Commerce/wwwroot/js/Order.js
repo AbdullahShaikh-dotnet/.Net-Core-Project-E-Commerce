@@ -34,24 +34,40 @@ const LoadDataTables = function () {
             { data: 'orderStatus', title: 'Order Status' },
             { data: 'orderTotal', title: 'Order Total' },
             {
-                data: 'id',
+                data: null,
                 title: 'Actions',
-                render: function (d) {
-                    return `
-                    	<div class="btn-group d-flex justify-content-center" role="group">
-							<a class="mx-4 " href="${EditURL + d}">
-								<i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
-							</a>
-
-                            <a class="mx-4 text-decoration-none" href="/customer/Invoice/GenerateInvoice?OrderID=${d}"> 
-                            <i class="bi bi-download"></i>
-                            Invoice
-							</a>
-						</div>
-                    `;
+                className: 'text-center',
+                render: function (data) {
+                    const editLink = `<a class="mx-4" href="${EditURL + data.id}">
+                                        <i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
+                                      </a>`;
+                    return editLink;
                 },
                 orderable: false,
                 searchable: false
+            },
+            {
+                data: null,
+                title: 'Invoice',
+                className: 'text-center',
+                render: function (data) {
+                    if (data.invoiceNumber) {
+                        return `<div class="btn-group d-flex justify-content-center" role="group">
+                        <a class="mx-4 fs-5 text-decoration-none" title="Download Invoice"
+                        href="/customer/Invoice/DownloadInvoice?OrderID=${data.id}">
+                            <i class="bi bi-download"></i>
+                        </a>
+
+                        <a class="mx-4 fs-5 text-decoration-none" target="_blank" title="View Invoice"
+                        href="/customer/Invoice/GenerateInvoice?OrderID=${data.id}">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                               `;
+                    }
+                    return '';
+                },
+                orderable: false,
+                searchable: false,
             },
         ],
         select: true,
