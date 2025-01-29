@@ -44,7 +44,7 @@ namespace ECom.DataAccess.Repository
                 {
                     orderHeaderDB.PaymentSignature = orderPaymentDb.razorpay_signature;
                 }
-
+                orderHeaderDB.PaymentDate = orderPaymentDb.CreateDate;
             }
         }
 
