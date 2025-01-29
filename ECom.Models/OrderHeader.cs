@@ -29,7 +29,6 @@ namespace ECom.Models
         public DateTime PaymentDate { get; set; }
         public DateOnly PaymentDueDate { get; set; }
 
-
         public string? SessionId { get; set; }
 
         public string? PaymentIntendID { get; set; }
@@ -55,6 +54,10 @@ namespace ECom.Models
         public string Name { get; set; }
 
         public DateTime CreateDate { get; set; } = DateTime.Now;
+
+        public string? InvoiceNumber { get; set; }
+
+        public DateTime? InvoiceDate { get; set; }
 
         [ValidateNever]
         public DateTime? UpdateDate { get; set; }
