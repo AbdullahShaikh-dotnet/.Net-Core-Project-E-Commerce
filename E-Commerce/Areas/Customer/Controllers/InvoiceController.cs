@@ -62,7 +62,9 @@ public class InvoiceController : Controller
             OrderDate = OrderHeaderDB.OrderDate,
             CustomerName = CustomerName,
             Items = InvoiceItemList,
-            TotalAmount = (decimal)OrderHeaderDB.OrderTotal
+            TotalAmount = (decimal)OrderHeaderDB.OrderTotal,
+            InvoiceNumber = OrderHeaderDB.InvoiceNumber,
+            InvoiceDate = (DateTime)OrderHeaderDB.InvoiceDate
         };
 
         return invoice;

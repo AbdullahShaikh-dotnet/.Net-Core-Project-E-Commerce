@@ -50,7 +50,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                 orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted && orderData.PaymentStatus == SD.Payment_Status_Approved
-                    && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
+                    && orderData.ApplicationUserID == UserID && !string.IsNullOrEmpty(orderData.InvoiceNumber), includePropertiesList: "_ApplicationUser")
                 .ToList();
             }
             else if (User.IsInRole(SD.Role_Company))
@@ -152,6 +152,9 @@ namespace E_Commerce.Areas.Admin.Controllers
             OrderHeaderdb.Carrier = orderVM.orderHeader.Carrier;
             OrderHeaderdb.OrderStatus = SD.Status_Shipped;
             OrderHeaderdb.ShippingDate = DateTime.Now;
+
+            OrderHeaderdb.InvoiceNumber = Guid.NewGuid().ToString();
+            OrderHeaderdb.InvoiceDate = DateTime.Now;
 
             if (OrderHeaderdb.PaymentStatus == SD.Payment_Status_Delayed_Payment)
             {
