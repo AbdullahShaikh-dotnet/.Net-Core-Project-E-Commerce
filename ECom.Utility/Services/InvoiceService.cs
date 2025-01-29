@@ -50,9 +50,14 @@ namespace ECom.Utility.Services
                     // Add a border to the entire page content
                     page.Content()
                         .Border(0.5f) // Add a 1-unit border around the content
-                        .PaddingVertical(1, Unit.Centimetre)
                         .Column(x =>
                         {
+                            x.Item()
+                                .Padding(5)
+                                .PaddingLeft(10)
+                                .Text("E-Commerce")
+                                .SemiBold().FontSize(20).AlignLeft();
+
                             x.Spacing(10);
 
                             // Add a border to the header
@@ -71,7 +76,7 @@ namespace ECom.Utility.Services
                                 });
 
 
-                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(10).Text($"Invoice Number  : ");
+                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(10).Text($"Invoice No  : ");
                                 table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(10).Text(invoice.InvoiceNumber);
 
                                 table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text($"Invoice Date  : ");
@@ -79,6 +84,12 @@ namespace ECom.Utility.Services
 
                                 table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text($"Customer Name  : ");
                                 table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text(invoice.CustomerName);
+
+                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text($"Order No  : ");
+                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text(invoice.OrderID.ToString());
+
+                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text($"Order Date  : ");
+                                table.Cell().PaddingRight(10).PaddingLeft(10).PaddingTop(5).Text(invoice.OrderDate.ToString("dd-MM-yyyyy"));
                             });
 
 
