@@ -50,8 +50,8 @@ namespace E_Commerce.Areas.Admin.Controllers
                 orderHeaders = _UnitOfWork
                 .OrderHeaders
                 .GetAll(orderData => !orderData.IsDeleted && orderData.PaymentStatus == SD.Payment_Status_Approved
-                    && orderData.ApplicationUserID == UserID && !string.IsNullOrEmpty(orderData.InvoiceNumber), includePropertiesList: "_ApplicationUser")
-                .ToList();
+                    && orderData.ApplicationUserID == UserID, includePropertiesList: "_ApplicationUser")
+                .ToList().OrderByDescending(data => data.CreateDate);
             }
             else if (User.IsInRole(SD.Role_Company))
             {
@@ -59,7 +59,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                     .OrderHeaders
                     .GetAll(orderData => !orderData.IsDeleted && orderData.ApplicationUserID == UserID,
                     includePropertiesList: "_ApplicationUser")
-                    .ToList();
+                    .ToList().OrderByDescending(data => data.CreateDate); ;
             }
             else
             {
