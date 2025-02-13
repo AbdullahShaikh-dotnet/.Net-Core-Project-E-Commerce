@@ -12,6 +12,30 @@ const LoadDataTables = function () {
     const DeleteURL = RootPath + tableElement.dataset?.deleteurl;
     DT = new DataTable(tableElement, {
         ajax: { url: GetURL },
+        layout: {
+            bottomStart: {
+                buttons: [
+                    {
+                        extend: 'csv',
+                        className: 'btn-sm btn-outline-primary border-1 rounded-1 mx-1', // Custom class
+                        filename: 'Product Report', // Custom filename
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn-sm btn-outline-primary border-1 rounded-1 mx-1',
+                        filename: 'Product Report',
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn-sm btn-outline-primary border-1 rounded-1 mx-1',
+                        filename: 'Product Report',
+                        orientation: 'landscape', // Portrait or landscape
+                        pageSize: 'A4' // Page size
+                    }
+                ]
+            }
+        }
+        ,
         columns: [
             {
                 title: 'Sr. No.',
@@ -50,12 +74,12 @@ const LoadDataTables = function () {
                 render: function (d) {
                     return `
                     	<div class="btn-group d-flex justify-content-center" role="group">
-							<a class="mx-4 " href="${ EditURL + d}">
+							<a class="mx-4 " href="${EditURL + d}">
 								<i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
 							</a>
 
                             <i class="text-danger mx-4 bi bi-trash fs-4 btnDelete"
-                            data-url='${ DeleteURL+ d }' style="cursor: pointer"></i>
+                            data-url='${DeleteURL + d}' style="cursor: pointer"></i>
 						</div>
                     `;
                 },
