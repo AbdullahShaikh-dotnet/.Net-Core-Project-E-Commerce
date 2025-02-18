@@ -7,60 +7,126 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-	int? CartCount = ContextAccessor.HttpContext.Session.GetInt32(SD.ShoppingCartSessionKey);
+    int? CartCount = ContextAccessor.HttpContext.Session.GetInt32(SD.ShoppingCartSessionKey);
 }
-<ul class="navbar-nav">
-	@if (SignInManager.IsSignedIn(User))
-	{
-		var currentUser = await UserManager.GetUserAsync(User);
-		var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
+@* <ul class="flex items-center space-x-4">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = await UserManager.GetUserAsync(User);
+        var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
 
-		<li class="nav-item mx-2">
-			<a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-				<i class="bi bi-person-circle"></i>
-				Hello @Username!
-			</a>
-		</li>
-		<li class="nav-item mx-2 position-relative mx-4">
-			<a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-				<i class="bi bi-cart-fill fs-5"></i>
-				@* 	<span class="badge rounded-5 ms-2 position-absolute top-25 start-75 translate-middle"
-					  style="font-size:8px; background:#b70000;">@(CartCount is not null ? CartCount : 0)</span> *@
-					  @await Component.InvokeAsync("ShoppingCartCount")
-			</a>
-		</li>
-		<li class="nav-item mx-2">
-			<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-				<button id="logout" type="submit" class="nav-link btn btn-link border-0">
-					Logout
-					<i class="bi bi-caret-right-fill"></i>
-				</button>
-			</form>
-		</li>
-	}
-	else
-	{
+        <li>
+            <a id="manage" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="bi bi-person-circle text-xl"></i>
+                <span>Hello @Username!</span>
+            </a>
+        </li>
+        <li class="relative">
+            <a class="flex items-center text-gray-700 hover:text-gray-900" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                <i class="bi bi-cart-fill text-xl"></i>
+                <span class="absolute top-0 left-5 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5">@await Component.InvokeAsync("ShoppingCartCount")</span>
+            </a>
+        </li>
+        <li>
+            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="text-gray-700 hover:text-gray-900">
+                    Logout <i class="bi bi-caret-right-fill"></i>
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="relative group">
+            <a class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 cursor-pointer">
+                <i class="bi bi-person-circle text-xl"></i>
+                <span>Login</span>
+            </a>
+            <ul class="absolute hidden group-hover:block bg-white shadow-lg rounded-lg p-2 w-40">
+                <li>
+                    <a class="flex items-center px-3 py-2 hover:bg-gray-100 rounded-md text-gray-700" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <i class="bi bi-person-circle text-lg mr-2"></i>
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a class="flex items-center px-3 py-2 hover:bg-gray-100 rounded-md text-gray-700" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <i class="bi bi-person-plus-fill text-lg mr-2"></i>
+                        Register
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
+</ul> *@
 
-		<li class="nav-item dropdown mx-5">
-			<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="bi bi-person-circle"></i>
-				Login
-			</a>
-			<ul class="dropdown-menu rounded-2 shadow-sm" style="left: -20px !important;">
-				<li>
-					<a class="dropdown-item fw-bold" id="login" asp-area="Identity" asp-page="/Account/Login">
-						<i class="bi bi-person-circle fs-4 px-2"></i>
-						Login
-					</a>
-				</li>
-				<li>
-					<a class="dropdown-item fw-bold" id="register" asp-area="Identity" asp-page="/Account/Register">
-						<i class="bi bi-person-plus-fill fs-4 px-2"></i>
-						Register
-					</a>
-				</li>
-			</ul>
-		</li>
 
-	}
+<ul class="flex items-center space-x-4">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var currentUser = await UserManager.GetUserAsync(User);
+        var Username = currentUser?.Name ?? currentUser?.UserName ?? "Guest";
+
+        <li>
+            <a id="manage" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 px-4 hover:bg-gray-50 rounded-md transition-all ease duration-200" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="bi bi-person-circle text-xl"></i>
+                <span class="text-gray-700 text-sm font-semibold my-2 px-1">Hello @Username!</span>
+            </a>
+        </li>
+        <li class="relative">
+            <a class="flex items-center text-gray-700 hover:text-gray-900" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+               @*  <i class="bi bi-cart-fill text-xl"></i>
+                <span class="absolute top-0 left-3 bg-transparent text-white rounded-full px-0.5 py-0.5"></span>*@
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                </svg>
+                <div class="absolute top-0 text-lg left-3 bg-transparent text-white rounded-full px-0.5 py-0.5">@await Component.InvokeAsync("ShoppingCartCount")</div>
+            </a>
+        </li>
+        <li>
+            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="text-gray-700 text-sm font-semibold my-2 p-2 rounded-md hover:bg-gray-50">
+                    Logout <i class="bi bi-caret-right-fill"></i>
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="relative" id="dropdownWrapper">
+            <a class="flex items-center space-x-2 text-gray-700 text-sm font-semibold my-2 p-2 rounded-md hover:bg-gray-50" id="loginDropdown">
+                @* <i class="bi bi-person-circle text-xl"></i> *@
+                <span>Login &rarr;</span>
+            </a>
+            <ul id="dropdownMenu" class="absolute z-40 opacity-0 invisible bg-white shadow-sm border rounded-lg p-2 w-40 transition-opacity duration-300 ease-in-out">
+                <li>
+                    <a class="flex items-center px-3 py-2 hover:bg-gray-50 rounded-md text-gray-700 text-sm font-semibold" id="login" asp-area="Identity" asp-page="/Account/Login">
+                        <i class="bi bi-person-circle text-lg mr-2"></i>
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a class="flex items-center px-3 py-2 hover:bg-gray-50 rounded-md text-gray-700 text-sm font-semibold" id="register" asp-area="Identity" asp-page="/Account/Register">
+                        <i class="bi bi-person-plus-fill text-lg mr-2"></i>
+                        Register
+                    </a>
+                </li>
+            </ul>
+        </li>
+    }
 </ul>
+
+<script>
+    const dropdownWrapper = document.getElementById("dropdownWrapper");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    dropdownWrapper.addEventListener("mouseenter", function () {
+        dropdownMenu.classList.remove("opacity-0", "invisible");
+        dropdownMenu.classList.add("opacity-100", "visible");
+    });
+
+    dropdownWrapper.addEventListener("mouseleave", function () {
+        dropdownMenu.classList.remove("opacity-100", "visible");
+        dropdownMenu.classList.add("opacity-0", "invisible");
+    });
+</script>
