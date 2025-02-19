@@ -1,220 +1,223 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - E Commerce</title>
-	<link href="~/css/renderedtailwindcss.css" rel="stylesheet" asp-append-version="true" />
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-	<link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
-	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - E Commerce</title>
+    <link href="~/css/renderedtailwindcss.css" rel="stylesheet" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body class="flex flex-col min-h-screen bg-white">
-	<header class="bg-white sticky top-0 z-50 border-b-1 border-gray-700 drop-shadow-sm">
-		<nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
-			<!-- Logo (Left Side) -->
-			<div class="flex lg:flex-none">
-				<a href="#" class="-m-1.5 p-1.5">
-					<span class="sr-only">Your Company</span>
-					<svg class="h-8 w-auto" viewBox="0 0 512 512" xml:space="preserve">
-					<path style="fill:transparent" d="M13.872 42.808h484.256L256 461.232z" />
-					<path d="M484.256 50.8 256 445.264 27.744 50.8zM512 34.8H0l256 442.4z" />
-					<path d="m256 303.008 106.424-183.92H149.576z" /></svg>
-				</a>
-			</div>
+    <header class="bg-white sticky top-0 z-50 border-b border-gray-300 drop-shadow-sm">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between p-3 lg:px-8" aria-label="Global">
+            <!-- Logo (Left Side) -->
+            <div class="flex lg:flex-none">
+                <a href="#" class="-m-1.5 p-1.5">
+                    <span class="sr-only">Your Company</span>
+                    <svg class="h-8 w-auto" viewBox="0 0 512 512" xml:space="preserve">
+                    <path style="fill:transparent" d="M13.872 42.808h484.256L256 461.232z" />
+                    <path d="M484.256 50.8 256 445.264 27.744 50.8zM512 34.8H0l256 442.4z" />
+                    <path d="m256 303.008 106.424-183.92H149.576z" /></svg>
+                </a>
+            </div>
 
-			<!-- Mobile Menu Button -->
-			<button class="mobile-menu-button lg:hidden text-gray-900 focus:outline-none">
-				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-				</svg>
-			</button>
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-button lg:hidden text-gray-900 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
 
-			<!-- Centered Menu -->
-			<div class="hidden lg:flex flex-1 justify-center gap-x-12 lg:gap-x-12">
-				<a class="text-sm font-semibold" asp-area="Customer" asp-controller="Home" asp-action="Index"><span class="text-gray-700">Home</span></a>
-				@if (User.IsInRole(SD.Role_Admin))
-				{
-					<div class="relative menu-item">
+            <!-- Centered Menu -->
+            <div class="hidden lg:flex flex-1 justify-center gap-x-12 lg:gap-x-12">
+                <a class="text-sm font-semibold" asp-area="Customer" asp-controller="Home" asp-action="Index"><span class="text-gray-700">Home</span></a>
+                @if (User.IsInRole(SD.Role_Admin))
+                {
+                    <div class="relative menu-item">
 
-						<button type="button" class="flyout-button flex items-center gap-x-1 text-sm font-semibold text-gray-700" aria-expanded="false">
-							Content Management
-							<svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-								<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-							</svg>
-						</button>
+                        <button type="button" class="flyout-button flex items-center gap-x-1 text-sm font-semibold text-gray-700" aria-expanded="false">
+                            Content Management
+                            <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
 
-						<div class="flyout-menu absolute -left-8 top-full z-10 mt-3 w-screen max-w-sm overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5 invisible opacity-0 scale-95 transition ease-out duration-200">
-							<div class="p-3">
-								<a asp-area="Admin" asp-controller="Category" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
-									<div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
-										<svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
-											<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
-										</svg>
-									</div>
-									<span class="text-gray-700">Category</span>
-								</a>
+                        <div class="flyout-menu absolute -left-8 top-full z-10 mt-3 w-screen max-w-sm overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-gray-900/5 invisible opacity-0 scale-95 transition ease-out duration-200">
+                            <div class="p-3">
+                                <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                                    <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700">Category</span>
+                                </a>
 
-								<a asp-area="Admin" asp-controller="Product" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
-									<div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
-										<svg class="size-5 text-gray-600 transition-all duration-300" width="30" height="30" viewBox="0 0 15 15" fill="none" stroke-width="1" stroke="currentColor" aria-hidden="true">
-											<path d="M.5 3.498 7.5.5l7 2.998m-14 0 7 2.998m-7-2.998V3.5m14-.002-7 2.998m7-2.998V11.5l-7 3m7-11.002L7.5 6.5v8m0-8.004V14.5m0-8.004L.5 3.5m7 11-7-3v-8" stroke-linejoin="round" />
-										</svg>
-									</div>
-									<span class="text-gray-700">Product</span>
-								</a>
+                                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                                    <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                        <svg class="size-5 text-gray-600 transition-all duration-300" width="30" height="30" viewBox="0 0 15 15" fill="none" stroke-width="1" stroke="currentColor" aria-hidden="true">
+                                            <path d="M.5 3.498 7.5.5l7 2.998m-14 0 7 2.998m-7-2.998V3.5m14-.002-7 2.998m7-2.998V11.5l-7 3m7-11.002L7.5 6.5v8m0-8.004V14.5m0-8.004L.5 3.5m7 11-7-3v-8" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700">Product</span>
+                                </a>
 
-								<a asp-area="Admin" asp-controller="Company" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
-									<div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
-										<svg class="size-5 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
-										</svg>
+                                <a asp-area="Admin" asp-controller="Company" asp-action="Index" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                                    <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                        <svg class="size-5 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
+                                        </svg>
 
-									</div>
-									<span class="text-gray-700">Company</span>
-								</a>
+                                    </div>
+                                    <span class="text-gray-700">Company</span>
+                                </a>
 
-								<hr class="m-2" />
+                                <hr class="m-2" />
 
-								<a asp-area="Identity" asp-page="/Account/Register" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
-									<div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
-										<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-600 transition-all duration-300">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-										</svg>
-									</div>
-									<span class="text-gray-700">Create User</span>
-								</a>
+                                <a asp-area="Identity" asp-page="/Account/Register" class="group relative flex items-center gap-x-6 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                                    <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-600 transition-all duration-300">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-700">Create User</span>
+                                </a>
 
-							</div>
-						</div>
-					</div>
-				}
+                            </div>
+                        </div>
+                    </div>
+                }
 
-				<a asp-area="Admin" asp-controller="Order" asp-action="Index" class="text-sm font-semibold">
-					<span class="text-gray-700">
-						@(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) ? "Manage Orders" : "My Orders")
-					</span>
-				</a>
-				<a asp-area="Customer" asp-controller="Home" asp-action="Privacy" class="text-sm font-semibold"><span class="text-gray-700">Privacy</span></a>
-			</div>
+                <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="text-sm font-semibold">
+                    <span class="text-gray-700">
+                        @(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) ? "Manage Orders" : "My Orders")
+                    </span>
+                </a>
+                <a asp-area="Customer" asp-controller="Home" asp-action="Privacy" class="text-sm font-semibold"><span class="text-gray-700">Privacy</span></a>
+            </div>
 
-			<div class="hidden lg:block">
-				<partial name="_LoginPartial" />
-			</div>
-		</nav>
-
-
-		<!-- Mobile Menu -->
-		<div class="mobile-menu max-h-0 overflow-hidden opacity-0 scale-95 transform transition-all duration-500 bg-white lg:hidden">
-			<div class="space-y-2 px-6 py-4">
-				<div class="mobile-menu-item">
-					<button type="button" class="mobile-submenu-button group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">
-						Content Management
-						<svg class="size-5 flex-none text-gray-400 transition-transform duration-300 mobile-submenu-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-						</svg>
-					</button>
-					<!-- Nested Submenu -->
-					<div class="mobile-submenu max-h-0 overflow-hidden transition-all duration-300 ease-in-out pl-6 space-y-2">
-						<a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Category</span></a>
-						<a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Product</span></a>
-						<a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Company</span></a>
-					</div>
-
-					<button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Home</button>
-					<button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Orders</button>
-					<button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Privacy</button>
-
-					<hr />
-					<!-- Login Button (Right Side) -->
-					<div class="flex justify-end gap-x-2">
-						<div class="hidden sm:block">
-							<partial name="_LoginPartial" />
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div class="hidden lg:block">
+                <partial name="_LoginPartial" />
+            </div>
+        </nav>
 
 
-	</header>
+        <!-- Mobile Menu -->
+        <div class="mobile-menu max-h-0 overflow-hidden opacity-0 scale-95 transform transition-all duration-500 bg-white lg:hidden">
+            <div class="space-y-2 px-6 py-4">
+                <div class="mobile-menu-item">
+
+                    @if (User.IsInRole(SD.Role_Admin))
+                    {
+                        <button type="button" class="mobile-submenu-button group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">
+                            Content Management
+                            <svg class="size-5 flex-none text-gray-400 transition-transform duration-300 mobile-submenu-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    }
+
+                    <!-- Nested Submenu -->
+                    <div class="mobile-submenu max-h-0 overflow-hidden transition-all duration-300 ease-in-out pl-6 space-y-2">
+                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Category</span></a>
+                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Product</span></a>
+                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Company</span></a>
+                    </div>
+
+                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Home</button>
+                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Orders</button>
+                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Privacy</button>
+
+                    <hr />
+                    <!-- Login Button (Right Side) -->
+                    <div class="flex justify-end gap-x-2">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-	@* <div class="container-fluid px-5"> *@
-	<main role="main" class="flex-grow p-4">
-		<partial name="_Notification"></partial>
-		@RenderBody()
-	</main>
-	@* </div> *@
+    </header>
 
-	<footer class="border-top fixed-bottom footer bg-primary">
-		<div class="container-fluid text-light">
-			&copy; 2024 - E-Commerce
-		</div>
-	</footer>
-	<script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	@*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    @* <div class="container-fluid px-5"> *@
+    <main role="main" class="flex-grow p-4">
+        <partial name="_Notification"></partial>
+        @RenderBody()
+    </main>
+    @* </div> *@
+
+    <footer class="border-top fixed-bottom footer bg-primary">
+        <div class="container-fluid text-light">
+            &copy; 2024 - E-Commerce
+        </div>
+    </footer>
+    <script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script> *@
-	<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
+    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
 
-	<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-	<script src="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.js"></script>
-	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const toggleClass = (element, add, remove) => {
-				element.classList.remove(...remove);
-				element.classList.add(...add);
-			};
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleClass = (element, add, remove) => {
+                element.classList.remove(...remove);
+                element.classList.add(...add);
+            };
 
-			// Toggle mobile menu
-			document.querySelector('.mobile-menu-button')?.addEventListener('click', () => {
-				const menu = document.querySelector('.mobile-menu');
-				toggleClass(menu,
-					menu.classList.contains("max-h-0") ? ["max-h-[500px]", "opacity-100", "scale-100"] : ["max-h-0", "opacity-0", "scale-95"],
-					menu.classList.contains("max-h-0") ? ["max-h-0", "opacity-0", "scale-95"] : ["max-h-[500px]", "opacity-100", "scale-100"]
-				);
-			});
+            // Toggle mobile menu
+            document.querySelector('.mobile-menu-button')?.addEventListener('click', () => {
+                const menu = document.querySelector('.mobile-menu');
+                toggleClass(menu,
+                    menu.classList.contains("max-h-0") ? ["max-h-[500px]", "opacity-100", "scale-100"] : ["max-h-0", "opacity-0", "scale-95"],
+                    menu.classList.contains("max-h-0") ? ["max-h-0", "opacity-0", "scale-95"] : ["max-h-[500px]", "opacity-100", "scale-100"]
+                );
+            });
 
-			// Toggle mobile submenu
-			document.querySelectorAll('.mobile-submenu-button').forEach(button => {
-				button.addEventListener('click', function () {
-					const submenu = this.nextElementSibling;
-					submenu.style.maxHeight = submenu.style.maxHeight ? null : submenu.scrollHeight + 'px';
-					this.querySelector('.mobile-submenu-icon').classList.toggle('rotate-180');
-				});
-			});
+            // Toggle mobile submenu
+            document.querySelectorAll('.mobile-submenu-button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const submenu = this.nextElementSibling;
+                    submenu.style.maxHeight = submenu.style.maxHeight ? null : submenu.scrollHeight + 'px';
+                    this.querySelector('.mobile-submenu-icon').classList.toggle('rotate-180');
+                });
+            });
 
-			// Toggle desktop flyout menu
-			document.querySelectorAll('.flyout-button').forEach(button => {
-				button.addEventListener('click', function (event) {
-					event.stopPropagation();
-					const menu = this.nextElementSibling;
-					menu.classList.toggle('invisible');
-					menu.classList.toggle('opacity-0');
-					menu.classList.toggle('scale-95');
-					menu.classList.toggle('opacity-100');
-					menu.classList.toggle('scale-100');
-				});
-			});
+            // Toggle desktop flyout menu
+            document.querySelectorAll('.flyout-button').forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                    const menu = this.nextElementSibling;
+                    menu.classList.toggle('invisible');
+                    menu.classList.toggle('opacity-0');
+                    menu.classList.toggle('scale-95');
+                    menu.classList.toggle('opacity-100');
+                    menu.classList.toggle('scale-100');
+                });
+            });
 
-			// Close menus when clicking outside
-			document.addEventListener('click', (event) => {
-				document.querySelectorAll('.flyout-menu').forEach(menu => {
-					if (!menu.parentElement.contains(event.target)) {
-						toggleClass(menu, ["invisible", "opacity-0", "scale-95"], ["opacity-100", "scale-100"]);
-					}
-				});
-			});
-		});
+            // Close menus when clicking outside
+            document.addEventListener('click', (event) => {
+                document.querySelectorAll('.flyout-menu').forEach(menu => {
+                    if (!menu.parentElement.contains(event.target)) {
+                        toggleClass(menu, ["invisible", "opacity-0", "scale-95"], ["opacity-100", "scale-100"]);
+                    }
+                });
+            });
+        });
 
-	</script>
+    </script>
 
 
-	@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
