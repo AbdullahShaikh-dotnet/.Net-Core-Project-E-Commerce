@@ -1,6 +1,5 @@
 ﻿using E_Commerce.DataAccess.Data;
 using ECom.DataAccess.Repository.IRepository;
-using ECom.Models;
 using ECom.Models.ViewModels;
 
 namespace ECom.DataAccess.Repository

@@ -1,5 +1,4 @@
-﻿using ECom.DataAccess.Repository;
-using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;

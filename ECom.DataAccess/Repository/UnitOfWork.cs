@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using E_Commerce.DataAccess.Data;
+﻿using E_Commerce.DataAccess.Data;
 using ECom.DataAccess.Repository.IRepository;
-using ECom.Models;
 
 namespace ECom.DataAccess.Repository
 {

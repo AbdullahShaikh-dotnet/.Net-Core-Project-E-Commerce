@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using E_Commerce.DataAccess.Data;
+﻿using E_Commerce.DataAccess.Data;
 using ECom.Models;
 using ECom.Utility;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +24,7 @@ namespace ECom.DataAccess.Data.DbInitializer
             // Migrate if not Applied
             try
             {
-                if(_db.Database.GetPendingMigrations().Count() > 0)
+                if (_db.Database.GetPendingMigrations().Count() > 0)
                 {
                     _db.Database.Migrate();
                 }

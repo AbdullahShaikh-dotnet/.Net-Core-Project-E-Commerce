@@ -1,7 +1,4 @@
-﻿using ECom.Utility;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -46,6 +43,6 @@ namespace ECom.Models.ViewModels
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         [NotMapped]
-        public bool isCustomer {  get; set; } = true;
+        public bool isCustomer { get; set; } = true;
     }
 }

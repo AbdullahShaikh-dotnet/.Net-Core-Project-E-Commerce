@@ -1,16 +1,11 @@
-﻿using System.Diagnostics;
-using System;
-using ECom.DataAccess.Repository;
-using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using ECom.Models.ViewModels;
 using ECom.Utility;
+using ECom.Utility.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using ECom.Models.ViewModels;
-using ECom.Utility.Services;
-using ECom.Utility.Interface;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {

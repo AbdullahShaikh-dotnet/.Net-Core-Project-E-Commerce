@@ -7,11 +7,12 @@
     "author": "",
     "type": "commonjs",
     "main": "postcss.config.js",
-    "scripts": {
-        "css:build": "npx tailwindcss -i ./wwwroot/css/tailwind.css -o ./wwwroot/css/renderedTailwindCss.css --minify",
-        "css:watch": "npx tailwindcss -i ./wwwroot/css/tailwind.css -o ./wwwroot/css/renderedTailwindCss.css --watch --minify",
-        "dev": "concurrently --kill-others --raw \"dotnet watch run\" \"npm run css:watch\""
-    },
+  "scripts": {
+    "css:build": "npx tailwindcss -i ./wwwroot/css/tailwind.css -o ./wwwroot/css/renderedTailwindCss.css --minify",
+    "css:watch": "npx tailwindcss -i ./wwwroot/css/tailwind.css -o ./wwwroot/css/renderedTailwindCss.css --watch --minify",
+    "dev1": "concurrently --kill-others --raw \"dotnet watch run\" \"npm run css:watch\"",
+    "dev": "start cmd /k \"dotnet watch run\" && start cmd /k \"npm run css:watch\""
+  },
     "devDependencies": {
         "@tailwindcss/line-clamp": "^0.4.4",
         "autoprefixer": "^10.4.20",

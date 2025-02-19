@@ -1,5 +1,4 @@
 ﻿using ECom.DataAccess.Repository.IRepository;
-using ECom.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_Commerce.Areas.ViewComponents

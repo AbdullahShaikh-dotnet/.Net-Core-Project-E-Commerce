@@ -1,4 +1,4 @@
-﻿@model ShoppingCartVM
+﻿@* @model ShoppingCartVM
 
 <div class="container">
 	<div class="row pt-4">
@@ -109,3 +109,108 @@
 		</div>
 	</div>
 </form>
+ *@
+
+
+
+@model ShoppingCartVM
+
+<div class="container mx-auto px-4 py-6">
+	<div class="flex justify-between items-center py-4">
+		<h2 class="text-3xl font-semibold text-gray-700">Shopping Cart</h2>
+
+		<div class="mb-4 text-start">
+			<a asp-action="Index" asp-controller="Home" class="hidden lg:block hover:drop-shadow-sm transition ease-in-out duration-300 btn w-full sm:w-auto bg-white text-gray-700 rounded-md py-2 px-4 flex items-start justify-center text-sm">
+				<i class="bi bi-arrow-return-left text-sm mr-2"></i> Continue Shopping
+			</a>
+		</div>
+	</div>
+
+	<form method="post">
+		<div class="bg-white rounded-lg shadow-md p-6 mt-6">
+			<div class="mb-6 pb-6">
+				<div class="space-y-6">
+					@foreach (var cart in Model.shoppingCartsList)
+					{
+						<div class="flex flex-col md:flex-row items-center md:items-center py-4 px-2 md:px-4 border-b">
+							<!-- Product Image -->
+							<a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
+							   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
+								<img src="@cart.product.ImageURL" class="h-30 w-30 object-cover md:h-20 md:w-20 sm:w-full rounded-md" alt="Product Image" />
+							</a>
+
+
+							<!-- Product Details -->
+							<div class="flex-1 pt-3 md:pt-0 text-center md:text-left ml-4">
+								<h5 class="text-lg font-semibold text-gray-800">
+									<a class="text-gray-900 hover:underline" asp-area="Customer" asp-controller="Home"
+									   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
+										@cart.product.Title
+									</a>
+								</h5>
+								<div class="w-30 text-sm">@Html.Raw(cart.product.Description)</div>
+							</div>
+
+							<!-- Product Actions -->
+							<div class="flex justify-center md:justify-end items-center space-x-4 py-2">
+								<div class="text-md font-semibold text-gray-700">
+									@cart.product.Price.ToString("C")
+									<span class="text-gray-400">&nbsp; x &nbsp;</span>@cart.Count
+								</div>
+								<div class="flex items-center space-x-2">
+									<div class="flex items-center space-x-2">
+										<a asp-action="CartPlus" asp-route-CartID="@cart.ID" class="btn bg-gray-50 font-bold hover:bg-gray-200 text-gray-600 rounded-md p-2">
+											<i class="bi bi-plus-lg"></i>
+										</a>
+										<a asp-action="CartMinus" asp-route-CartID="@cart.ID" class="btn bg-gray-50 font-bold hover:bg-gray-200 text-gray-600 rounded-md p-2">
+											<i class="bi bi-dash-lg"></i>
+										</a>
+									</div>
+								</div>
+								<div>
+									<button asp-action="CartRemove" asp-route-CartID="@cart.ID" 
+									class="btn bg-red-600 text-white rounded-lg py-2 px-4">
+										<i class="bi bi-trash-fill"></i> Remove
+									</button>
+								</div>
+							</div>
+						</div>
+					}
+
+					<hr class="my-6" />
+				</div>
+
+				@if (Model.shoppingCartsList != null && Model.shoppingCartsList.Count() >= 1)
+				{
+					<!-- Cart Total -->
+					<div class="bg-white mt-6 border-t pt-4">
+						<div class="flex justify-center">
+							<div class="w-full sm:w-1/2 md:w-1/3">
+								<ul class="list-none mb-4">
+									<li class="flex justify-between items-center py-2 text-lg font-semibold text-gray-800">
+										<span>Total (INR)</span>
+										<span>@Model.orderHeader.OrderTotal.ToString("C")</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="flex justify-end mt-4">
+							<div class="w-full sm:w-auto md:w-1/4">
+								<button asp-action="Summary" class="btn border p-5 rounded-sm transition-all duration-300 ease-in-out
+										text-gray-900 rounded-lg w-full py-2 shadow-sm hover:bg-gray-50">
+									Summary
+								</button>
+							</div>
+						</div>
+					</div>
+				}
+				else
+				{
+					<h1 class="text-center text-red-600 text-xl">
+						<i class="bi bi-cart-x mr-2"></i> Cart is Empty
+					</h1>
+				}
+			</div>
+		</div>
+	</form>
+</div>

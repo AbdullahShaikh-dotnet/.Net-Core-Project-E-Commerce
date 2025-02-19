@@ -47,128 +47,129 @@
 @model IEnumerable<Product>
 
 <div class="container mx-auto px-4 mt-6 flex gap-6">
-	<!-- Sidebar Filters -->
-	<aside class="hidden md:block w-1/4 bg-white shadow-lg rounded-xl p-5 sticky top-4 h-fit">
-		<h3 class="text-xl font-semibold text-gray-900 mb-4">Filters</h3>
+    <!-- Sidebar Filters -->
+    <aside class="hidden md:block w-1/4 bg-white shadow-lg rounded-xl p-5 sticky top-4 h-fit">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Filters</h3>
 
-		<!-- Categories -->
-		<div class="mb-6">
-			<h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
-			<ul class="space-y-2">
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Home & Kitchen</li>
-			</ul>
-		</div>
+        <!-- Categories -->
+        <div class="mb-6">
+            <h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
+            <ul class="space-y-2">
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Home & Kitchen</li>
+            </ul>
+        </div>
 
-		<!-- Price Range -->
-		<div class="mb-6">
-			<h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
-			<input type="range" min="0" max="1000" class="w-full accent-blue-500">
-		</div>
+        <!-- Price Range -->
+        <div class="mb-6">
+            <h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
+            <input type="range" min="0" max="1000" class="w-full accent-blue-500">
+        </div>
 
-		<!-- Sort By -->
-		<div>
-			<h4 class="text-md font-semibold text-gray-800 mb-2">Sort By</h4>
-			<select class="w-full p-2 border border-gray-300 rounded-lg">
-				<option>Price: Low to High</option>
-				<option>Price: High to Low</option>
-				<option>Newest Arrivals</option>
-			</select>
-		</div>
-	</aside>
+        <!-- Sort By -->
+        <div>
+            <h4 class="text-md font-semibold text-gray-800 mb-2">Sort By</h4>
+            <select class="w-full p-2 border border-gray-300 rounded-lg">
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Newest Arrivals</option>
+            </select>
+        </div>
+    </aside>
 
-	<!-- Mobile Filter Button -->
-	<div class="md:hidden">
-		<button id="toggleFilter" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
-			Filters
-		</button>
-		<div id="mobileFilters" class="hidden absolute left-4 top-16 bg-white p-5 shadow-lg rounded-xl w-64">
-			<h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
-			<ul>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
-				<li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
-			</ul>
-		</div>
-	</div>
+    <!-- Mobile Filter Button -->
+    <div class="md:hidden">
+        <button id="toggleFilter" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
+            Filters
+        </button>
+        <div id="mobileFilters" class="hidden absolute left-4 top-16 bg-white p-5 shadow-lg rounded-xl w-64">
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
+            <ul>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
+                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
+            </ul>
+        </div>
+    </div>
 
-	<!-- Product Grid -->
-	<div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-		@foreach (var product in Model)
-		{
-			<div class="relative bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2">
-				<a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block relative">
+    <!-- Product Grid -->
+    <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        @foreach (var product in Model)
+        {
+            <div class="relative bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2">
+                <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block relative">
 
-					<!-- Image & Icons Container -->
-					<div class="relative">
-						@if (string.IsNullOrEmpty(product.ImageURL))
-						{
-							<div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg">
-								No Media Available
-							</div>
-						}
-						else
-						{
-							<img src="@product.ImageURL" class="w-full h-56 object-cover transition-all duration-300 hover:scale-110">
-						}
+                    <!-- Image & Icons Container -->
+                    <div class="relative">
+                        @if (string.IsNullOrEmpty(product.ImageURL))
+                        {
+                            <div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg">
+                                No Media Available
+                            </div>
+                        }
+                        else
+                        {
+                            <img src="@product.ImageURL" class="w-full h-56 object-cover transition-all duration-300 hover:scale-110">
+                        }
 
-						@if (product.ListPrice > product.Price)
-						{
-							<span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-								-@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
-							</span>
-						}
-
-						<!-- Cart & Wishlist Icons -->
-						<div class="absolute top-2 right-2 flex flex-col gap-2">
-							<!-- Wishlist Button -->
-							<button class="bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-red-500 hover:text-white transition duration-300">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-								</svg>
-							</button>
-
-							<!-- Cart Button -->
-							<button class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300 z-40">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-									<path stroke-linecap="round" stroke-linejoin="round"
-										  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-								</svg>
-							</button>
-						</div>
-					</div>
-				</a>
+                        @if (product.ListPrice > product.Price)
+                        {
+                            <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                                -@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
+                            </span>
+                        }
+                    </div>
+                </a>
 
 
-				<div class="p-5 flex flex-col">
-					<h5 class="text-lg font-bold truncate text-gray-700">@product.Title</h5>
-					<div class="flex justify-between items-center mt-1">
-						<p class="capitalize text-gray-700 text-xs">by @product.Author</p>
-					</div>
-					<div class="text-right mt-2">
-						@if (product.ListPrice > product.Price)
-						{
-							<span class="text-xs line-through text-red-500">@product.ListPrice.ToString("C")</span>
-						}
-						<span class="text-sm font-bold text-gray-700">@product.Price.ToString("C")</span>
-					</div>
-				</div>
+                <div class="p-5 flex flex-col">
+                    <h5 class="text-lg font-bold truncate text-gray-700">@product.Title</h5>
+                    <div class="flex justify-between items-center mt-1">
+                        <p class="capitalize text-gray-700 text-xs">by @product.Author</p>
+                    </div>
+                    <div class="text-right mt-2">
+                        @if (product.ListPrice > product.Price)
+                        {
+                            <span class="text-xs line-through text-red-500">@product.ListPrice.ToString("C")</span>
+                        }
+                        <span class="text-sm font-bold text-gray-700">@product.Price.ToString("C")</span>
+                    </div>
+
+                    <!-- Cart & Wishlist Icons -->
+                    <div class="absolute top-2 right-2 flex flex-col gap-2">
+                        <!-- Wishlist Button -->
+                        <button class="bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-red-500 hover:text-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                        </button>
+
+                        <!-- Cart Button -->
+                        <button asp-action="Details" asp-controller="Home" class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300 z-40">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
 
 
 
-			</div>
-		}
-	</div>
+            </div>
+        }
+    </div>
 </div>
 
 <script>
-	document.getElementById("toggleFilter").addEventListener("click", function () {
-		let filterMenu = document.getElementById("mobileFilters");
-		filterMenu.classList.toggle("hidden");
-	});
+    document.getElementById("toggleFilter").addEventListener("click", function () {
+        let filterMenu = document.getElementById("mobileFilters");
+        filterMenu.classList.toggle("hidden");
+    });
 </script>
 
 

@@ -1,17 +1,8 @@
 ﻿using ECom.Models.InvoiceModels;
 using ECom.Utility.Interface;
-using ECom.Utility.Services;
-using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using QuestPDF.Previewer;
-using Razorpay.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECom.Utility.Services
 {

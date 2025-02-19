@@ -2,12 +2,8 @@
 using ECom.Utility.Settings;
 using Mailjet.Client;
 using Mailjet.Client.Resources;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 public class MailJetService : IMailJetService
 {

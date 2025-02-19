@@ -1,16 +1,13 @@
-using System.Diagnostics;
-using System.Security.Claims;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;
 using ECom.Utility.Interface;
-using ECom.Utility.Services;
 using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Razorpay.Api;
+using System.Security.Claims;
 
 namespace E_Commerce.Areas.Customer.Controllers
 {
@@ -455,5 +452,7 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _ => shoppingCart.product.Price100
             };
         }
+
+
     }
 }

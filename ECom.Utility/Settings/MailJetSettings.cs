@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace ECom.Utility.Settings
+﻿namespace ECom.Utility.Settings
 {
     public class MailJetSettings
     {

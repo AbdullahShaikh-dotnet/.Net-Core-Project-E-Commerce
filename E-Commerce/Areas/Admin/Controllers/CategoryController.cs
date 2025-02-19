@@ -1,12 +1,8 @@
-﻿using System.Security.Cryptography;
-using E_Commerce.DataAccess.Data;
-using ECom.DataAccess.Repository;
-using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {

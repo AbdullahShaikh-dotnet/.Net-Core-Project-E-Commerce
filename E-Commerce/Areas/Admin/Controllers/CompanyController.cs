@@ -1,11 +1,8 @@
-﻿using ECom.DataAccess.Repository;
-using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
-using ECom.Models.ViewModels;
 using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace E_Commerce.Areas.Admin.Controllers
 {

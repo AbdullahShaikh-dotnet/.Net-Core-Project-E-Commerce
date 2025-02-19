@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ECom.Utility.Interface;
+﻿using ECom.Utility.Interface;
 using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

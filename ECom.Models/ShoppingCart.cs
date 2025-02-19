@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECom.Models
 {
@@ -16,9 +11,9 @@ namespace ECom.Models
         public int ProductID { get; set; }
         [ValidateNever]
         [ForeignKey("ProductID")]
-        public Product product {  get; set; }
+        public Product product { get; set; }
 
-        [Range(1,100, ErrorMessage = "Count Must in Between 1 to 1000")]
+        [Range(1, 100, ErrorMessage = "Count Must in Between 1 to 1000")]
         public int Count { get; set; }
 
         public string ApplicationUserID { get; set; }

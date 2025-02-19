@@ -1,6 +1,6 @@
-﻿using System.Security.Claims;
-using ECom.Utility;
+﻿using ECom.Utility;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 public interface IUserService
 {

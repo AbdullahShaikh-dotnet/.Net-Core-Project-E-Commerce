@@ -1,11 +1,9 @@
-using System.Diagnostics;
-using System.Security.Claims;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace E_Commerce.Areas.Customer.Controllers
 {

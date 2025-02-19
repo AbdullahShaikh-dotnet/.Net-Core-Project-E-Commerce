@@ -2,9 +2,6 @@
 using ECom.Models.InvoiceModels;
 using ECom.Utility.Interface;
 using Microsoft.AspNetCore.Mvc;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-using System.IO;
 
 [Area("Customer")]
 public class InvoiceController : Controller
