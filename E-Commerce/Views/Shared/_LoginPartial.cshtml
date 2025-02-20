@@ -24,14 +24,17 @@
         </li>
         <li class="relative">
             <a class="flex items-center text-gray-700 hover:text-gray-900" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                @*  <i class="bi bi-cart-fill text-xl"></i>
-                <span class="absolute top-0 left-3 bg-transparent text-white rounded-full px-0.5 py-0.5"></span>*@
                 <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                 </svg>
-                <div class="absolute top-0 text-lg left-3 bg-transparent text-white rounded-full px-0.5 py-0.5">@await Component.InvokeAsync("ShoppingCartCount")</div>
+
+                <!-- Cart count badge -->
+                <div class="absolute -top-3 left-4 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full w-5 h-5  shadow">
+                    @CartCount
+                </div>
             </a>
         </li>
+
         <li>
             <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button id="logout" type="submit" class="text-gray-700 text-sm font-semibold my-2 p-2 rounded-md hover:bg-gray-50">
@@ -77,17 +80,17 @@
     }
 </ul>
 
-<script>
-    const dropdownWrapper = document.getElementById("dropdownWrapper");
-    const dropdownMenu = document.getElementById("dropdownMenu");
+<script defer>
+    let dropdownWrapper = document.getElementById("dropdownWrapper");
+    let dropdownMenu = document.getElementById("dropdownMenu");
 
-    dropdownWrapper.addEventListener("mouseenter", function () {
-        dropdownMenu.classList.remove("opacity-0", "invisible");
-        dropdownMenu.classList.add("opacity-100", "visible");
+    dropdownWrapper?.addEventListener("mouseenter", function () {
+        dropdownMenu?.classList.remove("opacity-0", "invisible");
+        dropdownMenu?.classList.add("opacity-100", "visible");
     });
 
-    dropdownWrapper.addEventListener("mouseleave", function () {
-        dropdownMenu.classList.remove("opacity-100", "visible");
-        dropdownMenu.classList.add("opacity-0", "invisible");
+    dropdownWrapper?.addEventListener("mouseleave", function () {
+        dropdownMenu?.classList.remove("opacity-100", "visible");
+        dropdownMenu?.classList.add("opacity-0", "invisible");
     });
 </script>
