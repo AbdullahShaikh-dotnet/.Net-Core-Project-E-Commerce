@@ -2,9 +2,13 @@
 
 @if (!String.IsNullOrEmpty(Model))
 {
-    var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        @Model
+    var statusMessageClass = Model.StartsWith("Error") ? "bg-red-100 border-red-400 text-red-700" : "bg-green-100 border-green-400 text-green-700";
+    <div class="p-4 mb-4 border-l-4 rounded-md @statusMessageClass">
+        <div class="flex justify-between items-center">
+            <span class="font-medium">@Model</span>
+            <button type="button" class="text-gray-600 hover:text-gray-800" onclick="this.parentElement.parentElement.remove()">
+                &times;
+            </button>
+        </div>
     </div>
 }
