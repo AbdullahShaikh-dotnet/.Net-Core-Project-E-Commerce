@@ -50,8 +50,8 @@
 	</ItemGroup>
 
 
-	<Target Name="RunNpmWatch" AfterTargets="Build">
+	<!--<Target Name="RunNpmWatch" AfterTargets="Build">
 		<Exec Command="cmd /k npm run css:watch" />
-	</Target>
+	</Target>-->
 
 </Project>
