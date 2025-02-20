@@ -5,38 +5,48 @@
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h3>@ViewData["Title"]</h3>
+<h3 class="text-3xl font-extrabold text-gray-900 mb-6">@ViewData["Title"]</h3>
+
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="email-form" method="post">
-            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
-            @if (Model.IsEmailConfirmed)
-            {
-                <div class="form-floating mb-3 input-group">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                        <div class="input-group-append">
-                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    <label asp-for="Email" class="form-label"></label>
+
+<div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 max-w-lg mx-auto">
+    <form id="email-form" method="post" class="space-y-5">
+        <div asp-validation-summary="All" class="text-red-500 text-sm font-medium" role="alert"></div>
+
+        <!-- Current Email (Confirmed / Unconfirmed) -->
+        @if (Model.IsEmailConfirmed)
+        {
+            <div class="relative">
+                <label asp-for="Email" class="block text-gray-700 font-semibold mb-1">Current Email</label>
+                <div class="flex items-center border border-gray-300 bg-gray-100 rounded-lg p-3">
+                    <input asp-for="Email" class="w-full bg-transparent text-gray-600 cursor-not-allowed" disabled />
+                    <span class="text-green-500 font-bold text-xl">✓</span>
                 </div>
-            }
-            else
-            {
-                <div class="form-floating mb-3">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                    <label asp-for="Email" class="form-label"></label>
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                </div>
-            }
-            <div class="form-floating mb-3">
-                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
-                <label asp-for="Input.NewEmail" class="form-label"></label>
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
             </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change email</button>
-        </form>
-    </div>
+        }
+        else
+        {
+            <div>
+                <label asp-for="Email" class="block text-gray-700 font-semibold mb-1">Current Email</label>
+                <input asp-for="Email" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 cursor-not-allowed" disabled />
+                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="text-blue-600 font-medium mt-2 hover:underline">
+                    Send verification email
+                </button>
+            </div>
+        }
+
+        <!-- New Email -->
+        <div>
+            <label asp-for="Input.NewEmail" class="block text-gray-700 font-semibold mb-1">New Email</label>
+            <input asp-for="Input.NewEmail" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition" />
+            <span asp-validation-for="Input.NewEmail" class="text-red-500 text-sm font-medium"></span>
+        </div>
+
+        <!-- Change Email Button -->
+        <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all shadow-md">
+            Change Email
+        </button>
+    </form>
 </div>
 
 @section Scripts {

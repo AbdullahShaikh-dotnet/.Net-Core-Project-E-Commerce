@@ -1,10 +1,70 @@
-﻿@model string
+﻿
+@model string
 
-@if (!String.IsNullOrEmpty(Model))
+@if (!string.IsNullOrEmpty(Model))
 {
-    var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        @Model
+    var statusType = Model.StartsWith("Error") ? "error" : "success";
+    var alertClasses = statusType == "error"
+        ? "bg-red-100 border-red-500 text-red-700"
+        : "bg-green-100 border-green-500 text-green-700";
+
+    <div class="p-4 border-l-4 rounded-lg shadow-md relative @alertClasses fade-in">
+        <button type="button" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-opacity duration-300"
+                onclick="this.parentElement.classList.add('fade-out')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="flex items-center gap-2">
+            <span>
+                @if (statusType == "error")
+                {
+                    <svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636A9 9 0 115.636 18.364 9 9 0 0118.364 5.636zM12 8v4m0 4h.01"></path>
+                    </svg>
+                }
+                else
+                {
+                    <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                }
+            </span>
+            <span>@Model</span>
+        </div>
     </div>
+
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-in-out forwards;
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+    </style>
 }

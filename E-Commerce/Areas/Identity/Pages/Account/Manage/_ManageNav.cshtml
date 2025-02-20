@@ -2,14 +2,54 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li>
-    }
-    <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
-</ul>
+
+<div class="bg-white p-4 rounded-lg w-full max-w-sm">
+    <ul class="space-y-2">
+        <li>
+            <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                       @ManageNavPages.IndexNavClass(ViewContext)"
+               id="profile" asp-page="./Index">
+                <i class="bi bi-person-circle mr-2"></i> Profile
+            </a>
+        </li>
+        <li>
+            <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                       @ManageNavPages.EmailNavClass(ViewContext)"
+               id="email" asp-page="./Email">
+                <i class="bi bi-envelope mr-2"></i> Email
+            </a>
+        </li>
+        <li>
+            <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                       @ManageNavPages.ChangePasswordNavClass(ViewContext)"
+               id="change-password" asp-page="./ChangePassword">
+                <i class="bi bi-lock mr-2"></i> Password
+            </a>
+        </li>
+        @if (hasExternalLogins)
+        {
+            <li>
+                <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                           @ManageNavPages.ExternalLoginsNavClass(ViewContext)"
+                   id="external-login" asp-page="./ExternalLogins">
+                    <i class="bi bi-key mr-2"></i> External logins
+                </a>
+            </li>
+        }
+        <li>
+            <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                       @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"
+               id="two-factor" asp-page="./TwoFactorAuthentication">
+                <i class="bi bi-shield-lock mr-2"></i> Two-factor authentication
+            </a>
+        </li>
+        <li>
+            <a class="flex items-center px-4 py-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition
+                       @ManageNavPages.PersonalDataNavClass(ViewContext)"
+               id="personal-data" asp-page="./PersonalData">
+                <i class="bi bi-person-badge mr-2"></i> Personal data
+            </a>
+        </li>
+    </ul>
+</div>
+
