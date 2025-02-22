@@ -139,23 +139,30 @@
                 </div>
             </div>
         </div>
-
-
     </header>
 
 
-    @* <div class="container-fluid px-5"> *@
     <main role="main" class="flex-grow p-4">
         <partial name="_Notification"></partial>
         @RenderBody()
     </main>
-    @* </div> *@
 
-    <footer class="border-top fixed-bottom footer bg-primary">
+    @*     <footer class="border-top fixed-bottom footer bg-primary">
         <div class="container-fluid text-light">
             &copy; 2024 - E-Commerce
         </div>
+    </footer> *@
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-400 p-4 text-center mt-6 flex justify-between">
+        <p>&copy; 2025 E-Commerce Company. All rights reserved.</p>
+        <div class="flex justify-center space-x-4 mt-2">
+            <a asp-action="Privacy" class="hover:text-white">Privacy Policy</a>
+            <a href="#" class="hover:text-white">Terms of Service</a>
+            <a href="#" class="hover:text-white">Contact Us</a>
+        </div>
     </footer>
+
     <script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
