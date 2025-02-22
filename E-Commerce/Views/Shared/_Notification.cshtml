@@ -1,17 +1,105 @@
-﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+﻿<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+<script src="//cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+
 
 @if (TempData["success"] != null)
 {
 	<script>
-		toastr.success("@TempData["success"]", "Success");
+
+        iziToast.success({
+            title: 'Success',
+            titleColor: '#064e3b', // Tailwind 'emerald-900'
+            message: '@TempData["success"]',
+            position: 'topCenter',
+            theme: 'light',
+            backgroundColor: '#d1fae5', // Tailwind 'emerald-100'
+            messageColor: '#065f46', // Tailwind 'emerald-700'
+            timeout: 5000,
+            layout: 1,
+            close: true,
+            progressBarColor: '#10b981', // Tailwind 'emerald-500'
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            drag: true
+        });
+
+
 	</script>
 }
 
 @if (TempData["error"] != null)
 {
 	<script>
-		toastr.error("@TempData["error"]", "Success");
+        iziToast.error({
+            title: 'Error',
+            titleColor: '#7f1d1d', // Tailwind 'red-900'
+            message: '@TempData["error"]',
+            position: 'topCenter',
+            theme: 'light',
+            backgroundColor: '#fee2e2', // Tailwind 'red-100'
+            messageColor: '#991b1b', // Tailwind 'red-700'
+            timeout: 5000,
+            layout: 1,
+            close: true,
+            progressBarColor: '#ef4444', // Tailwind 'red-500'
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            drag: true
+        });
+
 	</script>
 
 }
+
+
+@if (TempData["warning"] != null)
+{
+    <script>
+        iziToast.warning({
+            title: 'Warning',
+            titleColor: '#78350f', // Tailwind 'amber-900'
+            message: '@TempData["warning"]',
+            position: 'topCenter',
+            theme: 'light',
+            backgroundColor: '#fef3c7', // Tailwind 'amber-100'
+            messageColor: '#b45309', // Tailwind 'amber-700'
+            timeout: 5000,
+            layout: 1,
+            close: true,
+            progressBarColor: '#f59e0b', // Tailwind 'amber-500'
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            drag: true
+        });
+    </script>
+
+}
+
+
+
+@if (TempData["info"] != null)
+{
+    <script>
+        iziToast.info({
+            title: 'Info',
+            titleColor: '#1e3a8a', // Tailwind 'blue-900'
+            message: '@TempData["info"]',
+            position: 'topCenter',
+            theme: 'light',
+            backgroundColor: '#dbeafe', // Tailwind 'blue-100'
+            messageColor: '#1e40af', // Tailwind 'blue-700'
+            timeout: 5000,
+            layout: 1,
+            close: true,
+            progressBarColor: '#3b82f6', // Tailwind 'blue-500'
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            drag: true
+        });
+
+    </script>
+
+}
+
+
+
