@@ -1,64 +1,19 @@
-﻿@* @model IEnumerable<Product>
-
-<div class="row mt-4 pb-3 d-flex justify-content-start">
-    @foreach (var product in Model)
-    {
-        <div class="col-sm-6 col-md-4 col-lg-2 mb-4">
-            <div class="card h-100 shadow-sm border-light rounded-2">
-                <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="text-decoration-none">
-                    @if (string.IsNullOrEmpty(product.ImageURL))
-                    {
-                        <div class="card-img-top rounded-2 d-flex justify-content-center align-items-center rounded-bottom-0" style="height: 200px; background-color: #f0f0f0; color: #777; font-size: 1.2rem;">
-                            No Media Available
-                        </div>
-                    }
-                    else
-                    {
-                        <img src="@product.ImageURL" class="card-img-top rounded-2 rounded-bottom-0" alt="Product Image" style="object-fit: cover; height: 200px;">
-                    }
-                </a>
-
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title text-truncate">@product.Title</h5>
-                    <p class="card-text text-muted text-truncate" style="font-size: 0.9rem;">
-                        Some quick example text to build on the card title and make up the bulk of the card's content.
-                    </p>
-                    <div class="mt-auto">
-                        <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="btn btn-primary w-100 btn-sm rounded-2">Details</a>
-                    </div>
-                </div>
-                <hr />
-                <div class="bg-light d-flex justify-content-between align-items-center border-0 p-2 pt-0">
-                    <p class="text-capitalize m-0 fs-6 fw-bold">@product.Author</p>
-                    <small class="fs-6 fw-bold">
-                        @if (product.ListPrice > product.Price)
-                        {
-                            <sup class="text-decoration-line-through text-danger">@product.ListPrice.ToString("C")</sup>
-                        }
-                        @product.Price.ToString("C")
-                    </small>
-                </div>
-            </div>
-        </div>
-    }
-</div> *@
+﻿@model IEnumerable<Product>
 
 
-@model IEnumerable<Product>
-
-<div class="container mx-auto px-4 mt-6 flex gap-6">
-    <!-- Sidebar Filters -->
-    <aside class="hidden md:block w-1/4 bg-white shadow-lg rounded-xl p-5 sticky top-4 h-fit">
+<div class="container mx-auto px-4 mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <!-- Sidebar Filters (Desktop) -->
+    <aside class="hidden md:block bg-white shadow-lg rounded-xl p-5 sticky top-4 h-fit border border-gray-200">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Filters</h3>
 
         <!-- Categories -->
         <div class="mb-6">
             <h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
-            <ul class="space-y-2">
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Home & Kitchen</li>
+            <ul class="space-y-2 text-gray-700">
+                <li class="cursor-pointer hover:text-blue-600 transition">Electronics</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Books</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Fashion</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Home & Kitchen</li>
             </ul>
         </div>
 
@@ -81,96 +36,159 @@
 
     <!-- Mobile Filter Button -->
     <div class="md:hidden">
-        <button id="toggleFilter" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">
+        <button id="toggleFilter" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md w-full">
             Filters
         </button>
-        <div id="mobileFilters" class="hidden absolute left-4 top-16 bg-white p-5 shadow-lg rounded-xl w-64">
+    </div>
+
+    <!-- Mobile Filter Modal -->
+    <div id="mobileFilters" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300">
+        <div class="p-5 relative">
+            <button id="closeFilter" class="absolute top-4 right-4 p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+
+            </button>
             <h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
-            <ul>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Electronics</li>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Books</li>
-                <li class="cursor-pointer text-gray-700 hover:text-blue-600 transition">Fashion</li>
+            <ul class="space-y-2 text-gray-700">
+                <li class="cursor-pointer hover:text-blue-600 transition">Electronics</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Books</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Fashion</li>
             </ul>
         </div>
     </div>
 
     <!-- Product Grid -->
-    <div class="w-full md:w-3/4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach (var product in Model)
         {
-            <div class="relative bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-2">
-                <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block relative">
+            <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block">
+                <div class="relative w-full h-40 bg-gray-800 rounded-t-lg overflow-hidden group">
+                    @if (string.IsNullOrEmpty(product.ImageURL))
+                    {
+                        <div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg">
+                            No Media Available
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@product.ImageURL" class="w-full h-56 object-cover">
+                    }
 
-                    <!-- Image & Icons Container -->
-                    <div class="relative">
-                        @if (string.IsNullOrEmpty(product.ImageURL))
-                        {
-                            <div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg">
-                                No Media Available
-                            </div>
-                        }
-                        else
-                        {
-                            <img src="@product.ImageURL" class="w-full h-56 object-cover transition-all duration-300 hover:scale-110">
-                        }
+                    @if (product.ListPrice > product.Price)
+                    {
+                        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                            -@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
+                        </span>
+                    }
 
-                        @if (product.ListPrice > product.Price)
-                        {
-                            <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
-                                -@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
-                            </span>
-                        }
+                    <!-- Backdrop -->
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-2
+                        translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-in-out z-10">
+                        <span class="text-white text-xs font-semibold">@Html.Raw(product.Description)</span>
                     </div>
-                </a>
-
-
-                <div class="p-5 flex flex-col">
-                    <h5 class="text-lg font-bold truncate text-gray-700">@product.Title</h5>
-                    <div class="flex justify-between items-center mt-1">
-                        <p class="capitalize text-gray-700 text-xs">by @product.Author</p>
-                    </div>
-                    <div class="text-right mt-2">
-                        @if (product.ListPrice > product.Price)
-                        {
-                            <span class="text-xs line-through text-red-500">@product.ListPrice.ToString("C")</span>
-                        }
-                        <span class="text-sm font-bold text-gray-700">@product.Price.ToString("C")</span>
-                    </div>
-
-                    <!-- Cart & Wishlist Icons -->
-                    <div class="absolute top-2 right-2 flex flex-col gap-2">
-                        <!-- Wishlist Button -->
-                        <button class="bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-red-500 hover:text-white transition duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                            </svg>
-                        </button>
-
-                        <!-- Cart Button -->
-                        <button asp-action="Details" asp-controller="Home" class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300 z-40">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                            </svg>
-                        </button>
-                    </div>
-
                 </div>
 
+                <div class="text-left border border-gray-300 p-3 relative">
+                    <h5 class="text-md font-semibold text-gray-700 truncate">@product.Title</h5>
+                    <p class="capitalize text-gray-500 text-sm pl-2">by @product.Author</p>
+
+                    <div class="mt-1 flex items-center justify-between">
+                        <!-- Plus Button (Desktop Only) -->
+                        <div class="relative group hidden md:block">
+                            <button class="text-gray-700 p-2 rounded-full border border-gray-200 transition-all duration-200 ease-in-out hover:scale-75 hover:opacity-0 hover:delay-150 hover:pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </button>
+
+                            <!-- Sliding Cart & Wishlist Icons (Desktop Only) -->
+                            <div class="absolute left-0 top-1/2 -translate-y-1/2 flex gap-2 opacity-0 -translate-x-3 group-hover:opacity-100
+                                    group-hover:translate-x-0 transition-all duration-200 ease-in-out w-full md:flex hidden">
+                                <!-- Wishlist Button -->
+                                <button class="bg-white text-gray-700 p-2 rounded-full shadow-md hover:bg-red-500 hover:text-white transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                </button>
 
 
-            </div>
+                                <!-- Cart Button -->
+                                <button onclick="addToCart(@product.Id, event)"
+                                   class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                    </svg>
+                                </button>
+
+
+
+                            </div>
+                        </div>
+
+                        <!-- Always Visible Cart & Wishlist Icons (Mobile & Tablet Only) -->
+                        <div class="flex gap-3 md:hidden mt-1">
+                            <!-- Wishlist Button -->
+                            <button class="bg-white text-gray-700 size-7 rounded-full shadow-md hover:bg-red-500 hover:text-white transition duration-300 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg>
+                            </button>
+
+                            <!-- Cart Button -->
+                            <button asp-route-AddtoCart="@product.Id" asp-action="AddtoCart" asp-area="Customer" asp-controller="Home" class="bg-blue-500 text-white size-7 rounded-full shadow-md hover:bg-blue-600 transition duration-300 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                </svg>
+                            </button>
+                        </div>
+
+
+                        <!-- Price -->
+                        <div class="text-lg font-semibold text-gray-700">@product.Price.ToString("C")</div>
+                    </div>
+                </div>
+            </a>
         }
     </div>
+
+
+
 </div>
 
 <script>
     document.getElementById("toggleFilter").addEventListener("click", function () {
-        let filterMenu = document.getElementById("mobileFilters");
-        filterMenu.classList.toggle("hidden");
+        document.getElementById("mobileFilters").classList.remove("translate-x-full");
     });
+
+    document.getElementById("closeFilter").addEventListener("click", function () {
+        document.getElementById("mobileFilters").classList.add("translate-x-full");
+    });
+
+
+    function addToCart(productId, e) {
+        e.preventDefault();
+        fetch('/Customer/Home/AddtoCart?ProductID='+productId, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Product added to cart successfully!');
+            } else {
+                console.error('Failed to add product to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
 </script>
-
-
-
