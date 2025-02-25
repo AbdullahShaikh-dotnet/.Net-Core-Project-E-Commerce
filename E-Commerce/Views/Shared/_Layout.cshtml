@@ -6,10 +6,16 @@
     <title>@ViewData["Title"] - E Commerce</title>
     <link href="~/css/renderedtailwindcss.css" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+
+
+    @await RenderSectionAsync("Styles", required: false)
+
+
 </head>
 <body class="flex flex-col min-h-screen bg-white">
+
+    @* Header Section *@
     <header class="bg-white sticky top-0 z-50 border-b border-gray-300 drop-shadow-sm">
         <nav class="mx-auto flex max-w-7xl items-center justify-between p-3 lg:px-8" aria-label="Global">
             <!-- Logo (Left Side) -->
@@ -141,17 +147,10 @@
         </div>
     </header>
 
-
+    @* Body Section *@
     <main role="main" class="flex-grow p-4">
-        <partial name="_Notification"></partial>
         @RenderBody()
     </main>
-
-    @*     <footer class="border-top fixed-bottom footer bg-primary">
-        <div class="container-fluid text-light">
-            &copy; 2024 - E-Commerce
-        </div>
-    </footer> *@
 
     <!-- Footer Section -->
     <footer class="bg-gray-900 text-gray-400 p-4 text-center mt-6 flex justify-between">
@@ -163,16 +162,21 @@
         </div>
     </footer>
 
+
     <script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script> *@
-    <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js" asp-append-version="true"></script>
-
-    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+    <script src="~/js/toast.js"></script>
+    <partial name="_Notification"></partial>
+
+
+
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -225,6 +229,15 @@
     </script>
 
 
+
+    <!-- DataTables Buttons Extension -->
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+
+
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
