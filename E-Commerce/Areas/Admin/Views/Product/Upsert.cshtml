@@ -1,4 +1,4 @@
-﻿@model ProductVM
+﻿@* @model ProductVM
 
 
 <div class="container">
@@ -158,4 +158,166 @@
     @{
         <partial name="_ValidationScriptsPartial"></partial>
     }
+} *@
+
+
+
+
+
+
+
+          @model ProductVM
+
+<div class="container mx-auto p-4">
+    <div class="flex justify-between items-center pb-4">
+        <h2 class="text-2xl font-bold text-blue-600">@(Model.product.Id != 0 ? "Update" : "Create") Product</h2>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="space-y-6">
+    <input type="hidden" asp-for="product.Id" />
+    <input type="hidden" asp-for="product.ImageURL" />
+
+    <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label asp-for="product.Title" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.Title" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.Title"></span>
+            </div>
+            <div>
+                <label asp-for="product.Category_ID" class="block text-gray-700 font-medium"></label>
+                <select asp-for="product.Category_ID" asp-items="@Model.categoryList" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500">
+                    <option disabled selected>Select Category</option>
+                </select>
+                <span class="text-red-500 text-sm" asp-validation-for="product.Category_ID"></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label asp-for="product.Author" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.Author" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.Author"></span>
+            </div>
+            <div>
+                <label asp-for="product.ISBN" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.ISBN" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.ISBN"></span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <!-- File Upload -->
+            <div class="flex-1">
+                <label asp-for="product.ImageURL" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.ImageURL"
+                       class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500"
+                       type="file"
+                       name="file" />
+            </div>
+
+            <!-- Image Preview -->
+            @if (!string.IsNullOrEmpty(Model.product.ImageURL))
+            {
+                <a href="@Model.product.ImageURL" target="_blank">
+                    <div class="w-20 h-20 border shadow-md rounded-md flex items-center justify-center bg-gray-100 duration-300 transition hover:shadow-lg border-gray-200 hover:scale-110">
+                        <img src="@Model.product.ImageURL" class="w-full h-full object-cover rounded-lg" />
+                    </div>
+                </a>
+            }
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label asp-for="product.ListPrice" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.ListPrice" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.ListPrice"></span>
+            </div>
+            <div>
+                <label asp-for="product.Price" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.Price" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.Price"></span>
+            </div>
+            <div>
+                <label asp-for="product.Price50" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.Price50" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.Price50"></span>
+            </div>
+            <div>
+                <label asp-for="product.Price100" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.Price100" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="product.Price100"></span>
+            </div>
+        </div>
+
+        <div>
+            <label asp-for="product.Description" class="block text-gray-700 font-medium"></label>
+            <textarea asp-for="product.Description" rows="6" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500"></textarea>
+            <span class="text-red-500 text-sm" asp-validation-for="product.Description"></span>
+        </div>
+
+        <div class="flex justify-between items-center">
+            <a asp-controller="Product" asp-action="Index" class="text-gray-600 hover:text-blue-500 font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                Back to List
+            </a>
+            <div class="space-x-2">
+                @if (Model.product.Id == 0)
+                {
+                    <button type="reset" class="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-200">Clear</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
+</form>
+
+@section Scripts {
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+    <script>
+        tinymce.init({
+          selector: 'textarea',
+          skin: 'oxide',
+          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+          plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
+            'searchreplace', 'visualblocks', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'code'
+          ],
+          height: 250,
+                  setup: function (editor) {
+            editor.on('init', function () {
+                document.querySelector('.tox.tox-tinymce').style.zIndex = '10';
+            });
+        }
+        });
+
+    </script>
+
+    <script>
+        function openImageModal() {
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeImageModal(e) {
+            e.preventDefault();
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+    </script>
+
 }

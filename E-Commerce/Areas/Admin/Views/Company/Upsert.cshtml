@@ -1,75 +1,63 @@
 ﻿@model Company
 
-
-<div class="container">
-    <div class="row pt-4">
-        <div class="col-md-6">
-            <h2 class="text-primary">@(Model.ID != 0 ? "Update" : "Create") Company</h2>
-        </div>
+<div class="container mx-auto p-4">
+    <div class="flex justify-between items-center pb-4">
+        <h2 class="text-2xl font-bold text-blue-600">@(Model.ID != 0 ? "Update" : "Create") Company</h2>
     </div>
 </div>
 
-
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" class="space-y-6">
     <input type="hidden" asp-for="@Model.ID" />
-    <div class="row">
-        <div class="col-md-12">
-            <div class="border rounded-2 shadow p-3 mt-2">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3 p-1">
-                            <label asp-for="@Model.Name" class="p-0"></label>
-                            <input asp-for="@Model.Name" class="form-control rounded-2" type="text" />
-                            <span class="fs-6 text-danger" asp-validation-for="@Model.Name"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3 p-1">
-                            <label asp-for="@Model.PhoneNumber" class="p-0"></label>
-                            <input asp-for="@Model.PhoneNumber" class="form-control rounded-2" type="text" />
-                            <span class="fs-6 text-danger" asp-validation-for="@Model.PhoneNumber"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3 p-1">
-                            <label asp-for="@Model.StreetAddress" class="p-0"></label>
-                            <input asp-for="@Model.StreetAddress" class="form-control rounded-2" rows="2" maxlength="500" type="text" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3 p-1">
-                            <label asp-for="@Model.City" class="p-0"></label>
-                            <input asp-for="@Model.City" class="form-control rounded-2" type="text" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3 p-1">
-                            <label asp-for="@Model.State" class="p-0"></label>
-                            <input asp-for="@Model.State" class="form-control rounded-2" type="text" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-content-between">
-                    <div class="col-6">
-                        <a asp-controller="Company" asp-action="Index" class="btn btn-secondary btn-sm border rounded-2">
-                            <i class="fs-6 p-1 bi bi-arrow-return-left"></i>
-                            Back to List
-                        </a>
-                    </div>
-                    <div class="col-6 text-end">
-                        @if (Model.ID == 0)
-                        {
-                            <button class="btn btn-secondary border-black border-1 btn-sm border clearBtn rounded-2" type="reset">Clear</button>
-                            <button class="btn btn-sm btn-primary rounded-2" type="submit">Create</button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-sm btn-primary rounded-2" type="submit">Update</button>
-                        }
-                    </div>
-                </div>
+
+    <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label asp-for="@Model.Name" class="block text-gray-700 font-medium"></label>
+                <input asp-for="@Model.Name" 
+                class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="@Model.Name"></span>
+            </div>
+            <div>
+                <label asp-for="@Model.PhoneNumber" class="block text-gray-700 font-medium"></label>
+                <input asp-for="@Model.PhoneNumber"
+                 class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+                <span class="text-red-500 text-sm" asp-validation-for="@Model.PhoneNumber"></span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label asp-for="@Model.StreetAddress" class="block text-gray-700 font-medium"></label>
+                <input asp-for="@Model.StreetAddress"
+                       class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+            </div>
+            <div>
+                <label asp-for="@Model.City" class="block text-gray-700 font-medium"></label>
+                <input asp-for="@Model.City" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+            </div>
+            <div>
+                <label asp-for="@Model.State" class="block text-gray-700 font-medium"></label>
+                <input asp-for="@Model.State" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" type="text" />
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center">
+            <a asp-controller="Company" asp-action="Index" class="text-gray-600 hover:text-blue-500 font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                Back to List
+            </a>
+            <div class="space-x-2">
+                @if (Model.ID == 0)
+                {
+                    <button type="reset" class="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-200">Clear</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
+                }
             </div>
         </div>
     </div>
@@ -77,6 +65,6 @@
 
 @section Scripts {
     @{
-        <partial name="_ValidationScriptsPartial"></partial>
+        <partial name="_ValidationScriptsPartial" />
     }
 }

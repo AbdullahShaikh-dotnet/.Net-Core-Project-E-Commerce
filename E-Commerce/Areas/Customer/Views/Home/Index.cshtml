@@ -91,10 +91,14 @@
                 </div>
 
                 <div class="text-left border border-gray-300 p-3 relative">
-                    <h5 class="text-md font-semibold text-gray-700 truncate">@product.Title</h5>
-                    <p class="capitalize text-gray-500 text-sm pl-2">by @product.Author</p>
+                    <div class="flex justify-between">
+                        <h5 class="text-md font-semibold text-gray-700 truncate">@product.Title</h5>
+                        <p class="capitalize text-right text-[10px] bg-green-500 text-white px-3 py-1 rounded hidden md:block"> @product.Category.Name</p>
+                    </div>
+                    <p class="capitalize text-gray-500 text-xs">by @product.Author</p>
 
-                    <div class="mt-1 flex items-center justify-between">
+
+                    <div class="mt-2 flex items-center justify-between">
                         <!-- Plus Button (Desktop Only) -->
                         <div class="relative group hidden md:block">
                             <button class="text-gray-700 p-2 rounded-full border border-gray-200 transition-all duration-200 ease-in-out hover:scale-75 hover:opacity-0 hover:delay-150 hover:pointer-events-none">
@@ -117,7 +121,7 @@
 
                                 <!-- Cart Button -->
                                 <button onclick="addToCart(@product.Id, event)"
-                                   class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300">
+                                        class="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 transition duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                               d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
@@ -162,33 +166,43 @@
 </div>
 
 <script>
-    document.getElementById("toggleFilter").addEventListener("click", function () {
-        document.getElementById("mobileFilters").classList.remove("translate-x-full");
-    });
-
-    document.getElementById("closeFilter").addEventListener("click", function () {
-        document.getElementById("mobileFilters").classList.add("translate-x-full");
-    });
-
-
-    function addToCart(productId, e) {
-        e.preventDefault();
-        fetch('/Customer/Home/AddtoCart?ProductID='+productId, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Product added to cart successfully!');
-            } else {
-                console.error('Failed to add product to cart.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+        document.getElementById("toggleFilter").addEventListener("click", function () {
+            document.getElementById("mobileFilters").classList.remove("translate-x-full");
         });
-    }
+
+        document.getElementById("closeFilter").addEventListener("click", function () {
+            document.getElementById("mobileFilters").classList.add("translate-x-full");
+        });
+
+            function addToCart(productId, event) {
+            event.preventDefault();
+            fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())  // Ensure we parse JSON
+            .then(data => {
+                if (data.success) {
+                    console.log(data.message);
+                    reloadCartCount();
+                } else {
+                    console.error('Failed to add product to cart.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+
+        function reloadCartCount() {
+                fetch('/Customer/Home/ReloadCartCount',{
+                                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('cart-count-LoginPartial').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error reloading cart count:', error));
+            }
 
 </script>
