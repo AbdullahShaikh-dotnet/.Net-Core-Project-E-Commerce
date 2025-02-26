@@ -1,5 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
     LoadDataTables();
+    const searchInput = document.querySelector(".dt-search input");
+    if (searchInput) {
+        searchInput.placeholder = "Search";
+    }
 })
 
 let DT;
@@ -38,9 +42,13 @@ const LoadDataTables = function () {
                 title: 'Actions',
                 className: 'text-center',
                 render: function (data) {
-                    const editLink = `<a class="mx-4" href="${EditURL + data.id}">
-                                        <i class="bi bi-pencil-square fs-4" style="cursor: pointer"></i>
-                                      </a>`;
+                    const editLink = `
+                        <div class="flex justify-center text-center">
+							<a class="mx-4 " href="${EditURL + data.id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+							</a>
+						</div>`;
                     return editLink;
                 },
                 orderable: false,
@@ -52,17 +60,22 @@ const LoadDataTables = function () {
                 className: 'text-center',
                 render: function (data) {
                     if (data.invoiceNumber) {
-                        return `<div class="btn-group d-flex justify-content-center" role="group">
-                        <a class="mx-4 fs-5 text-decoration-none" title="Download Invoice"
-                        href="/customer/Invoice/DownloadInvoice?OrderID=${data.id}">
-                            <i class="bi bi-download"></i>
-                        </a>
+                        return `
+                        <div class="flex justify-between text-center">
+							<a class="mx-4 " href="/customer/Invoice/DownloadInvoice?OrderID=${data.id}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+							</a>
 
-                        <a class="mx-4 fs-5 text-decoration-none" target="_blank" title="View Invoice"
-                        href="/customer/Invoice/GenerateInvoice?OrderID=${data.id}">
-                            <i class="bi bi-eye"></i>
-                        </a>
-                               `;
+
+                            <a class="mx-4 " href="/customer/Invoice/GenerateInvoice?OrderID=${data.id}" target="_blank">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+							</a>
+						</div>
+                        `;
                     }
                     return '';
                 },
@@ -73,6 +86,8 @@ const LoadDataTables = function () {
         select: true,
         processing: true,
         info: true,
+        scrollCollapse: true,
+        scrollY: '70vh',
     });
 }
 

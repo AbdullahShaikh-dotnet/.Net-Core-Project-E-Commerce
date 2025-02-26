@@ -73,13 +73,13 @@
 		},
 
 		paging: {
-			active: "font-bold bg-gray-100 text-gray-700 border border-gray-500 hover:bg-gray-700 hover:text-white transition",
-			notActive: "bg-white text-gray-300",
-			button: "px-4 py-2 mx-0.5 rounded-md border border-gray-300 shadow-sm hover:bg-gray-100 transition",
+			active: "font-bold bg-gray-700 text-white hover:bg-gray-700 hover:text-white transition",
+			notActive: "bg-white text-gray-700",
+			button: "px-4 py-2 mx-0.5 rounded-md border border-gray-300 shadow-sm hover:bg-gray-100 hover:scale-2 transition",
 			first: "rounded-md",
 			last: "rounded-md",
 			enabled: "hover:text-gray-700 focus:ring-1 focus:ring-blue-50 transition",
-			notEnabled: "text-gray-300 cursor-not-allowed hover:bg-white"
+			notEnabled: "text-gray-200 cursor-not-allowed hover:bg-white"
 		},
 
 		table: "w-full min-w-full border-collapse text-sm align-middle whitespace-nowrap border border-gray-200 bg-white shadow-sm rounded-lg overflow-hidden",
