@@ -165,44 +165,44 @@
 
 </div>
 
-<script>
-        document.getElementById("toggleFilter").addEventListener("click", function () {
-            document.getElementById("mobileFilters").classList.remove("translate-x-full");
-        });
+<script type="text/javascript">
+    document.getElementById("toggleFilter").addEventListener("click", function () {
+        document.getElementById("mobileFilters").classList.remove("translate-x-full");
+    });
 
-        document.getElementById("closeFilter").addEventListener("click", function () {
-            document.getElementById("mobileFilters").classList.add("translate-x-full");
-        });
+    document.getElementById("closeFilter").addEventListener("click", function () {
+        document.getElementById("mobileFilters").classList.add("translate-x-full");
+    });
 
-            function addToCart(productId, event) {
-            event.preventDefault();
-            fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(response => response.json())  // Ensure we parse JSON
-            .then(data => {
-                if (data.success) {
-                    console.log(data.message);
-                    reloadCartCount();
-                } else {
-                    console.error('Failed to add product to cart.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-
-        function reloadCartCount() {
-                fetch('/Customer/Home/ReloadCartCount',{
-                                method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
-                })
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('cart-count-LoginPartial').innerHTML = data;
-                    })
-                    .catch(error => console.error('Error reloading cart count:', error));
+        function addToCart(productId, event) {
+        event.preventDefault();
+        fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())  // Ensure we parse JSON
+        .then(data => {
+            if (data.success) {
+                reloadCartCount();
+                toast.success('Item added to cart',5);
+            } else {
+                console.error('Failed to add product to cart.');
             }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+
+    function reloadCartCount() {
+            fetch('/Customer/Home/ReloadCartCount',{
+                            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('cart-count-LoginPartial').innerHTML = data;
+                })
+                .catch(error => console.error('Error reloading cart count:', error));
+        }
 
 </script>
