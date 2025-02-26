@@ -128,14 +128,53 @@
 
                     <!-- Nested Submenu -->
                     <div class="mobile-submenu max-h-0 overflow-hidden transition-all duration-300 ease-in-out pl-6 space-y-2">
-                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Category</span></a>
-                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Product</span></a>
-                        <a href="#" class="block text-sm font-semibold hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2"><span class="text-gray-500">Company</span></a>
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="group relative flex items-center gap-x-2 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                            <div class="flex size-8 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-700 text-xs">Category</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="group relative flex items-center gap-x-2 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                            <div class="flex size-8 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white ">
+                                <svg class="size-4 text-gray-600 transition-all duration-300" width="30" height="30" viewBox="0 0 15 15" fill="none" stroke-width="1" stroke="currentColor" aria-hidden="true">
+                                    <path d="M.5 3.498 7.5.5l7 2.998m-14 0 7 2.998m-7-2.998V3.5m14-.002-7 2.998m7-2.998V11.5l-7 3m7-11.002L7.5 6.5v8m0-8.004V14.5m0-8.004L.5 3.5m7 11-7-3v-8" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-700 text-xs">Product</span>
+                        </a>
+                        <a asp-area="Admin" asp-controller="Company" asp-action="Index" class="group relative flex items-center gap-x-2 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                            <div class="flex size-8 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                <svg class="size-4 text-gray-600 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819" />
+                                </svg>
+
+                            </div>
+                            <span class="text-gray-700 text-xs">Company</span>
+                        </a>
+
+                        <hr class="m-1" />
+
+                        <a asp-area="Identity" asp-page="/Account/Register" class="group relative flex items-center gap-x-2 rounded-xl p-2 text-sm font-semibold text-gray-800 transition-all duration-300 hover:text-amber-500 hover:bg-gray-50">
+                            <div class="flex size-8 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-amber-500">
+                                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-600 transition-all duration-300">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-700 text-xs">Create User</span>
+                        </a>
                     </div>
 
-                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Home</button>
-                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Orders</button>
-                    <button href="#" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">Privacy</button>
+                    <a class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm" asp-area="Customer" asp-controller="Home" asp-action="Index"><span class="text-gray-700">Home</span></a>
+                    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm">
+                        <span class="text-gray-700">
+                            @(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee) ? "Manage Orders" : "My Orders")
+                        </span>
+                    </a>
+                    <a asp-area="Customer" asp-controller="Home" asp-action="Privacy" class="group flex justify-between w-full text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:rounded-md transition-all duration-300 p-2 rounded-sm"><span class="text-gray-700">Privacy</span></a>
+
 
                     <hr />
                     <!-- Login Button (Right Side) -->
@@ -231,7 +270,7 @@
 
 
     <!-- DataTables Buttons Extension -->
-@*     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    @*     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script> *@
 
