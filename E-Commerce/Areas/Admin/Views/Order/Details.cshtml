@@ -7,19 +7,19 @@
 
     if (OrderStatus == "pending" || OrderStatus == "processing")
     {
-        CssBasedOnStatus = "border-warning text-warning bg-warning-subtle";
+        CssBasedOnStatus = " bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-lg";
     }
     else if (OrderStatus == "approved" || OrderStatus == "Shipped" || OrderStatus == "refunded")
     {
-        CssBasedOnStatus = $"border-success text-success bg-success-subtle {(OrderStatus == "Shipped" ? "text-muted" : "")}";
+        CssBasedOnStatus = $" bg-green-50 border-l-4 border-green-500 text-green-800 {(OrderStatus == "Shipped" ? "opacity-75" : "")}";
     }
     else if (OrderStatus == "cancelled")
     {
-        CssBasedOnStatus = "border-danger text-danger bg-danger-subtle";
+        CssBasedOnStatus = " bg-red-50 border-l-4 border-red-500 text-red-800";
     }
     else
     {
-        CssBasedOnStatus = "border-primary text-primary bg-primary-subtle";
+        CssBasedOnStatus = " bg-blue-50 border-l-4 border-blue-500 text-blue-800";
     }
 
     ViewData["Title"] = "Order Summary";
@@ -27,7 +27,7 @@
 
 
 @* Header *@
-<div class="container mb-5">
+@* <div class="container mb-5">
     <div class="row pt-4 align-items-center">
         <div class="col-12 col-md-10">
             <h2 class="text-primary fw-bold">@ViewData["Title"]</h2>
@@ -356,7 +356,401 @@
             }
         </div>
     </div>
+</form> *@
+
+
+
+
+<div class="container mx-auto mb-10">
+    <div class="flex flex-wrap items-center pt-6">
+        <div class="w-full md:w-10/12">
+            <h2 class="text-2xl font-bold text-indigo-700">@ViewData["Title"]</h2>
+        </div>
+        <div class="w-full md:w-2/12 text-right">
+            <a href="@Url.Action("Index")" class="text-gray-600 hover:text-indigo-700 font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+<form method="post" id="OrderForm" class="space-y-6">
+    <input type="hidden" asp-for="orderHeader.ID" />
+    <div class="flex flex-wrap -mx-4">
+        <!-- PickUp Details Section -->
+        <div class="w-full lg:w-6/12 px-4 mb-6">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h4 class="text-xl font-semibold text-primary flex items-center mb-4">
+                    <i class="bi bi-person-circle mr-2"></i>PickUp Details
+                </h4>
+
+
+
+
+
+
+
+                <!-- Accordion Item 1 -->
+                <div class="border-b border-slate-200">
+                    <button data-Index="1" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
+                        <span>Personal Details</span>
+                        <span id="icon-1" class="text-slate-800 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div id="content-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="pb-5 text-sm text-slate-500">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+                                <!-- Name -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.Name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your name" />
+                                        <span asp-validation-for="orderHeader.Name" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.Name" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your name" />
+                                    }
+                                </div>
+                                <!-- Phone -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.PhoneNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your phone number" />
+                                        <span asp-validation-for="orderHeader.PhoneNumber" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.PhoneNumber" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your phone number" />
+                                    }
+                                </div>
+                                <!-- Address -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.StreetAddress" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your address" />
+                                        <span asp-validation-for="orderHeader.StreetAddress" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.StreetAddress" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your address" />
+                                    }
+                                </div>
+                                <!-- City -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.City" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your city" />
+                                        <span asp-validation-for="orderHeader.City" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.City" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your city" />
+                                    }
+                                </div>
+                                <!-- State -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.State" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your state" />
+                                        <span asp-validation-for="orderHeader.State" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.State" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your state" />
+                                    }
+                                </div>
+                                <!-- Zip Code -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.PostalCode" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your zip code" />
+                                        <span asp-validation-for="orderHeader.PostalCode" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.PostalCode" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your zip code" />
+                                    }
+                                </div>
+                                <!-- Email -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your email" />
+                                        <span asp-validation-for="orderHeader._ApplicationUser.Email" class="text-sm text-red-500"></span>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your email" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Item 2 -->
+                <div class="border-b border-slate-200">
+                    <button data-Index="2" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
+                        <span>Order Details</span>
+                        <span id="icon-2" class="text-slate-800 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                        </span>
+                    </button>
+                    <div id="content-2" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="pb-5 text-sm text-slate-500">
+                            <!-- Order Date -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Order Date</label>
+                                    <input value="@Model.orderHeader.OrderDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                </div>
+
+                                <!-- Payment Due Date / Payment Date -->
+                                @if (Model.orderHeader.SessionId is null)
+                                {
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Due Date</label>
+                                        <input value="@Model.orderHeader.PaymentDueDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Date</label>
+                                        <input value="@Model.orderHeader.PaymentDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    </div>
+                                }
+
+
+                                <!-- Payment Status -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
+                                    <input asp-for="orderHeader.PaymentStatus" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                </div>
+
+
+                                <!-- Shipping Date -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Shipping Date</label>
+                                    <input value="@Model.orderHeader.ShippingDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                </div>
+
+                                <!-- Payment Details -->
+                                @if (canEdit)
+                                {
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Session ID</label>
+                                        <input value="@Model.orderHeader.SessionId" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Payment Intent ID</label>
+                                        <input value="@Model.orderHeader.PaymentIntendID" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    </div>
+                                }
+
+                                <!-- Carrier -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Carrier</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.Carrier" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter carrier" />
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.Carrier" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter carrier" />
+                                    }
+                                </div>
+                                <!-- Tracking -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tracking</label>
+                                    @if (canEdit)
+                                    {
+                                        <input asp-for="orderHeader.TrackingNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter tracking number" />
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="orderHeader.TrackingNumber" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter tracking number" />
+                                    }
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                @if (canEdit)
+                {
+                    <div class="flex justify-end">
+                        <button type="submit" asp-action="UpdateOrderDetails"
+                                class="mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
+                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
+                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                            Update Details
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Order Summary Section -->
+        <div class="w-full lg:w-5/12 px-4 mb-6">
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                <h4 class="text-xl font-semibold text-primary flex items-center mb-4">
+                    <i class="bi bi-receipt mr-2"></i>Order Summary
+                </h4>
+                <!-- Order Status -->
+                <div class="mb-4">
+                    <div class="w-full p-4 bg-@(CssBasedOnStatus) border border-@(CssBasedOnStatus) rounded-lg flex items-center justify-between">
+                        <span class="font-medium">Order Status - @Model.orderHeader.OrderStatus</span>
+                        <i class="bi bi-info-circle text-lg"></i>
+                    </div>
+                </div>
+                <!-- Order Items -->
+                <div class="border border-gray-200 rounded-lg mb-4">
+                    <ul class="divide-y divide-gray-200">
+                        @foreach (var detail in Model.orderDetails)
+                        {
+                            <li class="p-4 flex justify-between items-center">
+                                <div>
+                                    <h6 class="text-primary font-semibold">@detail._Product.Title</h6>
+                                    <small class="text-gray-500">Price: @detail.Price.ToString("C")</small><br />
+                                    <small class="text-gray-500">Quantity: @detail.Count</small>
+                                </div>
+                                <p class="font-semibold">@((detail.Count * detail.Price).ToString("C"))</p>
+                            </li>
+                        }
+                        <li class="p-4 flex justify-between items-center border-t border-gray-200">
+                            <span class="font-semibold">Total</span>
+                            <strong class="font-bold">@Model.orderHeader.OrderTotal.ToString("C")</strong>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Action Buttons -->
+                @if (Model.orderHeader.PaymentStatus == SD.Payment_Status_Delayed_Payment && Model.orderHeader.OrderStatus == SD.Status_Shipped && !canEdit)
+                {
+                    <button type="submit" asp-action="DelayedPayNow" asp-controller="Cart" asp-area="Customer" asp-route-OrderHeaderID="@Model.orderHeader.ID"
+                            class="mb-2 w-full bg-gradient-to-r from-green-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all shadow-md">
+                        <i class="bi bi-cash-stack mr-2"></i>Pay Now
+                    </button>
+                }
+                @if (canEdit)
+                {
+                    if (Model.orderHeader.OrderStatus == SD.Status_Approved)
+                    {
+                        <button type="submit" asp-action="StartProcessing" class="mb-2 w-full mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
+                                    hover:shadow-lg text-teal-600 hover:text-white hover:bg-teal-600 hover:border-teal-900 focus:text-white focus:bg-teal-800
+                                    focus:border-teal-800 active:border-teal-800 active:text-white active:bg-teal-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                            <i class="bi bi-gear mr-2"></i>Start Processing
+                        </button>
+                    }
+                    if (Model.orderHeader.OrderStatus == SD.Status_In_Process)
+                    {
+                        <button type="submit" asp-action="ShipOrder" onclick="return isValid()" class="mb-2 w-full mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
+                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-600 hover:border-indigo-900 focus:text-white focus:bg-indigo-800
+                                    focus:border-indigo-800 active:border-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                            <i class="bi bi-truck mr-2"></i>Ship Order
+                        </button>
+                    }
+                    @if (Model.orderHeader.OrderStatus != SD.Status_Refunded && Model.orderHeader.OrderStatus != SD.Status_Cancelled && Model.orderHeader.OrderStatus != SD.Status_Shipped)
+                    {
+                        <button type="submit" asp-action="CancelOrder"
+                                class=" bg-gradient-to-l from-red-700 to-red-600 text-white
+                                    w-full mt-10 rounded-md py-2 px-4 text-center text-md transition-all shadow-sm
+                                    hover:shadow-lg text-white hover:bg-red-600 focus:text-white focus:bg-red-800
+                                    focus:border-red-800 active:border-red-800 active:text-white active:bg-red-800
+                                    disabled:pointer-events-none disabled:opacity-50 disabled:shadow-non duration-300">
+                            <i class="bi bi-x-circle mr-2"></i>Cancel Order
+                        </button>
+                    }
+                }
+                else if (User.IsInRole(SD.Role_Customer))
+                {
+                    @if (Model.orderHeader.OrderStatus != SD.Status_Refunded && Model.orderHeader.OrderStatus != SD.Status_Cancelled && Model.orderHeader.OrderStatus != SD.Status_Shipped && Model.orderHeader.PaymentStatus == SD.Payment_Status_Approved)
+                    {
+                        <button type="submit" asp-action="CancelOrder" class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center">
+                            <i class="bi bi-x-circle mr-2"></i>Cancel Order
+                        </button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
 </form>
+
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+
+                                let AccordianBtn = document.querySelectorAll('.accordian-Button');
+                        AccordianBtn.forEach(Abtn => Abtn.addEventListener('click', e => {
+
+                            e.preventDefault();
+                            let accordianIndex = e.target.dataset.index;
+
+
+
+                      const content = document.getElementById(`content-${accordianIndex}`);
+                      const icon = document.getElementById(`icon-${accordianIndex}`);
+
+                      // SVG for Down icon
+                      const upSVG = `
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                            </svg>
+                      `;
+
+                      // SVG for Up icon
+                      const downSVG = `
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                          </svg>
+                      `;
+
+                      // Toggle the content's max-height for smooth opening and closing
+                      if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                        content.style.maxHeight = '0';
+                        icon.innerHTML = upSVG;
+                      } else {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                        icon.innerHTML = downSVG;
+                      }
+
+
+
+
+
+                        } ) );
+
+
+
+
+
+
+
+
+
+
+    });
+</script>
 
 
 @section Scripts {
