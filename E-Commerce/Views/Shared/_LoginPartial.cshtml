@@ -81,16 +81,18 @@
 </ul>
 
 <script defer>
-    let dropdownWrapper = document.getElementById("dropdownWrapper");
-    let dropdownMenu = document.getElementById("dropdownMenu");
+    (function() {
+        let dropdownWrapper = document.getElementById("dropdownWrapper");
+        let dropdownMenu = document.getElementById("dropdownMenu");
 
-    dropdownWrapper?.addEventListener("mouseenter", function () {
-        dropdownMenu?.classList.remove("opacity-0", "invisible");
-        dropdownMenu?.classList.add("opacity-100", "visible");
-    });
+        dropdownWrapper?.addEventListener("mouseenter", function () {
+            dropdownMenu?.classList.remove("opacity-0", "invisible");
+            dropdownMenu?.classList.add("opacity-100", "visible");
+        });
 
-    dropdownWrapper?.addEventListener("mouseleave", function () {
-        dropdownMenu?.classList.remove("opacity-100", "visible");
-        dropdownMenu?.classList.add("opacity-0", "invisible");
-    });
+        dropdownWrapper?.addEventListener("mouseleave", function () {
+            dropdownMenu?.classList.remove("opacity-100", "visible");
+            dropdownMenu?.classList.add("opacity-0", "invisible");
+        });
+    })();
 </script>
