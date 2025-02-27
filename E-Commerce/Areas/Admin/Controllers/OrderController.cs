@@ -120,7 +120,7 @@ namespace E_Commerce.Areas.Admin.Controllers
             _UnitOfWork.OrderHeaders.Update(OrderHeaderDB);
             _UnitOfWork.Save();
 
-            TempData["success"] = "Order Update Sucessfully";
+            TempData["success"] = "PickUp Details Update Sucessfully";
             return RedirectToAction(nameof(Details), new { OrderId = OrderHeaderDB.ID });
         }
 
