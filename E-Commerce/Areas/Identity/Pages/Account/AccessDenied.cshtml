@@ -1,25 +1,28 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-	ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Access Denied";
 }
 
+
+<div class="flex items-center justify-center h-full bg-white">
+    <div class="text-center">
+        <h1 class="text-8xl font-extrabold text-slate-700 m-2 tracking-widest">403</h1>
+        <h1 class="text-4xl font-bold text-red-600">@ViewData["Title"]</h1>
+        <p class="text-lg text-slate-700 mt-2">You do not have access to this resource.</p>
+        <a href="/" class="mt-4 inline-block bg-gradient-to-l from-red-700 to-red-600 text-white flex justify-center items-center
+                                    w-full mt-10 rounded-md py-2 px-4 text-center text-md transition-all shadow-sm hover:shadow-lg text-white hover:bg-red-600 focus:text-white focus:bg-red-800
+                                    focus:border-red-800 active:border-red-800 active:text-white active:bg-red-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-non duration-300">
+            Go Back Home
+        </a>
+    </div>
+</div>
+
 <style>
-
-	body {
-		background: var(--bs-danger);
-		margin: 0;
-	}
-
-	.border-top, .border-bottom {
-		border-top: none !important;
-		border-bottom: none !important
-	}
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+    }
 </style>
-
-<header class="d-flex align-items-center justify-content-center min-vh-100">
-	<div class="text-center">
-		<h1 class="fs-1 fw-bolder text-light">@ViewData["Title"]</h1>
-		<p class="text-light">You do not have access to this resource.</p>
-	</div>
-</header>

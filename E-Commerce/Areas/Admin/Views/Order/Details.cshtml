@@ -388,15 +388,10 @@
                 </h4>
 
 
-
-
-
-
-
                 <!-- Accordion Item 1 -->
                 <div class="border-b border-slate-200">
-                    <button data-Index="1" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
-                        <span>Personal Details</span>
+                    <button data-Index="1" onclick="toggleAccordian(event)" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
+                        <span class="font-semibold">Personal Details</span>
                         <span id="icon-1" class="text-slate-800 transition-transform duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -411,7 +406,7 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.Name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your name" />
+                                        <input asp-for="orderHeader.Name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your name" />
                                         <span asp-validation-for="orderHeader.Name" class="text-sm text-red-500"></span>
                                     }
                                     else
@@ -424,12 +419,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.PhoneNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your phone number" />
+                                        <input asp-for="orderHeader.PhoneNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your phone number" />
                                         <span asp-validation-for="orderHeader.PhoneNumber" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.PhoneNumber" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your phone number" />
+                                        <input asp-for="orderHeader.PhoneNumber" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your phone number" />
                                     }
                                 </div>
                                 <!-- Address -->
@@ -437,12 +432,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.StreetAddress" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your address" />
+                                        <input asp-for="orderHeader.StreetAddress" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your address" />
                                         <span asp-validation-for="orderHeader.StreetAddress" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.StreetAddress" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your address" />
+                                        <input asp-for="orderHeader.StreetAddress" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your address" />
                                     }
                                 </div>
                                 <!-- City -->
@@ -450,12 +445,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.City" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your city" />
+                                        <input asp-for="orderHeader.City" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your city" />
                                         <span asp-validation-for="orderHeader.City" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.City" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your city" />
+                                        <input asp-for="orderHeader.City" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your city" />
                                     }
                                 </div>
                                 <!-- State -->
@@ -463,12 +458,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.State" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your state" />
+                                        <input asp-for="orderHeader.State" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your state" />
                                         <span asp-validation-for="orderHeader.State" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.State" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your state" />
+                                        <input asp-for="orderHeader.State" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your state" />
                                     }
                                 </div>
                                 <!-- Zip Code -->
@@ -476,12 +471,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.PostalCode" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your zip code" />
+                                        <input asp-for="orderHeader.PostalCode" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your zip code" />
                                         <span asp-validation-for="orderHeader.PostalCode" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.PostalCode" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your zip code" />
+                                        <input asp-for="orderHeader.PostalCode" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your zip code" />
                                     }
                                 </div>
                                 <!-- Email -->
@@ -489,12 +484,12 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your email" />
+                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter your email" />
                                         <span asp-validation-for="orderHeader._ApplicationUser.Email" class="text-sm text-red-500"></span>
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter your email" />
+                                        <input asp-for="orderHeader._ApplicationUser.Email" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter your email" />
                                     }
                                 </div>
                             </div>
@@ -504,8 +499,8 @@
 
                 <!-- Accordion Item 2 -->
                 <div class="border-b border-slate-200">
-                    <button data-Index="2" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
-                        <span>Order Details</span>
+                    <button data-Index="2" onclick="toggleAccordian(event)" class="w-full flex justify-between items-center py-5 text-slate-800 accordian-Button">
+                        <span class="font-semibold">Order Details</span>
                         <span id="icon-2" class="text-slate-800 transition-transform duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
@@ -518,7 +513,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Order Date</label>
-                                    <input value="@Model.orderHeader.OrderDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    <input value="@Model.orderHeader.OrderDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                 </div>
 
                                 <!-- Payment Due Date / Payment Date -->
@@ -526,14 +521,14 @@
                                 {
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Payment Due Date</label>
-                                        <input value="@Model.orderHeader.PaymentDueDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                        <input value="@Model.orderHeader.PaymentDueDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                     </div>
                                 }
                                 else
                                 {
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Payment Date</label>
-                                        <input value="@Model.orderHeader.PaymentDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                        <input value="@Model.orderHeader.PaymentDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                     </div>
                                 }
 
@@ -541,14 +536,14 @@
                                 <!-- Payment Status -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
-                                    <input asp-for="orderHeader.PaymentStatus" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    <input asp-for="orderHeader.PaymentStatus" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                 </div>
 
 
                                 <!-- Shipping Date -->
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Shipping Date</label>
-                                    <input value="@Model.orderHeader.ShippingDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                    <input value="@Model.orderHeader.ShippingDate.ToShortDateString()" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                 </div>
 
                                 <!-- Payment Details -->
@@ -556,11 +551,11 @@
                                 {
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Session ID</label>
-                                        <input value="@Model.orderHeader.SessionId" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                        <input value="@Model.orderHeader.SessionId" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Payment Intent ID</label>
-                                        <input value="@Model.orderHeader.PaymentIntendID" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" />
+                                        <input value="@Model.orderHeader.PaymentIntendID" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" />
                                     </div>
                                 }
 
@@ -569,11 +564,11 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Carrier</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.Carrier" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter carrier" />
+                                        <input asp-for="orderHeader.Carrier" type="text" class="ShipOrderValidate w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter carrier" />
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.Carrier" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter carrier" />
+                                        <input asp-for="orderHeader.Carrier" type="text" readonly class="ShipOrderValidate w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter carrier" />
                                     }
                                 </div>
                                 <!-- Tracking -->
@@ -581,11 +576,11 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Tracking</label>
                                     @if (canEdit)
                                     {
-                                        <input asp-for="orderHeader.TrackingNumber" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter tracking number" />
+                                        <input asp-for="orderHeader.TrackingNumber" type="text" class="ShipOrderValidate w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-300" placeholder="Enter tracking number" />
                                     }
                                     else
                                     {
-                                        <input asp-for="orderHeader.TrackingNumber" type="text" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100" placeholder="Enter tracking number" />
+                                        <input asp-for="orderHeader.TrackingNumber" type="text" readonly class="ShipOrderValidate w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100" placeholder="Enter tracking number" />
                                     }
                                 </div>
 
@@ -601,8 +596,8 @@
                     <div class="flex justify-end">
                         <button type="submit" asp-action="UpdateOrderDetails"
                                 class="mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
-                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-indigo-800
+                                    active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                             Update Details
                         </button>
                     </div>
@@ -647,8 +642,13 @@
                 @if (Model.orderHeader.PaymentStatus == SD.Payment_Status_Delayed_Payment && Model.orderHeader.OrderStatus == SD.Status_Shipped && !canEdit)
                 {
                     <button type="submit" asp-action="DelayedPayNow" asp-controller="Cart" asp-area="Customer" asp-route-OrderHeaderID="@Model.orderHeader.ID"
-                            class="mb-2 w-full bg-gradient-to-r from-green-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition-all shadow-md">
-                        <i class="bi bi-cash-stack mr-2"></i>Pay Now
+                            class="mb-2 w-full mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm flex justify-center items-center
+                                    hover:shadow-lg text-teal-600 hover:text-white hover:bg-teal-600 hover:border-teal-900 focus:text-white focus:bg-teal-800
+                                    focus:border-teal-800 active:border-teal-800 active:text-white active:bg-teal-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                        </svg> Pay Now
                     </button>
                 }
                 @if (canEdit)
@@ -656,28 +656,34 @@
                     if (Model.orderHeader.OrderStatus == SD.Status_Approved)
                     {
                         <button type="submit" asp-action="StartProcessing" class="mb-2 w-full mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
-                                    hover:shadow-lg text-teal-600 hover:text-white hover:bg-teal-600 hover:border-teal-900 focus:text-white focus:bg-teal-800
+                                    hover:shadow-lg text-teal-600 hover:text-white hover:bg-teal-600 hover:border-teal-900 focus:text-white focus:bg-teal-800 flex justify-center items-center
                                     focus:border-teal-800 active:border-teal-800 active:text-white active:bg-teal-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-                            <i class="bi bi-gear mr-2"></i>Start Processing
+
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg> Start Processing
                         </button>
                     }
                     if (Model.orderHeader.OrderStatus == SD.Status_In_Process)
                     {
                         <button type="submit" asp-action="ShipOrder" onclick="return isValid()" class="mb-2 w-full mt-4 rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm
-                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-600 hover:border-indigo-900 focus:text-white focus:bg-indigo-800
+                                    hover:shadow-lg text-slate-600 hover:text-white hover:bg-indigo-600 hover:border-indigo-900 focus:text-white focus:bg-indigo-800 flex justify-center items-center
                                     focus:border-indigo-800 active:border-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-                            <i class="bi bi-truck mr-2"></i>Ship Order
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                            </svg> Ship Order
                         </button>
                     }
                     @if (Model.orderHeader.OrderStatus != SD.Status_Refunded && Model.orderHeader.OrderStatus != SD.Status_Cancelled && Model.orderHeader.OrderStatus != SD.Status_Shipped)
                     {
                         <button type="submit" asp-action="CancelOrder"
-                                class=" bg-gradient-to-l from-red-700 to-red-600 text-white
-                                    w-full mt-10 rounded-md py-2 px-4 text-center text-md transition-all shadow-sm
-                                    hover:shadow-lg text-white hover:bg-red-600 focus:text-white focus:bg-red-800
-                                    focus:border-red-800 active:border-red-800 active:text-white active:bg-red-800
-                                    disabled:pointer-events-none disabled:opacity-50 disabled:shadow-non duration-300">
-                            <i class="bi bi-x-circle mr-2"></i>Cancel Order
+                                class=" bg-gradient-to-l from-red-700 to-red-600 text-white flex justify-center items-center
+                                    w-full mt-10 rounded-md py-2 px-4 text-center text-md transition-all shadow-sm hover:shadow-lg text-white hover:bg-red-600 focus:text-white focus:bg-red-800
+                                    focus:border-red-800 active:border-red-800 active:text-white active:bg-red-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-non duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg> Cancel Order
                         </button>
                     }
                 }
@@ -685,8 +691,13 @@
                 {
                     @if (Model.orderHeader.OrderStatus != SD.Status_Refunded && Model.orderHeader.OrderStatus != SD.Status_Cancelled && Model.orderHeader.OrderStatus != SD.Status_Shipped && Model.orderHeader.PaymentStatus == SD.Payment_Status_Approved)
                     {
-                        <button type="submit" asp-action="CancelOrder" class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center">
-                            <i class="bi bi-x-circle mr-2"></i>Cancel Order
+                        <button type="submit" asp-action="CancelOrder"
+                                class=" bg-gradient-to-l from-red-700 to-red-600 text-white flex justify-center items-center
+                                    w-full mt-10 rounded-md py-2 px-4 text-center text-md transition-all shadow-sm hover:shadow-lg text-white hover:bg-red-600 focus:text-white focus:bg-red-800
+                                    focus:border-red-800 active:border-red-800 active:text-white active:bg-red-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-non duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 mx-4">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg> Cancel Order
                         </button>
                     }
                 }
@@ -694,64 +705,6 @@
         </div>
     </div>
 </form>
-
-
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-
-                                let AccordianBtn = document.querySelectorAll('.accordian-Button');
-                        AccordianBtn.forEach(Abtn => Abtn.addEventListener('click', e => {
-
-                            e.preventDefault();
-                            let accordianIndex = e.target.dataset.index;
-
-
-
-                      const content = document.getElementById(`content-${accordianIndex}`);
-                      const icon = document.getElementById(`icon-${accordianIndex}`);
-
-                      // SVG for Down icon
-                      const upSVG = `
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                            </svg>
-                      `;
-
-                      // SVG for Up icon
-                      const downSVG = `
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                          </svg>
-                      `;
-
-                      // Toggle the content's max-height for smooth opening and closing
-                      if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-                        content.style.maxHeight = '0';
-                        icon.innerHTML = upSVG;
-                      } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        icon.innerHTML = downSVG;
-                      }
-
-
-
-
-
-                        } ) );
-
-
-
-
-
-
-
-
-
-
-    });
-</script>
-
 
 @section Scripts {
     <script defer>
@@ -773,5 +726,79 @@
             }
             return isValid;
         }
+
+
+        // const toggleAccordian = function(e){
+        //     e.preventDefault();
+
+        //     let accordianIndex = e.target.dataset.index;
+        //     const content = document.getElementById(`content-${accordianIndex}`);
+        //     const icon = document.getElementById(`icon-${accordianIndex}`);
+
+        //     // SVG for Down icon
+        //     const upSVG = `
+        //     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        //         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        //     </svg>`;
+
+        //     // SVG for Up icon
+        //     const downSVG = `
+        //     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+        //         <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+        //     </svg>`;
+
+        //     // Toggle the content's max-height for smooth opening and closing
+        //     if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+        //         content.style.maxHeight = '0';
+        //         icon.innerHTML = upSVG;
+        //     } else {
+        //         content.style.maxHeight = content.scrollHeight + 'px';
+        //         icon.innerHTML = downSVG;
+        //     }
+        // }
+
+
+         const toggleAccordian = function(e) {
+            e.preventDefault();
+
+            let accordianIndex = e.target.closest("button").dataset.index; // Ensure correct target
+            const content = document.getElementById(`content-${accordianIndex}`);
+            const icon = document.getElementById(`icon-${accordianIndex}`);
+
+            // SVG for Down icon
+            const upSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>`;
+
+            // SVG for Up icon
+            const downSVG = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                </svg>`;
+
+            // Close all accordions
+            document.querySelectorAll("[id^='content-']").forEach((el) => {
+                if (el.id !== `content-${accordianIndex}`) {
+                    el.style.maxHeight = "0";
+                    document.getElementById(`icon-${el.id.split('-')[1]}`).innerHTML = upSVG;
+                }
+            });
+
+            // Toggle the selected accordion
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0';
+                icon.innerHTML = upSVG;
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                icon.innerHTML = downSVG;
+            }
+        };
+
+
     </script>
+
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
 }

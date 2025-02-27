@@ -1,79 +1,7 @@
-﻿@* @{
-	string? Status = Context.Request.Query["status"];
-	var pending = "text-primary";
-	var inprocess = "text-primary";
-	var completed = "text-primary"; 
-	var approved = "text-primary"; 
-	var all = "text-primary";
-	string Active = "shadow-none border-primary-subtle";
-
-	switch (Status)
-	{
-		case "pending":
-			pending = Active;
-			break;
-		case "inprocess":
-			inprocess = Active;
-			break;
-		case "completed":
-			completed = Active;
-			break;
-		case "approved":
-			approved = Active;
-			break;
-		default:
-			all = Active;
-			break;
-	}
-}
-<div class="container-fluid mb-2">
-	<div class="row pt-4">
-		<div class="col-6">
-			<h2 class="text-primary">Order List</h2>
-		</div>
-	</div>
-</div>
-
-<div class="container-fluid mt-4 mb-5">
-	<div class="row justify-content-end text-center">
-		<div class="col-auto border me-1 rounded-2 shadow-sm @inprocess">
-			<a asp-action="Index" asp-controller="Order" asp-route-status="inprocess" class="fw-bolder text-decoration-none d-block py-1 px-1">In process</a>
-		</div>
-
-		<div class="col-auto border me-1 rounded-2 shadow-sm @pending">
-			<a asp-action="Index" asp-controller="Order" asp-route-status="pending" class="fw-bolder text-decoration-none d-block py-1 px-1">Payment Pending</a>
-		</div>
-
-		<div class="col-auto border me-1 rounded-2 shadow-sm @completed">
-			<a asp-action="Index" asp-controller="Order" asp-route-status="completed" class="fw-bolder text-decoration-none d-block py-1 px-1">Completed</a>
-		</div>
-
-		<div class="col-auto border me-1 rounded-2 shadow-sm @approved">
-			<a asp-action="Index" asp-controller="Order" asp-route-status="approved" class="fw-bolder text-decoration-none d-block py-1 px-1">Approved</a>
-		</div>
-
-		<div class="col-auto border rounded-2 shadow-sm @all">
-			<a asp-action="Index" asp-controller="Order" asp-route-status="all" class="fw-bolder text-decoration-none d-block py-1 px-1 active">All</a>
-		</div>
-	</div>
-</div>
-
-
-<table class="table table-bordered shadow-sm tblData border-0 rounded-table"
-	   data-Root="/admin/order/"
-	   data-GetURL="getall"
-	   data-EditURL="Details?OrderId="></table>
-
-@section Scripts {
-	<script src="~/js/Order.js"></script>
-} *@
-
-
-@section Styles {
+﻿@section Styles {
     <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
     <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
-
 
 @{
     string? Status = Context.Request.Query["status"];
@@ -104,43 +32,55 @@
     }
 }
 
-<div class="container mx-auto mb-2">
-    <div class="pt-4">
-        <h2 class="text-indigo-700 text-xl font-bold">Order List</h2>
-    </div>
-</div>
+<div class="container mx-auto mt-4 mb-5 flex flex-col md:flex-row md:justify-between gap-4">
 
-<div class="container mx-auto mt-4 mb-5">
-    <div class="flex justify-end space-x-2 text-center">
+    <div>
+        <h2 class="text-indigo-700 text-2xl md:text-3xl font-bold">Order List</h2>
+    </div>
+
+    <!-- Button Group -->
+    <div class="flex flex-wrap justify-center md:justify-end gap-2">
         <a asp-action="Index" asp-controller="Order" asp-route-status="inprocess"
-           class="rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm @(inprocess.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600")
-                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">In process</a>
+           class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  @(inprocess.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600") hover:shadow-lg hover:text-white hover:bg-indigo-700
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            In Process
+        </a>
 
         <a asp-action="Index" asp-controller="Order" asp-route-status="pending"
-           class="rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm @(pending.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600")
-                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Payment Pending</a>
-
-
+           class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  @(pending.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600") hover:shadow-lg hover:text-white hover:bg-indigo-700
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            Payment Pending
+        </a>
 
         <a asp-action="Index" asp-controller="Order" asp-route-status="completed"
-           class="rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm @(completed.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600")
-                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Completed</a>
-
+           class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  @(completed.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600") hover:shadow-lg hover:text-white hover:bg-indigo-700
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            Completed
+        </a>
 
         <a asp-action="Index" asp-controller="Order" asp-route-status="approved"
-           class="rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm @(approved.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600")
-                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">Approved</a>
+           class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  @(approved.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600") hover:shadow-lg hover:text-white hover:bg-indigo-700
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            Approved
+        </a>
 
         <a asp-action="Index" asp-controller="Order" asp-route-status="all"
-           class="rounded-md border border-slate-300 py-2 px-4 text-center text-md transition-all shadow-sm @(all.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600")
-                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-slate-800
-                                    focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">All</a>
+           class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  @(all.Contains("active") ? "bg-indigo-700 text-white" : "text-slate-600") hover:shadow-lg hover:text-white hover:bg-indigo-700
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            All
+        </a>
     </div>
+
 </div>
+
+
+
+
 
 <!-- Table -->
 <table class="w-full border border-gray-300 shadow-sm rounded-md tblData"

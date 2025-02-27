@@ -3,16 +3,28 @@
     <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
 
-<div class="container mx-auto mb-4">
-    <div class="flex justify-between items-center pt-4 flex-wrap gap-2">
-        <h2 class="text-primary text-3xl font-bold">Company List</h2>
-        <a asp-controller="Company" asp-action="Upsert" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition">
-            <i class="bi bi-plus-circle mr-1"></i>Create Company
+
+
+<div class="container mx-auto mt-4 mb-5 flex flex-col md:flex-row md:justify-between gap-4 mb-4">
+
+    <div>
+        <h2 class="text-indigo-700 text-2xl md:text-3xl font-bold">Company List</h2>
+    </div>
+
+    <!-- Button Group -->
+    <div class="flex flex-wrap justify-end">
+        <a asp-controller="Company" asp-action="Upsert" class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  hover:shadow-lg hover:text-white hover:bg-indigo-700 flex justify-center item-center
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mx-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Create Company
         </a>
     </div>
 </div>
 
-<div class="bg-white shadow-md rounded-lg p-4">
+<div class="bg-white rounded-lg p-4 border border-slate-200">
     <table class="tblData w-full border-collapse border border-gray-200 rounded-lg"
            data-Root="/admin/company/"
            data-GetURL="getall"

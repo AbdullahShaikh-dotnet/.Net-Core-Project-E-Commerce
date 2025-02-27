@@ -73,7 +73,7 @@
 		},
 
 		paging: {
-			active: "font-bold bg-gray-700 text-white hover:bg-gray-700 hover:text-white transition",
+			active: "font-bold bg-indigo-700 text-white hover:bg-indigo-700 hover:text-white transition",
 			notActive: "bg-white text-gray-700",
 			button: "px-4 py-2 mx-0.5 rounded-md border border-gray-300 shadow-sm hover:bg-gray-100 hover:scale-2 transition",
 			first: "rounded-md",

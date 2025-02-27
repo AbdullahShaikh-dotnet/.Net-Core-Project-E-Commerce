@@ -1,63 +1,62 @@
 ﻿@model OrderPayment
 
-@if (Model.isPaymentSuccessfull)
+@if (!Model.isPaymentSuccessfull)
 {
-    <div class="container mt-5">
-        <div class="row justify-content-center align-content-center">
-            <div class="col-md-6">
-                <div class="card text-center shadow-sm rounded-2">
-                    <div class="card-header bg-success text-white pt-2">
-                        @if (Model.isCustomer)
-                        {
-                            <h3>Order Confirmed</h3>
-                        }
-                        else
-                        {
-                            <h3>Payment Confirmed</h3>
-                        }
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Thank you for your purchase!</h5>
-                        <p class="card-text">Your order has been successfully placed. We will process it shortly.</p>
-                        <div class="alert alert-success" role="alert">
-                            <strong>Order ID:</strong> @Model.OrderID
-                        </div>
-                        <div class="mb-3">
-                            <a asp-action="Index" asp-area="Customer" asp-controller="Home" class="btn btn-primary rounded-2">Continue Shopping</a>
-                        </div>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <small>For any inquiries, please contact customer support.</small>
-                    </div>
-                </div>
+    <div class="relative min-h-90 h-full w-full flex flex-col justify-center items-center my-6 bg-white shadow-sm border border-slate-200 rounded-lg p-4">
+        <div class="p-3 text-center">
+            <div class="flex justify-center mb-4">
+
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-40 text-teal-500">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+
             </div>
+            <h5 class="text-slate-800 text-2xl font-semibold">
+                @(Model.isCustomer ? "Order Confirmed" : "Payment Confirmed")
+            </h5>
+            <p class="text-slate-600 leading-normal font-light mb-4 max-w-lg">
+                Your order has been successfully placed. We will process it shortly.
+            </p>
+
+            <div class="my-4"><strong>Order ID:</strong> @Model.OrderID </div>
+
+            <a asp-action="Index" asp-area="Customer" asp-controller="Home" class="min-w-32 rounded-md bg-slate-800 py-2 px-4 text-sm text-white transition-all shadow-md hover:shadow-lg hover:bg-slate-700">
+                Continue Shopping
+            </a>
+            <p class="text-sm text-gray-500 mt-5">For any inquiries, please contact customer support.</p>
         </div>
     </div>
 }
 else
 {
-    <div class="container mt-5">
-        <div class="row justify-content-center align-content-center">
-            <div class="col-md-6">
-                <div class="card text-center shadow-sm rounded-2">
-                    <div class="card-header bg-danger text-white pt-2">
-                        <h3>Payment Failed</h3>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">We're sorry, your payment could not be processed.</h5>
-                        <p class="card-text">There was an issue processing your payment. Please check your payment details or try again later.</p>
-                        <div class="alert alert-danger" role="alert">
-                            <strong>Error:</strong> Something went wrong. If the issue persists, contact customer support.
-                        </div>
-                        <div class="mb-3">
-                            <a asp-action="Index" asp-area="Customer" asp-controller="Cart" class="btn btn-primary rounded-2">Back to Cart</a>
-                        </div>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <small>For assistance, please reach out to customer support.</small>
-                    </div>
-                </div>
+    <div class="relative min-h-80 w-full h-full flex flex-col justify-center items-center my-6 bg-white shadow-sm border border-slate-200 rounded-lg p-4">
+        <div class="p-3 text-center">
+            <div class="flex justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-40 text-red-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3m0 3h.01M4.5 12a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0z" />
+                </svg>
             </div>
+            <h5 class="text-slate-800 text-2xl font-semibold">Payment Failed</h5>
+            <p class="text-slate-600 leading-normal font-light mb-4 max-w-lg">
+                There was an issue processing your payment. Please check your details or try again later.
+            </p>
+            <div class="text-red-700 px-4 py-2 rounded-md mb-4 my-5">
+                <strong>Error:</strong> Something went wrong. If the issue persists, contact customer support.
+            </div>
+            <a asp-action="Index" asp-area="Customer" asp-controller="Cart" class="min-w-32 rounded-md bg-slate-800 py-2 px-4 text-sm text-white transition-all shadow-md hover:shadow-lg hover:bg-slate-700">
+                Back to Cart
+            </a>
         </div>
+        <p class="text-sm text-gray-500 mt-5">For assistance, please reach out to customer support.</p>
     </div>
+
 }
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+</style>

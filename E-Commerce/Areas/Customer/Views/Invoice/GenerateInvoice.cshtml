@@ -1,6 +1,10 @@
-﻿
-<div class="h-100">
-    <a href="@Url.Action("DownloadInvoice", new { OrderID = Model.OrderID })" class="btn btn-primary mb-3">Download Invoice</a>
+﻿<div class="h-screen flex flex-col items-start">
+    <a href="@Url.Action("DownloadInvoice", new { OrderID = Model.OrderID })" class="rounded-md border border-slate-300 py-2 px-4 text-center text-md
+                                    transition-all shadow-sm mb-4
+                                    hover:shadow-lg hover:text-white hover:bg-indigo-700 hover:border-indigo-900 focus:text-white focus:bg-indigo-800
+                                    active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
+        Download Invoice
+    </a>
 
-    <iframe src="@Url.Action("ViewInvoice", new { OrderID = Model.OrderID })" width="100%" height="600px"></iframe>
+    <iframe src="@Url.Action("ViewInvoice", new { OrderID = Model.OrderID })" class="w-full h-full"></iframe>
 </div>
