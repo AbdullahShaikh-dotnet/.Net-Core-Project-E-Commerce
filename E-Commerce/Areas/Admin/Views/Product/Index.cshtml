@@ -4,10 +4,14 @@
     <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
 
+@{
+    ViewData["Title"] = "Product List";
+}
+
 <div class="container-fluid mb-2">
     <div class="row pt-4">
         <div class="col-6">
-            <h2 class="text-primary">Product List</h2>
+            <h2 class="text-primary">@ViewData["Title"]</h2>
         </div>
         <div class="col-6 text-end">
             <a asp-controller="Product" asp-action="Upsert" class="btn btn-sm btn-outline-primary rounded-2 border-1">
