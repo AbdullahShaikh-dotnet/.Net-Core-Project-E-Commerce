@@ -89,15 +89,15 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
 
-        public IActionResult Delete(int? Id)
-        {
-            if (Id == null || Id == 0) return NotFound();
+        //public IActionResult Delete(int? Id)
+        //{
+        //    if (Id == null || Id == 0) return NotFound();
 
-            Category? category = _UnitOfWork.Category.Get(cat => Id == cat.Id);
-            if (category == null) return NotFound();
+        //    Category? category = _UnitOfWork.Category.Get(cat => Id == cat.Id);
+        //    if (category == null) return NotFound();
 
-            return View(category);
-        }
+        //    return View(category);
+        //}
 
 
         [HttpPost, ActionName("Delete")]
@@ -114,6 +114,42 @@ namespace E_Commerce.Areas.Admin.Controllers
             _UnitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully";
             return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Category> CompaniesList = _UnitOfWork.Category.GetAll()
+                .Where(data => !data.IsDeleted).ToList();
+            return Json(new { data = CompaniesList });
+        }
+
+
+        public IActionResult Delete(int? id)
+        {
+            var CategoryToBeDeleted = _UnitOfWork.Category.Get(d => d.Id == id);
+            if (CategoryToBeDeleted == null)
+            {
+                return Json(new { success = false, message = "Error While Deletig" });
+            }
+
+            CategoryToBeDeleted.IsDeleted = true;
+            CategoryToBeDeleted.DeletedAt = DateTime.Now;
+            _UnitOfWork.Category.Update(CategoryToBeDeleted);
+            _UnitOfWork.Save();
+
+            return Json(new { success = true, message = "Deleted Successfully" });
+        }
+
+
+        public IActionResult Upsert(int? id)
+        {
+            if (id == 0 || id is null)
+                return View(new Category());
+
+            var CategoryObj = _UnitOfWork.Category.Get(data => data.Id == id);
+            return View(CategoryObj);
         }
     }
 }
