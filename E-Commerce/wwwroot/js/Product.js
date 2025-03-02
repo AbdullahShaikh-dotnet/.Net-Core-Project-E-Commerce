@@ -76,7 +76,7 @@ const LoadDataTables = function () {
         processing: true,
         info: true,
         scrollCollapse: true,
-        scrollY: '80vh',
+        scrollY: '50vh',
         drawCallback: () => {
             // This function is triggered after every table redraw (e.g., after data is loaded)
             const deleteButtons = document.querySelectorAll('.btnDelete');
