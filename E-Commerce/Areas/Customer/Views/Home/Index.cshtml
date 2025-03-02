@@ -60,8 +60,8 @@
 		<!-- Sort By -->
 		<div>
 			<h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
-			<select class="w-full p-2 border border-gray-300 rounded-md outline-none">
-				<option value="ascending">Price: Low to High</option>
+			<select id="comboxSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
+				<option selected value="ascending">Price: Low to High</option>
 				<option value="decending">Price: High to Low</option>
 				<option>Newest Arrivals</option>
 			</select>
@@ -72,10 +72,8 @@
 			<button class="btn-primary w-full">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-				</svg>
-
-				Apply</button>
-			<button class="btn-primary-outline w-full">Clear</button>
+				</svg>Apply</button>
+			<button class="btn-primary-outline w-full" onclick="GetFilterData()">Clear</button>
 		</div>
 
 
@@ -277,9 +275,9 @@
 		const toSlider = document.querySelector('#toSlider');
 		const fromInput = document.querySelector('#fromInput');
 		const toInput = document.querySelector('#toInput');
-				const fromValue = document.getElementById("fromValue");
+		const fromValue = document.getElementById("fromValue");
 		const toValue = document.getElementById("toValue");
-
+		const comboxSortBy = document.getElementById("comboxSortBy");
 
 
 		fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
@@ -294,7 +292,6 @@
 			controlToSlider(fromSlider, toSlider, toInput);
 			toValue.textContent = toSlider.value;
 		}
-
 
 		fromInput.oninput = () => {
 			controlFromInput(fromSlider, fromInput, toInput, toSlider);
@@ -416,22 +413,17 @@
 				});
 				categoryList.innerHTML = ListItemMarkup;
 
-
 				const roundedMax = Math.ceil(parseFloat(data.d.maxPrice) / 100) * 100;
-
 				fromSlider.max = roundedMax;
 				toSlider.max = roundedMax;
 				fromInput.max = roundedMax;
 				toInput.max = roundedMax;
-
 				fromInput.value = data.d.minPrice;
-				console.log(data.d.minPrice);
-
 				fromValue.textContent = data.d.minPrice;
 				toValue.textContent = roundedMax;
-
 				toSlider.value = roundedMax;
 				toInput.value = roundedMax;
+				comboxSortBy.options.selectedIndex = 0
 				dualRangeinit();
 			})
 			.catch(error => {
@@ -440,7 +432,8 @@
 		}
 
 		// Call the function to load categories on page load or when needed
-		GetFilterData();
+		// GetFilterData();
+		document.addEventListener('DOMContentLoaded', GetFilterData)
 
 	</script>
 }
