@@ -74,48 +74,6 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult Edit(Category obj)
-        {
-            if (obj.Id == 0) return NotFound();
-
-            if (!ModelState.IsValid) return View();
-
-            _UnitOfWork.Category.Update(obj);
-            _UnitOfWork.Save();
-            TempData["success"] = "Category Updated Successfully";
-            return RedirectToAction("Index");
-
-        }
-
-
-        //public IActionResult Delete(int? Id)
-        //{
-        //    if (Id == null || Id == 0) return NotFound();
-
-        //    Category? category = _UnitOfWork.Category.Get(cat => Id == cat.Id);
-        //    if (category == null) return NotFound();
-
-        //    return View(category);
-        //}
-
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(Category obj)
-        {
-            Category? Db_Category = _UnitOfWork.Category.Get(cat => obj.Id == cat.Id);
-
-            if (Db_Category == null) return NotFound();
-
-            // _db.Categories.Remove(Db_Category);
-
-            Db_Category.IsDeleted = true;
-            Db_Category.DeletedAt = DateTime.Now;
-            _UnitOfWork.Save();
-            TempData["success"] = "Category Deleted Successfully";
-            return RedirectToAction("Index");
-        }
-
 
         [HttpGet]
         public IActionResult GetAll()
@@ -151,5 +109,34 @@ namespace E_Commerce.Areas.Admin.Controllers
             var CategoryObj = _UnitOfWork.Category.Get(data => data.Id == id);
             return View(CategoryObj);
         }
+
+
+
+
+        [HttpPost]
+        public IActionResult Upsert(Category CategoryObj)
+        {
+            if (ModelState.IsValid)
+            {
+                if (CategoryObj.Id == 0)
+                {
+                    _UnitOfWork.Category.Add(CategoryObj);
+                    TempData["success"] = "Category Created Successfully";
+                }
+                else
+                {
+                    _UnitOfWork.Category.Update(CategoryObj);
+                    TempData["success"] = "Category Updated Successfully";
+                }
+
+                _UnitOfWork.Save();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(CategoryObj);
+            }
+        }
+
     }
 }
