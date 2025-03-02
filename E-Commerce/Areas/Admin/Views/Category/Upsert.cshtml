@@ -1,11 +1,11 @@
 ﻿@{
-	ViewData["Title"] = "Category List";
+	ViewData["Title"] = "Category";
 }
 
 @model Category
-<div class="mx-auto p-4">
+<div class="container mx-auto p-4">
 	<div class="flex justify-between items-center pb-4">
-		<h2 class="text-2xl font-bold text-blue-600">@((Model.Id > 0 ? "Update" : "Insert") + ViewData["Title"])</h2>
+		<h2 class="text-2xl font-bold text-indigo-600">@((Model.Id > 0 ? "Update " : "Create ") + ViewData["Title"])</h2>
 	</div>
 </div>
 
@@ -16,30 +16,38 @@
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<div>
 				<label asp-for="Name" class="block text-gray-700 font-medium"></label>
-				<input asp-for="Name" type="text" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" />
+				<input asp-for="Name" type="text" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-indigo-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-indigo-500" />
 				<span class="text-sm text-red-500" asp-validation-for="Name"></span>
 			</div>
 
 			<div>
 				<label asp-for="DisplayOrder" class="block text-gray-700 font-medium"></label>
-				<input asp-for="DisplayOrder" type="text" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500" />
+				<input asp-for="DisplayOrder" type="text" class="w-full p-3 border rounded-md focus:ring-1 focus:ring-indigo-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-indigo-500" />
 				<span class="text-sm text-red-500" asp-validation-for="DisplayOrder"></span>
 			</div>
 		</div>
 
-		<div class="flex justify-between items-center mt-4">
-			<a asp-controller="Category" asp-action="Index" class="text-gray-600 hover:text-blue-500 font-medium flex items-center">
+		<div class="flex items-center justify-between mt-4">
+			<a asp-controller="Category" asp-action="Index" class="text-gray-600 hover:text-indigo-500 font-medium flex items-center">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
 				</svg>
 				Back to List
 			</a>
 
-			<div class="space-x-2">
-				<button type="reset" class="btn-primary-outline">Clear</button>
-				<button type="submit" class="btn-primary">Create</button>
+			<div class="ml-auto flex space-x-2">
+				@if (Model.Id == 0)
+				{
+					<button type="reset" class="btn-primary-outline">Clear</button>
+					<button type="submit" class="btn-indigo">Create</button>
+				}
+				else
+				{
+					<button type="submit" class="btn-indigo">Update</button>
+				}
 			</div>
 		</div>
+
 	</div>
 </form>
 
