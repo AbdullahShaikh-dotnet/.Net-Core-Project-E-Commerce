@@ -1,35 +1,52 @@
 ﻿@model List<Product>
 @section Styles {
-    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
-    <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
+	<link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
+	<link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
 
 @{
-    ViewData["Title"] = "Product List";
+	ViewData["Title"] = "Product List";
 }
 
-<div class="container-fluid mb-2">
-    <div class="row pt-4">
-        <div class="col-6">
-            <h2 class="text-primary">@ViewData["Title"]</h2>
-        </div>
-        <div class="col-6 text-end">
-            <a asp-controller="Product" asp-action="Upsert" class="btn btn-sm btn-outline-primary rounded-2 border-1">
-                <i class="fs-6 bi bi-plus-circle px-1"></i>Create Product
-            </a>
-        </div>
-    </div>
+<div class="mx-auto mt-4 mb-5 flex flex-col md:flex-row md:justify-between gap-4 mb-4">
+
+	<div>
+		<h2 class="text-indigo-700 text-2xl md:text-3xl font-bold">@ViewData["Title"]</h2>
+	</div>
+
+	<!-- Button Group -->
+	<div class="flex flex-wrap justify-end">
+		<a asp-controller="Product" asp-action="Upsert" class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
+                  hover:shadow-lg hover:text-white hover:bg-indigo-700 flex justify-center item-center
+                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mx-2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+			</svg>
+			Create Product
+		</a>
+	</div>
 </div>
 
-<table class="tblData"
-       data-Root="/admin/product/"
-       data-GetURL="getall"
-       data-DeleteURL="Delete?id="
-       data-EditURL="Upsert?id="></table>
+<div class="bg-white rounded-lg p-4 border border-slate-200">
+	<table class="tblData"
+		   data-Root="/admin/product/"
+		   data-GetURL="getall"
+		   data-DeleteURL="Delete?id="
+		   data-EditURL="Upsert?id="></table>
+</div>
 
 
 @section Scripts {
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
-    <script src="~/js/datatables.tailwind.js"></script>
-    <script src="~/js/Product.js"></script>
+	<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
+	<script src="~/js/datatables.tailwind.js"></script>
+	<script src="~/js/Product.js"></script>
 }
+
+
+
+
+
+
+
+
+

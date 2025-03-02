@@ -1,16 +1,21 @@
 ﻿@model ProductVM
 
+@{
+    ViewData["Title"] = "Product";
+}
+
 <div class="container mx-auto p-4">
     <div class="flex justify-between items-center pb-4">
-        <h2 class="text-2xl font-bold text-blue-600">@(Model.product.Id != 0 ? "Update" : "Create") Product</h2>
+        <h2 class="text-2xl font-bold text-indigo-600">@((Model.product.Id > 0 ? "Update " : "Create ") + ViewData["Title"])</h2>
     </div>
 </div>
+
 
 <form method="post" enctype="multipart/form-data" class="space-y-6">
     <input type="hidden" asp-for="product.Id" />
     <input type="hidden" asp-for="product.ImageURL" />
 
-    <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+    <div class="bg-white border border-slate-200 rounded-md p-6 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label asp-for="product.Title" class="block text-gray-700 font-medium"></label>
@@ -97,15 +102,15 @@
                 </svg>
                 Back to List
             </a>
-            <div class="space-x-2">
+            <div class="space-x-2 flex justify-end">
                 @if (Model.product.Id == 0)
                 {
-                    <button type="reset" class="px-4 py-2 border border-gray-400 text-gray-700 rounded-lg hover:bg-gray-200">Clear</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Create</button>
+                    <button type="reset" class="btn-primary-outline">Clear</button>
+                    <button type="submit" class="btn-indigo">Create</button>
                 }
                 else
                 {
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Update</button>
+                    <button type="submit" class="btn-indigo">Update</button>
                 }
             </div>
         </div>
