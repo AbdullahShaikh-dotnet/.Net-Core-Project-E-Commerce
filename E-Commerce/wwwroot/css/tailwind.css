@@ -15,16 +15,23 @@
     }
 
     .btn-primary {
-        @apply flex items-center rounded-md py-2 px-4 text-center text-sm transition-all shadow-sm
+        @apply flex items-center rounded py-2 px-4 text-center text-sm transition-all shadow-sm
         text-white bg-slate-800 hover:bg-slate-800 focus:text-white focus:bg-slate-800
         focus:border-slate-800 flex justify-center active:text-white
         active:bg-slate-700 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
     }
 
     .btn-primary-outline {
-        @apply flex items-center rounded-md py-2 px-4 text-center text-sm transition-all border border-slate-200 text-slate-800
+        @apply flex items-center rounded py-2 px-4 text-center text-sm transition-all border border-slate-200 text-slate-800
         bg-white hover:bg-slate-50 focus:bg-slate-50 flex justify-center active:text-slate-800 active:bg-slate-100
         disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
+    }
+
+    .btn-indigo{
+        @apply flex items-center rounded py-1 px-4 text-center text-sm transition-all shadow-sm
+        text-white bg-indigo-800 hover:bg-indigo-800 focus:text-white focus:bg-indigo-800
+        focus:border-indigo-800 flex justify-center active:text-white
+        active:bg-indigo-700 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none;
     }
 }
 
