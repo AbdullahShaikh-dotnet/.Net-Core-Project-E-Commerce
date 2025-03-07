@@ -202,20 +202,13 @@
     </footer>
 
 
-    <script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
     <script src="~/js/toast.js"></script>
     <partial name="_Notification"></partial>
-
-
-
-    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
-
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -266,16 +259,6 @@
         });
 
     </script>
-
-
-
-    <!-- DataTables Buttons Extension -->
-    @*     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script> *@
-
-
-
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
