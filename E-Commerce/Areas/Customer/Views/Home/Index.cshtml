@@ -1,439 +1,451 @@
-﻿@model IEnumerable<Product>
+﻿@* @model IEnumerable<ProductFilterViewModel> *@
+@model ProductFilterViewModel
 
 @{
-	ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home";
 }
 
 
-
-
 <div class="container mx-auto px-4 md:mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
-	<!-- Sidebar Filters (Desktop) -->
-	<aside class="hidden md:block bg-white rounded-md p-5 sticky top-4 h-fit border border-slate-200">
-		<h3 class="text-2xl font-semibold text-gray-900 mb-4">Filters</h3>
+    <!-- Sidebar Filters (Desktop) -->
+    <aside class="hidden md:block bg-white rounded-md p-5 sticky top-4 h-fit border border-slate-200">
+        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Filters</h3>
 
-		<!-- Categories -->
-		<div class="mb-6 h-full max-h-[500px] grid-1">
-			<h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
-			<div class="relative flex flex-col rounded-md bg-white" id="liCategory"></div>
-		</div>
+        <!-- Categories -->
+        <div class="mb-6 h-full max-h-[500px] grid-1">
+            <h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
+            <div class="relative flex flex-col rounded-md bg-white" id="liCategory"></div>
+        </div>
 
-		<!-- Price Range -->
-		<h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
-		<div class="flex flex-col w-[98%] mt-[10%] mb-[5%] mx-[2%]">
-			<div class="relative min-h-[20px]">
+        <!-- Price Range -->
+        <h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
+        <div class="flex flex-col w-[98%] mt-[10%] mb-[5%] mx-[2%]">
+            <div class="relative min-h-[20px]">
 
-				<div class="relative group">
-					<input id="fromSlider" class="dual-range-slider h-0 z-[1]" type="range" value="10" min="0" max="100" />
-					<span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
-						Min: <span id="fromValue"></span>
-					</span>
-				</div>
+                <div class="relative group">
+                    <input id="fromSlider" class="dual-range-slider h-0 z-[1]" type="range" value="10" min="0" max="@Model.MinPrice" />
+                    <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
+                        Min: <span id="fromValue"></span>
+                    </span>
+                </div>
 
-				<div class="relative group">
-					<input id="toSlider" class="dual-range-slider" type="range" value="40" min="0" max="100" />
-					<span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
-						Max: <span id="toValue"></span>
-					</span>
-				</div>
-			</div>
-			<div class="flex justify-around gap-2">
-				<div class="form_control_container flex-1">
-					<div class="form_control_container__time text-[12px] text-slate-400">Min</div>
-					<input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400 text-slate-700
+                <div class="relative group">
+                    <input id="toSlider" class="dual-range-slider" type="range" value="40" min="0" max="@Model.MaxPrice" />
+                    <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
+                        Max: <span id="toValue"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="flex justify-around gap-2">
+                <div class="form_control_container flex-1">
+                    <div class="form_control_container__time text-[12px] text-slate-400">Min</div>
+                    <input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400 text-slate-700
 						text-sm border border-slate-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400
 						hover:border-slate-300 shadow-sm focus:shadow appearance-none
 						[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-						   type="number" id="fromInput" value="10" min="0" max="100" />
-				</div>
-				<div class="form_control_container flex-1">
-					<div class="form_control_container__time text-[12px] text-slate-400">Max</div>
-					<input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400
+                           type="number" id="fromInput" value="@Model.MinPrice" min="0" max="100" />
+                </div>
+                <div class="form_control_container flex-1">
+                    <div class="form_control_container__time text-[12px] text-slate-400">Max</div>
+                    <input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400
 						text-slate-700 text-sm border border-slate-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease
 						focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow appearance-none
 						[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-						   type="number" id="toInput" value="40" min="0" max="100" />
-				</div>
-			</div>
-		</div>
+                           type="number" id="toInput" value="@Model.MaxPrice" min="0" max="100" />
+                </div>
+            </div>
+        </div>
 
-		<!-- Sort By -->
-		<div>
-			<h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
-			<select id="comboxSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
-				<option selected value="ascending">Price: Low to High</option>
-				<option value="decending">Price: High to Low</option>
-				<option>Newest Arrivals</option>
-			</select>
-		</div>
-
-
-		<div class="flex justify-between gap-2 mt-10">
-			<button class="btn-primary w-full">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-				</svg>Apply</button>
-			<button class="btn-primary-outline w-full" onclick="GetFilterData()">Clear</button>
-		</div>
+        <!-- Sort By -->
+        <div>
+            <h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
+            <select id="comboxSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
+                <option selected value="priceasc">Price: Low to High</option>
+                <option value="pricedesc">Price: High to Low</option>
+                <option>Newest Arrivals</option>
+            </select>
+        </div>
 
 
-	</aside>
-
-	<!-- Mobile Filter Button -->
-	<div class="md:hidden flex justify-start">
-		<button id="toggleFilter" class="btn-primary-outline">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-			</svg>
-		</button>
-	</div>
-
-	<!-- Mobile Filter Modal -->
-	<div id="mobileFilters" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300">
-		<div class="p-5 relative">
-			<button id="closeFilter" class="absolute top-4 right-4 p-2">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-				</svg>
-
-			</button>
-			<h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
-			<ul class="space-y-2 text-gray-700">
-				<li class="cursor-pointer hover:text-blue-600 transition">Electronics</li>
-				<li class="cursor-pointer hover:text-blue-600 transition">Books</li>
-				<li class="cursor-pointer hover:text-blue-600 transition">Fashion</li>
-			</ul>
-		</div>
-	</div>
+        <div class="flex justify-between gap-2 mt-10">
+            <button class="btn-primary w-full" id="btnApplyFilter" onclick="GetProductData(event)">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                </svg>Apply
+            </button>
+            <button class="btn-primary-outline w-full" onclick="location.reload()">Clear</button>
+        </div>
 
 
+    </aside>
 
+    <!-- Mobile Filter Button -->
+    <div class="md:hidden flex justify-start">
+        <button id="toggleFilter" class="btn-primary-outline">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+            </svg>
+        </button>
+    </div>
 
+    <!-- Mobile Filter Modal -->
+    <div id="mobileFilters" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300">
+        <div class="p-5 relative">
+            <button id="closeFilter" class="absolute top-4 right-4 p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
 
-	<!-- Product Grid -->
-	<div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-		@foreach (var product in Model)
-		{
-			<a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block">
-				<div class="relative w-full h-60 bg-white border border-b-0 border-slate-200 p-2 pb-0 rounded-t-lg overflow-hidden group">
-
-					@if (product.ListPrice > product.Price)
-					{
-						<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-semibold px-3 py-1 rounded-full shadow-sm m-2">
-							-@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
-						</span>
-					}
-
-
-					@if (string.IsNullOrEmpty(product.ImageURL))
-					{
-						<div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg">
-							No Media Available
-						</div>
-					}
-					else
-					{
-						<img src="@product.ImageURL" class="w-full h-full object-cover rounded-md transition-all duration-200">
-
-						<!-- Backdrop -->
-						<div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-2 m-2 rounded-md mb-0
-                        translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-in-out z-10">
-							<span class="text-white text-xs font-semibold line-clamp-6">@Html.Raw(product.Description)</span>
-						</div>
-					}
-				</div>
-
-				<div class="text-left border border-t-0 border-slate-200 rounded-b-md p-2 relative">
-					<div class="flex justify-between">
-
-						<h5 class="text-md font-semibold text-gray-700 truncate max-w-[80%] md:max-w-50" title="@product.Title">
-							@product.Title
-						</h5>
+            </button>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
+            <ul class="space-y-2 text-gray-700">
+                <li class="cursor-pointer hover:text-blue-600 transition">Electronics</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Books</li>
+                <li class="cursor-pointer hover:text-blue-600 transition">Fashion</li>
+            </ul>
+        </div>
+    </div>
 
 
 
-						<div class="absolute right-2 rounded-md bg-slate-100 py-0.2 px-1.5 border border-transparent text-[10px] text-slate-800 transition-all shadow-sm">
-							@product.Category.Name
-						</div>
-
-					</div>
-					<p class="capitalize text-gray-500 text-xs">by @product.Author</p>
 
 
-					<!-- Price -->
-					<div class="flex items-center justify-end">
-						<div class="text-lg font-semibold text-gray-700 mb-2">@product.Price.ToString("C")</div>
-					</div>
+    <!-- Product Grid -->
+    <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productListContainer">
+
+        @{
+            await Html.RenderPartialAsync("_ProductPartial", Model);
+        }
+
+    </div>
 
 
-					<div class="flex justify-between">
 
-						<!-- Wishlist Button -->
-						<button class="bg-white text-gray-700 p-2 rounded-full border border-slate-300 hover:bg-red-500 hover:border-red-500 hover:text-white transition duration-300 mr-2">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-							</svg>
-						</button>
+    <!-- Product Not Found Div (Takes up remaining space) -->
+    <div id="productNotFoundDiv" class="relative h-full w-full md:col-span-3 flex flex-col justify-center items-center bg-white border border-slate-200 rounded-md p-2 hidden">
+        <div class="p-3 text-center">
+            <div class="flex justify-center mb-4">
+                <svg class="text-slate-400 w-10 h-10" width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 11.286 22 7v10.714L12 22zm0 0L2 7v10.714L12 22zM12 3 2 7m10-4 10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <div class="flex justify-center mb-2">
+                <h5 class="text-slate-800 text-2xl font-semibold">
+                    No Products Found
+                </h5>
+            </div>
+            <p class="block text-slate-600 leading-normal font-light mb-4 max-w-lg">
+                We couldn't find any products matching your criteria.
+            </p>
+        </div>
+    </div>
 
-						<!-- Add to Cart Button -->
-						<button onclick="addToCart(@product.Id, event)" class="btn-primary w-full" type="button">
-							Add to cart
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5">
-								<path stroke-linecap="round" stroke-linejoin="round"
-									  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-							</svg>
-						</button>
-					</div>
-				</div>
-			</a>
-		}
-	</div>
+
+
+
 </div>
 
 
 @section Scripts {
-	<script defer>
+    <script defer>
 
-		function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
-			const [from, to] = getParsed(fromInput, toInput);
-			fillSlider(fromInput, toInput, '#C6C6C6', '#1e293b', controlSlider);
-			if (from > to) {
-				fromSlider.value = to;
-				fromInput.value = to;
-			} else {
-				fromSlider.value = from;
-			}
-		}
+                function controlFromInput(fromSlider, fromInput, toInput, controlSlider) {
+                    const [from, to] = getParsed(fromInput, toInput);
+                    fillSlider(fromInput, toInput, '#C6C6C6', '#1e293b', controlSlider);
+                    if (from > to) {
+                        fromSlider.value = to;
+                        fromInput.value = to;
+                    } else {
+                        fromSlider.value = from;
+                    }
+                }
 
-		function controlToInput(toSlider, fromInput, toInput, controlSlider) {
-			const [from, to] = getParsed(fromInput, toInput);
-			fillSlider(fromInput, toInput, '#C6C6C6', '#1e293b', controlSlider);
-			setToggleAccessible(toInput);
-			if (from <= to) {
-				toSlider.value = to;
-				toInput.value = to;
-			} else {
-				toInput.value = from;
-			}
-		}
+                function controlToInput(toSlider, fromInput, toInput, controlSlider) {
+                    const [from, to] = getParsed(fromInput, toInput);
+                    fillSlider(fromInput, toInput, '#C6C6C6', '#1e293b', controlSlider);
+                    setToggleAccessible(toInput);
+                    if (from <= to) {
+                        toSlider.value = to;
+                        toInput.value = to;
+                    } else {
+                        toInput.value = from;
+                    }
+                }
 
-		function controlFromSlider(fromSlider, toSlider, fromInput) {
-		  const [from, to] = getParsed(fromSlider, toSlider);
-		  fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
-		  if (from > to) {
-			fromSlider.value = to;
-			fromInput.value = to;
-		  } else {
-			fromInput.value = from;
-		  }
-		}
+                function controlFromSlider(fromSlider, toSlider, fromInput) {
+                  const [from, to] = getParsed(fromSlider, toSlider);
+                  fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
+                  if (from > to) {
+                    fromSlider.value = to;
+                    fromInput.value = to;
+                  } else {
+                    fromInput.value = from;
+                  }
+                }
 
-		function controlToSlider(fromSlider, toSlider, toInput) {
-		  const [from, to] = getParsed(fromSlider, toSlider);
-		  fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
-		  setToggleAccessible(toSlider);
-		  if (from <= to) {
-			toSlider.value = to;
-			toInput.value = to;
-		  } else {
-			toInput.value = from;
-			toSlider.value = from;
-		  }
-		}
+                function controlToSlider(fromSlider, toSlider, toInput) {
+                  const [from, to] = getParsed(fromSlider, toSlider);
+                  fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
+                  setToggleAccessible(toSlider);
+                  if (from <= to) {
+                    toSlider.value = to;
+                    toInput.value = to;
+                  } else {
+                    toInput.value = from;
+                    toSlider.value = from;
+                  }
+                }
 
-		function getParsed(currentFrom, currentTo) {
-		  const from = parseInt(currentFrom.value, 10);
-		  const to = parseInt(currentTo.value, 10);
-		  return [from, to];
-		}
+                function getParsed(currentFrom, currentTo) {
+                  const from = parseInt(currentFrom.value, 10);
+                  const to = parseInt(currentTo.value, 10);
+                  return [from, to];
+                }
 
-		function fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
-			const rangeDistance = to.max-to.min;
-			const fromPosition = from.value - to.min;
-			const toPosition = to.value - to.min;
-			controlSlider.style.background = `linear-gradient(
-			  to right,
-			  ${sliderColor} 0%,
-			  ${sliderColor} ${(fromPosition)/(rangeDistance)*100}%,
-			  ${rangeColor} ${((fromPosition)/(rangeDistance))*100}%,
-			  ${rangeColor} ${(toPosition)/(rangeDistance)*100}%,
-			  ${sliderColor} ${(toPosition)/(rangeDistance)*100}%,
-			  ${sliderColor} 100%)`;
-		}
+                function fillSlider(from, to, sliderColor, rangeColor, controlSlider) {
+                    const rangeDistance = to.max-to.min;
+                    const fromPosition = from.value - to.min;
+                    const toPosition = to.value - to.min;
+                    controlSlider.style.background = `linear-gradient(
+                      to right,
+                      ${sliderColor} 0%,
+                      ${sliderColor} ${(fromPosition)/(rangeDistance)*100}%,
+                      ${rangeColor} ${((fromPosition)/(rangeDistance))*100}%,
+                      ${rangeColor} ${(toPosition)/(rangeDistance)*100}%,
+                      ${sliderColor} ${(toPosition)/(rangeDistance)*100}%,
+                      ${sliderColor} 100%)`;
+                }
 
-		function setToggleAccessible(currentTarget) {
-		  const toSlider = document.querySelector('#toSlider');
-		  if (Number(currentTarget.value) <= 0 ) {
-			toSlider.style.zIndex = 2;
-		  } else {
-			toSlider.style.zIndex = 0;
-		  }
-		}
+                function setToggleAccessible(currentTarget) {
+                  const toSlider = document.querySelector('#toSlider');
+                  if (Number(currentTarget.value) <= 0 ) {
+                    toSlider.style.zIndex = 2;
+                  } else {
+                    toSlider.style.zIndex = 0;
+                  }
+                }
 
-		const fromSlider = document.querySelector('#fromSlider');
-		const toSlider = document.querySelector('#toSlider');
-		const fromInput = document.querySelector('#fromInput');
-		const toInput = document.querySelector('#toInput');
-		const fromValue = document.getElementById("fromValue");
-		const toValue = document.getElementById("toValue");
-		const comboxSortBy = document.getElementById("comboxSortBy");
-
-
-		fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
-		setToggleAccessible(toSlider);
-
-		fromSlider.oninput = () => {
-			controlFromSlider(fromSlider, toSlider, fromInput);
-			fromValue.textContent = fromSlider.value;
-		}
-
-		toSlider.oninput = () => {
-			controlToSlider(fromSlider, toSlider, toInput);
-			toValue.textContent = toSlider.value;
-		}
-
-		fromInput.oninput = () => {
-			controlFromInput(fromSlider, fromInput, toInput, toSlider);
-			fromValue.textContent = fromSlider.value;
-		}
-
-		toInput.oninput = () => {
-			controlToInput(toSlider, fromInput, toInput, toSlider);
-			toValue.textContent = toSlider.value;
-		}
+                const fromSlider = document.querySelector('#fromSlider');
+                const toSlider = document.querySelector('#toSlider');
+                const fromInput = document.querySelector('#fromInput');
+                const toInput = document.querySelector('#toInput');
+                const fromValue = document.getElementById("fromValue");
+                const toValue = document.getElementById("toValue");
+                const comboxSortBy = document.getElementById("comboxSortBy");
 
 
-		const dualRangeinit = function(){
-			controlFromSlider(fromSlider, toSlider, fromInput);
-			controlToSlider(fromSlider, toSlider, toInput);
-			controlFromInput(fromSlider, fromInput, toInput, toSlider);
-			controlToInput(toSlider, fromInput, toInput, toSlider);
-		}
+                fillSlider(fromSlider, toSlider, '#C6C6C6', '#1e293b', toSlider);
+                setToggleAccessible(toSlider);
+
+                fromSlider.oninput = () => {
+                    controlFromSlider(fromSlider, toSlider, fromInput);
+                    fromValue.textContent = fromSlider.value;
+                }
+
+                toSlider.oninput = () => {
+                    controlToSlider(fromSlider, toSlider, toInput);
+                    toValue.textContent = toSlider.value;
+                }
+
+                fromInput.oninput = () => {
+                    controlFromInput(fromSlider, fromInput, toInput, toSlider);
+                    fromValue.textContent = fromSlider.value;
+                }
+
+                toInput.oninput = () => {
+                    controlToInput(toSlider, fromInput, toInput, toSlider);
+                    toValue.textContent = toSlider.value;
+                }
 
 
-		// Cache DOM elements to avoid repeated DOM lookups
-		const toggleFilterBtn = document.getElementById("toggleFilter");
-		const closeFilterBtn = document.getElementById("closeFilter");
-		const mobileFilters = document.getElementById("mobileFilters");
-
-		// Event listener for toggling the filter visibility
-		toggleFilterBtn.addEventListener("click", () => {
-			mobileFilters.classList.remove("translate-x-full");
-		});
-
-		// Event listener for closing the filter
-		closeFilterBtn.addEventListener("click", () => {
-			mobileFilters.classList.add("translate-x-full");
-		});
-
-		// Function to add a product to the cart
-		function addToCart(productId, event) {
-			event.preventDefault();
-
-			const isUserLoggedIn = @User.Identity.IsAuthenticated.ToString().ToLower(); // Ensure this is properly rendered as a boolean string
-			if (!isUserLoggedIn) {
-				window.location.href = '/Identity/Account/Login';
-				return; // Prevent further execution if not logged in
-			}
-
-			fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' }
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					reloadCartCount(); // Reload cart count if item was added successfully
-					toast.success('Item added to cart', 5); // Show success message
-				} else {
-					console.error('Failed to add product to cart.');
-				}
-			})
-			.catch(error => console.error('Error adding product to cart:', error));
-		}
-
-		// Function to reload the cart count
-		function reloadCartCount() {
-			fetch('/Customer/Home/ReloadCartCount', {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' }
-			})
-			.then(response => response.text())
-			.then(data => {
-				document.getElementById('cart-count-LoginPartial').innerHTML = data;
-			})
-			.catch(error => console.error('Error reloading cart count:', error));
-		}
+                const dualRangeinit = function(){
+                    controlFromSlider(fromSlider, toSlider, fromInput);
+                    controlToSlider(fromSlider, toSlider, toInput);
+                    controlFromInput(fromSlider, fromInput, toInput, toSlider);
+                    controlToInput(toSlider, fromInput, toInput, toSlider);
+                }
 
 
-		function GetFilterData() {
-			fetch('/Customer/Home/GetFiltersData', {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' }
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (!data.success) {
-					throw new Error('Filter API response failed');
-				}
+                // Cache DOM elements to avoid repeated DOM lookups
+                const toggleFilterBtn = document.getElementById("toggleFilter");
+                const closeFilterBtn = document.getElementById("closeFilter");
+                const mobileFilters = document.getElementById("mobileFilters");
 
-				const categoryList = document.getElementById('liCategory');
+                // Event listener for toggling the filter visibility
+                toggleFilterBtn.addEventListener("click", () => {
+                    mobileFilters.classList.remove("translate-x-full");
+                });
 
-				categoryList.innerHTML = '';
-				let ListItemMarkup = '';
+                // Event listener for closing the filter
+                closeFilterBtn.addEventListener("click", () => {
+                    mobileFilters.classList.add("translate-x-full");
+                });
 
-				// Iterate through the categories and create list items
-				data.d.category.forEach(category => {
-					const checkboxId = `check-vertical-list-group-${category.id}`;
-					ListItemMarkup += `
-						<nav class="flex min-w-[240px] flex-col gap-1 px-2 py-1">
-							<div role="button" class="flex w-full items-center rounded-md p-0 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
-								<label for="${checkboxId}" class="flex w-full cursor-pointer items-center px-3 py-2.5">
-									<div class="inline-flex items-center">
-										<label class="flex items-center cursor-pointer relative" for="${checkboxId}">
-											<input type="checkbox" data-id="${category.id}"
-												   class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded duration-200 hover:shadow border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
-												   id="${checkboxId}" />
-											<span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-												<svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
-													<path fill-rule="evenodd"
-														  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-														  clip-rule="evenodd"></path>
-												</svg>
-											</span>
-										</label>
-										<label class="cursor-pointer ml-2 text-slate-600 text-sm" for="${checkboxId}">
-											${category.name}
-										</label>
-									</div>
-								</label>
-							</div>
-						</nav>`;
-				});
-				categoryList.innerHTML = ListItemMarkup;
+                // Function to add a product to the cart
+                function addToCart(productId, event) {
+                    event.preventDefault();
 
-				const roundedMax = Math.ceil(parseFloat(data.d.maxPrice) / 100) * 100;
-				fromSlider.max = roundedMax;
-				toSlider.max = roundedMax;
-				fromInput.max = roundedMax;
-				toInput.max = roundedMax;
-				fromInput.value = data.d.minPrice;
-				fromValue.textContent = data.d.minPrice;
-				toValue.textContent = roundedMax;
-				toSlider.value = roundedMax;
-				toInput.value = roundedMax;
-				comboxSortBy.options.selectedIndex = 0
-				dualRangeinit();
-			})
-			.catch(error => {
-				console.error('Error fetching categories:', error);
-			});
-		}
+                    const isUserLoggedIn = @User.Identity.IsAuthenticated.ToString().ToLower(); // Ensure this is properly rendered as a boolean string
+                    if (!isUserLoggedIn) {
+                        window.location.href = '/Identity/Account/Login';
+                        return; // Prevent further execution if not logged in
+                    }
 
-		// Call the function to load categories on page load or when needed
-		// GetFilterData();
-		document.addEventListener('DOMContentLoaded', GetFilterData)
+                    fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            reloadCartCount(); // Reload cart count if item was added successfully
+                            toast.success('Item added to cart', 5); // Show success message
+                        } else {
+                            console.error('Failed to add product to cart.');
+                        }
+                    })
+                    .catch(error => console.error('Error adding product to cart:', error));
+                }
 
-	</script>
+                // Function to reload the cart count
+                function reloadCartCount() {
+                    fetch('/Customer/Home/ReloadCartCount', {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('cart-count-LoginPartial').innerHTML = data;
+                    })
+                    .catch(error => console.error('Error reloading cart count:', error));
+                }
+
+
+                function GetFilterData() {
+                    fetch('/Customer/Home/GetFiltersData', {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error('Filter API response failed');
+                        }
+
+                        const categoryList = document.getElementById('liCategory');
+
+                        categoryList.innerHTML = '';
+                        let ListItemMarkup = '';
+
+                        // Iterate through the categories and create list items
+                        data.d.category.forEach(category => {
+                            const checkboxId = `check-vertical-list-group-${category.id}`;
+                            ListItemMarkup += `
+                                <nav class="flex min-w-[240px] flex-col gap-1 px-2 py-1">
+                                    <div role="button" class="flex w-full items-center rounded-md p-0 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100">
+                                        <label for="${checkboxId}" class="flex w-full cursor-pointer items-center px-3 py-2.5">
+                                            <div class="inline-flex items-center">
+                                                <label class="flex items-center cursor-pointer relative" for="${checkboxId}">
+                                                    <input type="checkbox" data-id="${category.id}" data-name="${category.name}" name="category"
+                                                           class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded duration-200 hover:shadow border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+                                                           id="${checkboxId}" />
+                                                    <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
+                                                            <path fill-rule="evenodd"
+                                                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                                  clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </span>
+                                                </label>
+                                                <label class="cursor-pointer ml-2 text-slate-600 text-sm" for="${checkboxId}">
+                                                    ${category.name}
+                                                </label>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </nav>`;
+                        });
+                        categoryList.innerHTML = ListItemMarkup;
+
+                        const roundedMax = Math.ceil(parseFloat(data.d.maxPrice) / 100) * 100;
+                        fromSlider.max = roundedMax;
+                        toSlider.max = roundedMax;
+                        fromInput.max = roundedMax;
+                        toInput.max = roundedMax;
+                        fromInput.value = data.d.minPrice;
+                        fromValue.textContent = data.d.minPrice;
+                        toValue.textContent = roundedMax;
+                        toSlider.value = roundedMax;
+                        toInput.value = roundedMax;
+                        comboxSortBy.options.selectedIndex = 0
+                        dualRangeinit();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching categories:', error);
+                    });
+                }
+
+                // Call the function to load categories on page load or when needed
+                // GetFilterData();
+                document.addEventListener('DOMContentLoaded', GetFilterData)
+
+
+
+
+
+        const GetProductData = (e) => {
+            const filterButton = e.currentTarget;
+           btnLoaderShow(filterButton);
+
+            const formData = new FormData();
+
+            // Collect filter data
+            const selectedCategories = [...document.querySelectorAll('input[name="category"]:checked')]
+                .map(el => el.dataset?.name);
+            const minPrice = document.getElementById("fromInput")?.value.trim();
+            const maxPrice = document.getElementById("toInput")?.value.trim();
+            const sortBy = document.getElementById("comboxSortBy")?.value.trim();
+
+            // Append to formData
+            if (selectedCategories.length) selectedCategories.forEach(cat => formData.append("SelectedCategories", cat));
+            if (minPrice) formData.append("MinPrice", minPrice);
+            if (maxPrice) formData.append("MaxPrice", maxPrice);
+            if (sortBy) formData.append("SortBy", sortBy);
+
+            fetch("@Url.Action("Index", "Home")", {
+                method: "POST",
+                body: formData,
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            })
+            .then(response => response.text())
+            .then(html => {
+                const productContainer = document.getElementById("productListContainer");
+                if (productContainer) productContainer.innerHTML = html;
+
+                    let NotFoundDiv = document.getElementById('productNotFoundDiv');
+                if(!html.trim()){
+                    NotFoundDiv.classList.remove('hidden');
+                    productContainer.classList.add('hidden');
+                }else{
+                    NotFoundDiv.classList.add('hidden');
+                    productContainer.classList.remove('hidden');
+                }
+            })
+            .catch(console.error)
+            .finally(() => {
+                btnLoaderHide(filterButton);
+            });
+        };
+
+        const btnLoaderShow = (element) => {
+            element.dataset.originalContent = element.innerHTML; // Store original content in a dataset attribute
+            element.disabled = true;
+            element.innerHTML = `<img src="/images/spinner.svg" width="22" height="22" />`;
+        };
+
+        const btnLoaderHide = (element) => {
+            element.disabled = false;
+            element.innerHTML = element.dataset?.originalContent; // Restore original content
+        };
+    </script>
 }
