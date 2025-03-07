@@ -120,41 +120,31 @@
 
 </form>
 
+
+<script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+      selector: 'textarea',
+      skin: 'oxide',
+      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+      plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
+        'searchreplace', 'visualblocks', 'fullscreen',
+        'insertdatetime', 'media', 'table', 'code'
+      ],
+      height: 250,
+              setup: function (editor) {
+        editor.on('init', function () {
+            document.querySelector('.tox.tox-tinymce').style.zIndex = '10';
+        });
+    }
+    });
+
+</script>
+
 @section Scripts {
 
     @{
         <partial name="_ValidationScriptsPartial" />
     }
-
-    <script>
-        tinymce.init({
-          selector: 'textarea',
-          skin: 'oxide',
-          toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
-          plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'charmap', 'preview',
-            'searchreplace', 'visualblocks', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code'
-          ],
-          height: 250,
-                  setup: function (editor) {
-            editor.on('init', function () {
-                document.querySelector('.tox.tox-tinymce').style.zIndex = '10';
-            });
-        }
-        });
-
-    </script>
-
-    <script>
-        function openImageModal() {
-            document.getElementById('imageModal').classList.remove('hidden');
-        }
-
-        function closeImageModal(e) {
-            e.preventDefault();
-            document.getElementById('imageModal').classList.add('hidden');
-        }
-    </script>
-
 }
