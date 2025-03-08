@@ -7,6 +7,7 @@ using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Razorpay.Api;
 using System.Security.Claims;
 
 namespace E_Commerce.Areas.Customer.Controllers
@@ -226,7 +227,7 @@ namespace E_Commerce.Areas.Customer.Controllers
                 _shoppingCartVM.orderHeader.PaymentStatus = SD.Payment_Status_Delayed_Payment;
                 _shoppingCartVM.orderHeader.OrderStatus = SD.Status_Approved;
                 _unitOfWork.OrderHeaders.Add(_shoppingCartVM.orderHeader);
-
+                _unitOfWork.Save();
 
                 foreach (var cart in _shoppingCartVM.shoppingCartsList)
                 {
@@ -250,12 +251,13 @@ namespace E_Commerce.Areas.Customer.Controllers
             var UserClaims = (ClaimsIdentity)User.Identity;
             var UserID = UserClaims.FindFirst(ClaimTypes.NameIdentifier).Value;
             var _OrderPayment = _unitOfWork.OrderPayments.Get(data => data.ApplicationUserID == UserID && data.OrderID == OrderID);
-            _OrderPayment.isCustomer = isCustomer;
 
             try
             {
                 if (isCustomer)
                 {
+                    _OrderPayment.isCustomer = isCustomer;
+
                     if (_OrderPayment.isPaymentSuccessfull)
                     {
                         _unitOfWork.OrderHeaders.UpdateStatus(
