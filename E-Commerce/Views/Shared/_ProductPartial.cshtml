@@ -1,5 +1,8 @@
 ﻿@model ProductFilterViewModel
 
+<input type="hidden" id="hfTotalPages" value="@Model.TotalPages" />
+<input type="hidden" id="hfcurrentPage" value="@Model.CurrentPage" />
+
 @foreach (var product in Model.Products)
 {
     <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block" target="_blank">
@@ -64,7 +67,7 @@
                 </button>
 
                 <!-- Add to Cart Button -->
-                <button onclick="addToCart(@product.Id, event)" class="btn-primary w-full" type="button">
+                <button onclick="addToCart(@product.Id, event)" class="btn-primary w-full" type="button" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()">
                     Add to cart
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
