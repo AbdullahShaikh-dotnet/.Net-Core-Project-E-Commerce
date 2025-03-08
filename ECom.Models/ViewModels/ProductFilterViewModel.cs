@@ -13,6 +13,8 @@ namespace ECom.Models.ViewModels
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }
         public string? SortBy { get; set; }
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
 
         public IEnumerable<SelectListItem>? Categories { get; set; }
         public IEnumerable<SelectListItem>? SortOptions { get; set; }
