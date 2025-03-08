@@ -103,12 +103,12 @@ namespace E_Commerce.Areas.Customer.Controllers
 
             if (model.MinPrice.HasValue)
             {
-                query = query.Where(p => p.ListPrice >= (double)model.MinPrice.Value);
+                query = query.Where(p => p.Price >= (double)model.MinPrice.Value);
             }
 
             if (model.MaxPrice.HasValue)
             {
-                query = query.Where(p => p.ListPrice <= (double)model.MaxPrice.Value);
+                query = query.Where(p => p.Price <= (double)model.MaxPrice.Value);
             }
 
             // Sorting
