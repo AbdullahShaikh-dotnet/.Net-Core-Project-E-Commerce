@@ -153,49 +153,6 @@
 	};
 
 
-
-	//DataTable.ext.renderer.pagingButton.tailwindcss = function (settings, buttonType, content, active, disabled) {
-	//	var classes = settings.oClasses.paging;
-	//	var btnClasses = [classes.button];
-
-	//	btnClasses.push(active ? classes.active : classes.notActive);
-	//	btnClasses.push(disabled ? classes.notEnabled : classes.enabled);
-
-	//	var svgIcons = {
-	//		"first": '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>',
-	//		"previous": '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>',
-	//		"next": '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>',
-	//		"last": '<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 17 11 12 6 7"></polyline><polyline points="13 17 18 12 13 7"></polyline></svg>'
-	//	};
-
-	//	var iconContent = svgIcons[buttonType] || content;
-
-	//	var a = $('<a>', {
-	//		'href': disabled ? null : '#',
-	//		'class': btnClasses.join(' '),
-	//		'aria-disabled': disabled ? "true" : "false"
-	//	}).html(iconContent);
-
-	//	return {
-	//		display: a,
-	//		clicker: a
-	//	};
-	//};
-
-	//DataTable.ext.renderer.pagingContainer.tailwindcss = function (settings, buttonEls) {
-	//	var classes = settings.oClasses.paging;
-
-	//	buttonEls[0].addClass(classes.first);
-	//	buttonEls[buttonEls.length - 1].addClass(classes.last);
-
-	//	return $('<div/>', {
-	//		'class': 'flex justify-center mt-4'
-	//	}).append(buttonEls);
-	//};
-
-
-
-
 	DataTable.ext.renderer.layout.tailwindcss = function (settings, container, items) {
 		var row = $('<div/>', {
 			"class": items.full ?
