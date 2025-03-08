@@ -28,18 +28,79 @@ namespace E_Commerce.Areas.Customer.Controllers
             _userService = UserService;
         }
 
+        //public IActionResult Index(ProductFilterViewModel model)
+        //{
+        //    var query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
+        //                .Where(data => !data.IsDeleted);
+
+        //    // Apply Category Filter
+        //    if (model.SelectedCategories != null && model.SelectedCategories.Any())
+        //    {
+        //        query = query.Where(p => model.SelectedCategories.Select(c => c.ToLower()).Contains(p.Category.Name.ToLower()));
+        //    }
+
+        //    // Apply Price Range Filter
+        //    if (model.MinPrice.HasValue)
+        //    {
+        //        query = query.Where(p => p.ListPrice >= (double)model.MinPrice.Value);
+        //    }
+
+        //    if (model.MaxPrice.HasValue)
+        //    {
+        //        query = query.Where(p => p.ListPrice <= (double)model.MaxPrice.Value);
+        //    }
+
+        //    // Apply Sorting
+        //    if (model.SortBy is not null)
+        //    {
+        //        switch (model.SortBy.ToLower())
+        //        {
+        //            case "priceasc":
+        //                query = query.OrderBy(p => p.Price);
+        //                break;
+        //            case "pricedesc":
+        //                query = query.OrderByDescending(p => p.Price);
+        //                break;
+        //            default:
+        //                query = query.OrderBy(p => p.Title);
+        //                break;
+        //        }
+        //    }
+
+        //    model.Products = query.Take(RecordPerPage).ToList();
+        //    model.Categories = _unitOfWork.Category
+        //                        .GetAll()
+        //                        .Select(c => new SelectListItem { Value = c.Name, Text = c.Name })
+        //                        .ToList();
+
+        //    model.SortOptions = new List<SelectListItem>
+        //    {
+        //        new SelectListItem { Value = "priceasc", Text = "Price: Low to High" },
+        //        new SelectListItem { Value = "pricedesc", Text = "Price: High to Low" },
+        //        new SelectListItem { Value = "new", Text = "Newest Arrivals" }
+        //    };
+
+        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") // Check if AJAX request
+        //    {
+        //        return PartialView("_ProductPartial", model);
+        //    }
+
+        //    return View(model);
+        //}
+
+
         public IActionResult Index(ProductFilterViewModel model)
         {
+            int RecordPerPage = 8; // Define records per page
             var query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
                         .Where(data => !data.IsDeleted);
 
-            // Apply Category Filter
+            // Apply Filters
             if (model.SelectedCategories != null && model.SelectedCategories.Any())
             {
-                query = query.Where(p => model.SelectedCategories.Select(c => c.ToLower()).Contains(p.Category.Name.ToLower()));
+                query = query.Where(p => model.SelectedCategories.Select(c => c?.ToLower()).Contains(p.Category.Name.ToLower()));
             }
 
-            // Apply Price Range Filter
             if (model.MinPrice.HasValue)
             {
                 query = query.Where(p => p.ListPrice >= (double)model.MinPrice.Value);
@@ -50,43 +111,30 @@ namespace E_Commerce.Areas.Customer.Controllers
                 query = query.Where(p => p.ListPrice <= (double)model.MaxPrice.Value);
             }
 
-            // Apply Sorting
+            // Sorting
             if (model.SortBy is not null)
             {
-                switch (model.SortBy.ToLower())
-                {
-                    case "priceasc":
-                        query = query.OrderBy(p => p.Price);
-                        break;
-                    case "pricedesc":
-                        query = query.OrderByDescending(p => p.Price);
-                        break;
-                    default:
-                        query = query.OrderBy(p => p.Title);
-                        break;
-                }
+                if (model.SortBy.ToLower() == "priceasc")
+                    query = query.OrderBy(p => p.Price);
+                else
+                    query = query.OrderByDescending(p => p.Price);
             }
 
-            model.Products = query.ToList();
-            model.Categories = _unitOfWork.Category
-                                .GetAll()
-                                .Select(c => new SelectListItem { Value = c.Name, Text = c.Name })
-                                .ToList();
+            // Pagination Logic
+            int totalRecords = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / RecordPerPage);
 
-            model.SortOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Value = "priceasc", Text = "Price: Low to High" },
-                new SelectListItem { Value = "pricedesc", Text = "Price: High to Low" },
-                new SelectListItem { Value = "new", Text = "Newest Arrivals" }
-            };
+            model.Products = query.Skip((model.CurrentPage - 1) * RecordPerPage).Take(RecordPerPage).ToList();
+            model.TotalPages = totalPages;
 
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") // Check if AJAX request
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") // AJAX Request
             {
                 return PartialView("_ProductPartial", model);
             }
 
             return View(model);
         }
+
 
 
 
