@@ -1,0 +1,31 @@
+﻿@section Styles {
+    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
+    <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
+}
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+
+<div class="mx-auto mt-4 mb-5 flex flex-col md:flex-row md:justify-between gap-4 mb-4">
+
+    <div>
+        <h2 class="text-indigo-700 text-2xl md:text-3xl font-bold">@ViewData["Title"]</h2>
+    </div>
+</div>
+
+
+<div class="bg-white rounded-lg p-4 border border-slate-200">
+    <table class="tblData w-full border-collapse border border-gray-200 rounded-lg"
+           data-Root="/admin/user/"
+           data-GetURL="getall"
+           data-LockUnlockURL="lockunlock">
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
+    <script src="~/js/datatables.tailwind.js"></script>
+    <script src="~/js/User.js"></script>
+}
