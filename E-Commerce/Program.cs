@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 using Serilog;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,6 +124,13 @@ builder.Services.AddSingleton<IMailJetService, MailJetService>();
 
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
+    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisConnection")));
+
+builder.Services.AddSingleton<ICacheService, CacheService>();
+
 
 var app = builder.Build();
 
