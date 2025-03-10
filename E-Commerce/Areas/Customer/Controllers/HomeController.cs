@@ -2,6 +2,7 @@ using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;
+using ECom.Utility.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,77 +18,18 @@ namespace E_Commerce.Areas.Customer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
+        private readonly ICacheService _cacheService;
 
         [BindProperty]
         public ProductFilterViewModel _ProductFilterViewModel { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork iUnitOfWork, IUserService UserService)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork iUnitOfWork, IUserService UserService, ICacheService cacheService)
         {
             _logger = logger;
             _unitOfWork = iUnitOfWork;
             _userService = UserService;
+            _cacheService = cacheService;
         }
-
-        //public IActionResult Index(ProductFilterViewModel model)
-        //{
-        //    var query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
-        //                .Where(data => !data.IsDeleted);
-
-        //    // Apply Category Filter
-        //    if (model.SelectedCategories != null && model.SelectedCategories.Any())
-        //    {
-        //        query = query.Where(p => model.SelectedCategories.Select(c => c.ToLower()).Contains(p.Category.Name.ToLower()));
-        //    }
-
-        //    // Apply Price Range Filter
-        //    if (model.MinPrice.HasValue)
-        //    {
-        //        query = query.Where(p => p.ListPrice >= (double)model.MinPrice.Value);
-        //    }
-
-        //    if (model.MaxPrice.HasValue)
-        //    {
-        //        query = query.Where(p => p.ListPrice <= (double)model.MaxPrice.Value);
-        //    }
-
-        //    // Apply Sorting
-        //    if (model.SortBy is not null)
-        //    {
-        //        switch (model.SortBy.ToLower())
-        //        {
-        //            case "priceasc":
-        //                query = query.OrderBy(p => p.Price);
-        //                break;
-        //            case "pricedesc":
-        //                query = query.OrderByDescending(p => p.Price);
-        //                break;
-        //            default:
-        //                query = query.OrderBy(p => p.Title);
-        //                break;
-        //        }
-        //    }
-
-        //    model.Products = query.Take(RecordPerPage).ToList();
-        //    model.Categories = _unitOfWork.Category
-        //                        .GetAll()
-        //                        .Select(c => new SelectListItem { Value = c.Name, Text = c.Name })
-        //                        .ToList();
-
-        //    model.SortOptions = new List<SelectListItem>
-        //    {
-        //        new SelectListItem { Value = "priceasc", Text = "Price: Low to High" },
-        //        new SelectListItem { Value = "pricedesc", Text = "Price: High to Low" },
-        //        new SelectListItem { Value = "new", Text = "Newest Arrivals" }
-        //    };
-
-        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") // Check if AJAX request
-        //    {
-        //        return PartialView("_ProductPartial", model);
-        //    }
-
-        //    return View(model);
-        //}
-
 
         public IActionResult Index(ProductFilterViewModel model)
         {
@@ -132,10 +74,10 @@ namespace E_Commerce.Areas.Customer.Controllers
                 return PartialView("_ProductPartial", model);
             }
 
+            //_cacheService.SetCacheValueAsync("ProductObject", model);
+
             return View(model);
         }
-
-
 
 
         public IActionResult Details(int ProductID)
