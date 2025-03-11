@@ -2,6 +2,7 @@
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility;
+using ECom.Utility.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,13 @@ namespace E_Commerce.Areas.Admin.Controllers
     public class UserController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public UserController(ApplicationDbContext db)
+        private readonly IWebSocketManager _webSocketManager;
+
+        public UserController(ApplicationDbContext db,
+            IWebSocketManager webSocketManager)
         {
             _db = db;
+            _webSocketManager = webSocketManager;
         }
 
         public IActionResult Index()
@@ -60,6 +65,14 @@ namespace E_Commerce.Areas.Admin.Controllers
 
             _db.SaveChanges();
             return Json(new { success = true, message = "Operation Successfully" });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Notification([FromBody] string NotifyMessage)
+        {
+            await _webSocketManager.BroadcastMessageAsync(NotifyMessage);
+            return Ok();
         }
     }
 }
