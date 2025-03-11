@@ -82,5 +82,10 @@
         /// Payment Status Rejected 
         /// </summary>
         public const string Payment_Status_Rejected = "Rejected";
+
+        /// <summary>
+        /// Maximum Count of API Request Per Second
+        /// </summary>
+        public const int RATE_LIMITING_COUNT = 5;
     }
 }
