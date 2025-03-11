@@ -11,14 +11,16 @@ namespace ECom.Utility.Services
 {
     public class CacheService : ICacheService
     {
+        private readonly IConnectionMultiplexer _connectionMultiplexer;
         private readonly IDatabase _redisDB;
         private readonly ILogger<CacheService> _logger;
         private readonly ISubscriber _subscriber;
 
         public CacheService(IConnectionMultiplexer connectionMultiplexer, ILogger<CacheService> logger)
         {
-            _redisDB = connectionMultiplexer.GetDatabase();
-            _subscriber = connectionMultiplexer.GetSubscriber();
+            _connectionMultiplexer = connectionMultiplexer;
+            _redisDB = _connectionMultiplexer.GetDatabase();
+            _subscriber = _connectionMultiplexer.GetSubscriber();
             _logger = logger;
         }
 
@@ -125,12 +127,19 @@ namespace ECom.Utility.Services
         // ======================== PUB/SUB ========================
         public async Task PublishAsync(string channel, string message)
         {
-            await _subscriber.PublishAsync(channel, message);
+            var pub = _connectionMultiplexer.GetSubscriber();
+            await pub.PublishAsync(channel, message);
         }
 
         public async Task SubscribeAsync(string channel, Action<string> handler)
         {
-            await _subscriber.SubscribeAsync(channel, (ch, msg) => handler(msg));
+            var sub = _connectionMultiplexer.GetSubscriber();
+            sub.Subscribe(channel, (redisChannel, value) =>
+            {
+                handler(value.ToString());
+            });
+
+            await Task.CompletedTask;
         }
 
         // ======================== RATE LIMITING ========================
