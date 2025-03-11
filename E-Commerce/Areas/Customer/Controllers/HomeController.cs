@@ -23,7 +23,10 @@ namespace E_Commerce.Areas.Customer.Controllers
         [BindProperty]
         public ProductFilterViewModel _ProductFilterViewModel { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork iUnitOfWork, IUserService UserService, ICacheService cacheService)
+        public HomeController(ILogger<HomeController> logger, 
+            IUnitOfWork iUnitOfWork, 
+            IUserService UserService, 
+            ICacheService cacheService)
         {
             _logger = logger;
             _unitOfWork = iUnitOfWork;
@@ -31,11 +34,31 @@ namespace E_Commerce.Areas.Customer.Controllers
             _cacheService = cacheService;
         }
 
-        public IActionResult Index(ProductFilterViewModel model)
+        public async Task<IActionResult> Index(ProductFilterViewModel model)
         {
+            //1.API Rate Limiting per user(Max Attempt: SD.RATE_LIMITING_COUNT)
+            string key = $"rate_limit:{_userService.GetUserId()}";
+            if (await _cacheService.IsRateLimitedAsync(key, SD.RATE_LIMITING_COUNT, TimeSpan.FromSeconds(1)))
+                return StatusCode(429, "Too many requests. Try again later.");
+
+
             int RecordPerPage = 8; // Define records per page
-            var query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
-                        .Where(data => !data.IsDeleted);
+            IEnumerable<Product> query;
+
+            var cachedProduct = await _cacheService.GetAsync<IEnumerable<Product>>("ProductObject");
+
+            if (cachedProduct == null)
+            {
+                query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
+                            .Where(data => !data.IsDeleted);
+
+                await _cacheService.SetAsync("ProductObject", query, TimeSpan.FromSeconds(10));
+            }
+            else
+            {
+                query = cachedProduct;
+            }
+
 
             // Apply Filters
             if (model.SelectedCategories != null && model.SelectedCategories.Any())
@@ -73,8 +96,6 @@ namespace E_Commerce.Areas.Customer.Controllers
             {
                 return PartialView("_ProductPartial", model);
             }
-
-            //_cacheService.SetCacheValueAsync("ProductObject", model);
 
             return View(model);
         }
