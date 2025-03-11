@@ -130,6 +130,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisConnection")));
 
 builder.Services.AddSingleton<ICacheService, CacheService>();
+builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
 
 
 var app = builder.Build();
@@ -142,9 +143,31 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+
+// Websocket Integration
+app.UseWebSockets();
+using (var scope = app.Services.CreateScope())
+{
+    var webSocketManager = scope.ServiceProvider.GetRequiredService<IWebSocketManager>();
+
+    app.Use(async (context, next) =>
+    {
+        if (context.Request.Path == "/ws")
+        {
+            await webSocketManager.HandleConnection(context);
+        }
+        else
+        {
+            await next();
+        }
+    });
+};
+
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -155,6 +178,7 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
 
