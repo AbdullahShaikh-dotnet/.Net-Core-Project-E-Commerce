@@ -73,6 +73,30 @@
             transitionOut: 'fadeOut',
             drag: true
         });
-    }
+    },
 
+    custom: (message, title = 'Info', timeout = 5000) => {
+        iziToast.info({
+            title: title,
+            titleColor: '#1e1e1e',
+            message: message,
+            position: 'bottomRight',
+            theme: 'light',
+            backgroundColor: '#fff',
+            messageColor: '#1e1e1e',
+            timeout: timeout * 1000,
+            layout: 2,
+            close: true,
+            progressBarColor: '#1e1e1e',
+            transitionIn: 'fadeInUp',
+            transitionOut: 'fadeOut',
+            drag: true,
+            animateInside: true,
+            displayMode: 0,
+            maxWidth: "500px",
+            closeOnClick: true,
+            progressBarEasing: 'linear',
+            iconUrl: "/images/Icons/Bell-Icon.svg"
+        });
+    }
 };
