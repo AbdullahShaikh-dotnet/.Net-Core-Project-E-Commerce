@@ -16,6 +16,18 @@
 </div>
 
 
+<div class="w-full mt-4 flex justify-end mb-10">
+    <div class="relative">
+        <input type="text" class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Enter your text" />
+        <button class="btnNotification absolute right-1 top-1 rounded bg-slate-800 py-1 px-2.5 border border-transparent text-center text-sm text-white transition-all shadow-sm hover:shadow focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+
 <div class="bg-white rounded-lg p-4 border border-slate-200">
     <table class="tblData w-full border-collapse border border-gray-200 rounded-lg"
            data-Root="/admin/user/"
@@ -29,3 +41,36 @@
     <script src="~/js/datatables.tailwind.js"></script>
     <script src="~/js/User.js"></script>
 }
+
+
+<script>
+
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     document.getElementById('btnmsg').addEventListener('click',async () => {
+    //         const response = await fetch("/Customer/Home/Notification", {});
+    //     });
+    // })
+
+                const Notifybtns = document.querySelectorAll('.btnNotification');
+            Notifybtns.forEach(btn => btn.addEventListener('click', async (e) => {
+                const NotifyInput = e.currentTarget.closest('div')?.querySelector('input[type="text"]');
+                const NotifyMessage = NotifyInput?.value;
+                if (NotifyMessage) {
+                    const response = await fetch(`/Admin/User/Notification`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json" // Specify JSON format
+                        },
+                        body: JSON.stringify(NotifyMessage) // Send as an object
+                    });
+
+                    if (!response.ok) {
+                        console.error("Error:", response.statusText);
+                    } else {
+                        NotifyInput.value = '';
+                    }
+                }
+            }));
+
+
+</script>
