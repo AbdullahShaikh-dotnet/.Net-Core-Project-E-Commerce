@@ -50,8 +50,14 @@
 	</ItemGroup>
 
 
-	<Target Name="RunNpmWatch" AfterTargets="Build">
+	<!--<Target Name="RunNpmWatch" AfterTargets="Build">
 		<Exec Command="cmd /k npm run css:build" />
+		<Exec Command="docker start redis-master" />
+	</Target>-->
+
+	<Target Name="RunNpmWatch" AfterTargets="Build">
+		<Exec Command="cmd /c npm run css:build &amp; docker start redis-master" />
 	</Target>
+
 
 </Project>
