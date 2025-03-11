@@ -212,7 +212,7 @@
     </footer>
 
 
-    
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -270,6 +270,22 @@
 
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script defer>
+        const socket = new WebSocket("wss://localhost:7280/ws");
+        socket.onopen = function() {
+            console.log("✅ Connected to WebSocket");
+        };
+
+        socket.onmessage = function(event) {
+            toast.custom(event.data, 'Notification' ,3);
+        };
+
+        socket.onclose = function() {
+            console.log("❌ Disconnected from WebSocket");
+        };
+    </script>
 
 </body>
 </html>
