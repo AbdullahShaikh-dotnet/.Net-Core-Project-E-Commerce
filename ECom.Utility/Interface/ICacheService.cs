@@ -1,15 +1,54 @@
-﻿using ECom.Models.InvoiceModels;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace ECom.Utility.Interface
 {
     public interface ICacheService
     {
-        Task<string> GetCacheStringAync(string key);
+        /// <summary>
+        /// Retrieves a cached string value.
+        /// </summary>
+        Task<string?> GetStringAsync(string key);
 
-        Task SetCacheStringAync(string key, string value);
+        /// <summary>
+        /// Caches a string value with an optional expiration time.
+        /// </summary>
+        Task<bool> SetStringAsync(string key, string value, TimeSpan? expiry = null);
 
-        Task<T> GetCacheValueAsync<T>(string key);
+        /// <summary>
+        /// Retrieves a strongly typed object from cache.
+        /// </summary>
+        Task<T?> GetAsync<T>(string key);
 
-        Task SetCacheValueAsync<T>(string key, T value);
+        /// <summary>
+        /// Caches a strongly typed object with an optional expiration time.
+        /// </summary>
+        Task<bool> SetAsync<T>(string key, T value, TimeSpan? expiry = null);
+
+        /// <summary>
+        /// Removes a cached value.
+        /// </summary>
+        Task<bool> RemoveAsync(string key);
+
+        /// <summary>
+        /// Checks if a key exists in cache.
+        /// </summary>
+        Task<bool> ExistsAsync(string key);
+
+
+        /// <summary>
+        /// Pub/Sub : Publisher Methods for Real time Publishing Message
+        /// </summary>
+        Task PublishAsync(string channel, string message);
+
+        /// <summary>
+        /// Pub/Sub : Subscriber Methods for Real time Publishing Message
+        /// </summary>
+        Task SubscribeAsync(string channel, Action<string> handler);
+
+        /// <summary>
+        /// Rate Limiting : Prevent API Abuse by limiting per user Request
+        /// </summary>
+        Task<bool> IsRateLimitedAsync(string key, int limit, TimeSpan duration);
     }
 }
