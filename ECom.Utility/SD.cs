@@ -92,5 +92,11 @@
         /// Notification Key for redis Pub/Sub
         /// </summary>
         public const string REDIS_PUBLISHER_SUBSCRIBER_NOTIFICATION_KEY = "notifications";
+
+
+        /// <summary>
+        /// LifeSpan of Redis Cache Memory
+        /// </summary>
+        public const int CACHE_TIMESPAN_SECONDS = 60;
     }
 }
