@@ -10,6 +10,7 @@
         IOrderDetailRepository OrderDetails { get; }
         IOrderHeaderRepository OrderHeaders { get; }
         IOrderPaymentRepository OrderPayments { get; }
-        void Save();
+        void Save(bool resetCache = false);
+        Task SaveAsync(bool resetCache = false);
     }
 }
