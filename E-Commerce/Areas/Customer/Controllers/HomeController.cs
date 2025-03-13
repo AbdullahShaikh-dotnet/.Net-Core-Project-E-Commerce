@@ -18,7 +18,6 @@ namespace E_Commerce.Areas.Customer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-        private readonly ICacheService _cacheService;
 
         [BindProperty]
         public ProductFilterViewModel _ProductFilterViewModel { get; set; }
@@ -31,33 +30,14 @@ namespace E_Commerce.Areas.Customer.Controllers
             _logger = logger;
             _unitOfWork = iUnitOfWork;
             _userService = UserService;
-            _cacheService = cacheService;
         }
 
         public async Task<IActionResult> Index(ProductFilterViewModel model)
         {
-            //1.API Rate Limiting per user(Max Attempt: SD.RATE_LIMITING_COUNT)
-            string key = $"rate_limit:{_userService.GetUserId()}";
-            if (await _cacheService.IsRateLimitedAsync(key, SD.RATE_LIMITING_COUNT, TimeSpan.FromSeconds(1)))
-                return StatusCode(429, "Too many requests. Try again later.");
-
-
             int RecordPerPage = 8; // Define records per page
-            IEnumerable<Product> query;
-
-            var cachedProduct = await _cacheService.GetAsync<IEnumerable<Product>>("ProductObject");
-
-            if (cachedProduct == null)
-            {
-                query = _unitOfWork.Product.GetAll(includePropertiesList: "Category")
-                            .Where(data => !data.IsDeleted);
-
-                await _cacheService.SetAsync("ProductObject", query, TimeSpan.FromSeconds(10));
-            }
-            else
-            {
-                query = cachedProduct;
-            }
+            IEnumerable<Product> query = await _unitOfWork
+                .Product
+                .GetAllAsync(filter: data => !data.IsDeleted, includePropertiesList: "Category", applyCaching: true);
 
 
             // Apply Filters
