@@ -254,7 +254,7 @@ async function GetProductData(e) {
         productContainer.innerHTML = html;
 
         const notFoundDiv = document.getElementById('productNotFoundDiv');
-        notFoundDiv.classList.toggle('hidden', !!html.trim());
+        notFoundDiv.classList.toggle('hidden', !html.trim());
         productContainer.classList.toggle('hidden', !html.trim());
 
         updatePagination();
