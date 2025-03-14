@@ -13,6 +13,7 @@ const LoadDataTables = function () {
     const RootPath = tableElement.dataset?.root;
     const GetURL = RootPath + tableElement.dataset?.geturl;
     const LockUnlockURL = RootPath + tableElement.dataset?.lockunlockurl;
+    const PermissionURL = RootPath + tableElement.dataset?.permissionurl;
     DT = new DataTable(tableElement, {
         ajax: { url: GetURL },
         columns: [
@@ -38,45 +39,37 @@ const LoadDataTables = function () {
                 render: function (data, type, row) {
                     let today = new Date().getTime();
                     let lockout = new Date(row.lockoutEnd).getTime();
-                    let HTML = "";
+                    let HTML = `<div class="flex justify-center gap-4 item-center text-center">`;
 
                     if (lockout > today) {
-                        HTML = `
-                <div class="flex justify-center gap-4 item-center text-center">
-                    <a class="flex font-light item-center text-red-500 border border-red-200 p-1 rounded btnLockUnlock"
-                        data-url='${LockUnlockURL}' data-id='${row.id}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                        </svg>
-                        <span class="px-1">Lock</span>
-                    </a>
-                    <button class="btnDelete flex item-center" data-url='${LockUnlockURL + row.id}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                        </svg>
-                        <span class="px-1">Permission</span>
-                    </button>
-                </div>
-            `;
+                        HTML += `
+                            <a class="flex font-light item-center text-red-500 border border-red-200 p-1 rounded btnLockUnlock"
+                                data-url='${LockUnlockURL}' data-id='${row.id}'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                                <span class="px-1">Lock</span>
+                            </a>`;
                     } else {
-                        HTML = `
-                <div class="flex justify-center gap-4 item-center text-center">
-                    <button class="flex font-light item-center text-emerald-600 border border-emerald-400 p-1 rounded btnLockUnlock"
-                        data-url='${LockUnlockURL}' data-id='${row.id}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                        </svg>
-                        <span class="px-1">Unlock</span>
-                    </button>
-                    <button class="btnDelete flex item-center" data-url='${LockUnlockURL + row.id}'>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                        </svg>
-                        <span class="px-1">Permission</span>
-                    </button>
-                </div>
-            `;
+                        HTML += `
+                            <button class="flex font-light item-center text-emerald-600 border border-emerald-400 p-1 rounded btnLockUnlock"
+                                data-url='${LockUnlockURL}' data-id='${row.id}'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                                <span class="px-1">Unlock</span>
+                            </button>`;
                     }
+
+                    HTML += `<a class="btnDelete flex item-center" href='${PermissionURL + row.id}'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.7" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                                </svg>
+                                <span class="px-1">Permission</span>
+                            </a>
+                            </div>`;
+
+
                     return HTML;
                 },
                 orderable: false,
