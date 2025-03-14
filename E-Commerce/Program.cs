@@ -9,6 +9,7 @@ using ECom.Utility.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using QuestPDF.Infrastructure;
 using Serilog;
 using StackExchange.Redis;
@@ -39,7 +40,12 @@ builder.Services.AddControllersWithViews();
 
 
 string pcName = Environment.MachineName;
+string DockerContainerID = "bd403b8e8402"; 
 string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
+
+if (pcName == DockerContainerID) // Docker ContainerID
+    ConnectionStringName = "DockerConnection";
+
 string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
 
 
@@ -127,7 +133,7 @@ builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
-    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisConnection")));
+    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(pcName == DockerContainerID ? "RedisDockerConnection" : "RedisConnection")));
 
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
