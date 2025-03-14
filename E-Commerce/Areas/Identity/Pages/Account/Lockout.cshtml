@@ -4,7 +4,37 @@
     ViewData["Title"] = "Locked out";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">This account has been locked out, please try again later.</p>
-</header>
+<div class="relative min-h-90 h-full w-full flex flex-col justify-center items-center my-6 bg-white border-slate-200 rounded-lg p-4">
+    <div class="p-3 text-center">
+        <div class="flex justify-center mb-4">
+
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-40 text-red-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+
+
+        </div>
+        <h5 class="text-slate-800 text-2xl font-semibold">
+            @ViewData["Title"]
+        </h5>
+        <p class="text-slate-600 leading-normal font-light mb-4 max-w-lg">
+            This account has been locked out, please try again later.
+        </p>
+
+        <a asp-action="Login" asp-area="Identity" asp-controller="Account"
+           class="btn-primary-outline">
+            Back to Login
+        </a>
+
+        <p class="text-sm text-gray-500 mt-5">For any inquiries, please contact customer support.</p>
+    </div>
+</div>
+
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+</style>
