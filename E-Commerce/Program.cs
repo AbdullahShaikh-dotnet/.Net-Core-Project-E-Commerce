@@ -38,12 +38,12 @@ builder.Host.UseSerilog((context, services, configuration) =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var isRunningInDockerContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
 string pcName = Environment.MachineName;
-string DockerContainerID = "bd403b8e8402"; 
 string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
 
-if (pcName == DockerContainerID) // Docker ContainerID
+if (isRunningInDockerContainer) // Docker ContainerID
     ConnectionStringName = "DockerConnection";
 
 string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
@@ -133,7 +133,7 @@ builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
-    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(pcName == DockerContainerID ? "RedisDockerConnection" : "RedisConnection")));
+    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection")));
 
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
