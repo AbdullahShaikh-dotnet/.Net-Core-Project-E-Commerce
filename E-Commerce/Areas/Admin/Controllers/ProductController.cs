@@ -62,7 +62,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                 {
                     string wwwRootPath = _webHostEnvironment.WebRootPath;
                     string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string ProductImagePath = Path.Combine(wwwRootPath, @"Images\Products");
+                    string ProductImagePath = Path.Combine(wwwRootPath, @"Images/Products");
                     string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
 
                     if (!Directory.Exists(ProductImagePath))
