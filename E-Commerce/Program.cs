@@ -43,11 +43,20 @@ var isRunningInDockerContainer = Environment.GetEnvironmentVariable("DOTNET_RUNN
 string pcName = Environment.MachineName;
 string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
 
-if (isRunningInDockerContainer) // Docker ContainerID
-    ConnectionStringName = "DockerConnection";
+//if (isRunningInDockerContainer)
+//    ConnectionStringName = "DockerConnection";
 
 string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
 
+if (isRunningInDockerContainer)
+{
+    ConnectionString = builder.Configuration["ConnectionStrings:DockerConnection"] =
+        $"Server={Environment.GetEnvironmentVariable("DB_HOST")},{Environment.GetEnvironmentVariable("DB_PORT")};" + // Fix here
+        $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" + // Moved DB_PORT to Server
+        $"User Id=sa;" +
+        $"Password={Environment.GetEnvironmentVariable("DB_SA_PASSWORD")};" +
+        "TrustServerCertificate=True;";
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>
     (options => options.UseSqlServer(ConnectionString));

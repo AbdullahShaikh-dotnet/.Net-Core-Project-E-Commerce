@@ -1,0 +1,43 @@
+networks:
+  ecommerce-network:
+
+services:
+
+  ecommercedb:
+    container_name: ecommerce-database
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=EcommerceA142BE!
+      - MSSQL_AUTHENTICATION_MODE=SQL
+    networks: 
+      - ecommerce-network
+    ports:
+      - 8001:1433
+
+  e-commerce:
+    container_name: ecommerce-application
+    image: ${DOCKER_REGISTRY-}ecommerce
+    build:
+      context: .
+      dockerfile: E-Commerce/Dockerfile
+    networks:
+      - ecommerce-network
+    ports:
+      - 8002:8080   
+    environment:
+      - DB_HOST=ecommercedb
+      - DB_NAME=EcommerceDatabase
+      - DB_PORT=1433
+      - DB_SA_PASSWORD=EcommerceA142BE!
+
+  redis-masterdb:
+    container_name: ecommerce-redis-master
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+    networks: 
+      - ecommerce-network
+    ports:
+      - 6379:6379
