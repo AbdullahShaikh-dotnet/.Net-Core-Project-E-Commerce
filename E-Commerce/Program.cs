@@ -35,6 +35,14 @@ builder.Host.UseSerilog((context, services, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 
+// Mis-Configuration throws Error on Buid Time Insted of Run Time
+builder.Host.UseDefaultServiceProvider((context, option) =>
+{
+    option.ValidateScopes = true;
+    option.ValidateOnBuild = true;
+});
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
