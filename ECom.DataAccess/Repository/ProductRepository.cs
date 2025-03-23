@@ -29,8 +29,8 @@ namespace ECom.DataAccess.Repository
             _product.Price50 = ProductObject.Price50;
             _product.Price100 = ProductObject.Price100;
             _product.Description = ProductObject.Description;
-            if (ProductObject.ImageURL != null)
-                _product.ImageURL = ProductObject.ImageURL;
+            //if (ProductObject.ImageURL != null)
+            //    _product.ImageURL = ProductObject.ImageURL;
         }
     }
 }

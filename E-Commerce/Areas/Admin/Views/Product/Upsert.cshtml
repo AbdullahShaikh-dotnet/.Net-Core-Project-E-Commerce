@@ -13,7 +13,7 @@
 
 <form method="post" enctype="multipart/form-data" class="space-y-6">
     <input type="hidden" asp-for="product.Id" />
-    <input type="hidden" asp-for="product.ImageURL" />
+    @* <input type="hidden" asp-for="product.ImageURL" /> *@
 
     <div class="bg-white border border-slate-200 rounded-md p-6 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -45,7 +45,7 @@
         </div>
 
         <div class="flex items-center space-x-4">
-            <!-- File Upload -->
+@*             <!-- File Upload -->
             <div class="flex-1">
                 <label asp-for="product.ImageURL" class="block text-gray-700 font-medium"></label>
                 <input asp-for="product.ImageURL"
@@ -62,7 +62,7 @@
                         <img src="@Model.product.ImageURL" class="w-full h-full object-cover rounded-lg" />
                     </div>
                 </a>
-            }
+            } *@
         </div>
 
 

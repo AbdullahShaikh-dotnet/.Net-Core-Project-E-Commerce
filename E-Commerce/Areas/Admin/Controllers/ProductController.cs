@@ -65,23 +65,23 @@ namespace E_Commerce.Areas.Admin.Controllers
                     string ProductImagePath = Path.Combine(wwwRootPath, @"Images/Products");
                     string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
 
-                    if (!Directory.Exists(ProductImagePath))
-                        Directory.CreateDirectory(ProductImagePath);
+                    //if (!Directory.Exists(ProductImagePath))
+                    //    Directory.CreateDirectory(ProductImagePath);
 
-                    if (!string.IsNullOrEmpty(_productVM.product.ImageURL))
-                    {
-                        string OldFileName = Path.Combine(wwwRootPath, _productVM.product.ImageURL.TrimStart('\\'));
+                    //if (!string.IsNullOrEmpty(_productVM.product.ImageURL))
+                    //{
+                    //    string OldFileName = Path.Combine(wwwRootPath, _productVM.product.ImageURL.TrimStart('\\'));
 
-                        if (System.IO.File.Exists(OldFileName))
-                            System.IO.File.Delete(OldFileName);
-                    }
+                    //    if (System.IO.File.Exists(OldFileName))
+                    //        System.IO.File.Delete(OldFileName);
+                    //}
 
-                    using (var fileStream = new FileStream(CompleteFilePath, FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
+                    //using (var fileStream = new FileStream(CompleteFilePath, FileMode.Create))
+                    //{
+                    //    file.CopyTo(fileStream);
+                    //}
 
-                    _productVM.product.ImageURL = @$"\Images\Products\{Filename}";
+                    //_productVM.product.ImageURL = @$"\Images\Products\{Filename}";
                 }
 
                 if (_productVM.product.Id == 0)
@@ -150,14 +150,14 @@ namespace E_Commerce.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error While Deletig" });
             }
 
-            string wwwRootPath = _webHostEnvironment.WebRootPath;
-            if (!string.IsNullOrEmpty(productToBeDeleted.ImageURL))
-            {
-                string OldFileName = Path.Combine(wwwRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
+            //string wwwRootPath = _webHostEnvironment.WebRootPath;
+            //if (!string.IsNullOrEmpty(productToBeDeleted.ImageURL))
+            //{
+            //    string OldFileName = Path.Combine(wwwRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
 
-                if (System.IO.File.Exists(OldFileName))
-                    System.IO.File.Delete(OldFileName);
-            }
+            //    if (System.IO.File.Exists(OldFileName))
+            //        System.IO.File.Delete(OldFileName);
+            //}
 
             productToBeDeleted.IsDeleted = true;
             productToBeDeleted.DeletedAt = DateTime.Now;

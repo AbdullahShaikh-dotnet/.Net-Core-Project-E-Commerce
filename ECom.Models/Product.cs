@@ -55,7 +55,7 @@ namespace ECom.Models
         [DisplayName("Category")]
         public int Category_ID { get; set; }
 
-        [ValidateNever]
-        public string? ImageURL { get; set; }
+        //[ValidateNever]
+        //public string? ImageURL { get; set; }
     }
 }
