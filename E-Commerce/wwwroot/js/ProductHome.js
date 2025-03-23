@@ -136,7 +136,7 @@ function addToCart(productId, event) {
     event.preventDefault();
 
     const isUserLoggedIn = event.currentTarget.dataset?.isauthenticated; // Ensure this is properly rendered as a boolean string
-    if (!isUserLoggedIn) {
+    if (isUserLoggedIn !== "true") {
         window.location.href = '/Identity/Account/Login';
         return; // Prevent further execution if not logged in
     }
