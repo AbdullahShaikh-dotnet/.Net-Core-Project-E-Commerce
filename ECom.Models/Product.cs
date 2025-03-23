@@ -57,5 +57,8 @@ namespace ECom.Models
 
         //[ValidateNever]
         //public string? ImageURL { get; set; }
+
+        [ValidateNever]
+        public List<ProductImages> ProductImages { get; set; }
     }
 }
