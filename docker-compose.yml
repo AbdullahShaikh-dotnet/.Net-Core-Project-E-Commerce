@@ -1,10 +1,3 @@
-networks:
-  ecommerce-network:
-
-volumes:
-  ecommerce-data:
-    name: ecommerce-data
-
 services:
 
   ecommercedb:
@@ -34,8 +27,10 @@ services:
       - DB_NAME=EcommerceDatabase
       - DB_PORT=1433
       - DB_SA_PASSWORD=EcommerceA142BE!
-    # volumes:
-    #   - ecommerce-data:/app/wwwroot/Images/Products
+    volumes:
+        - type: volume
+          source: ecommerce-data
+          target: /app/wwwroot/Images/Products
 
   redis-masterdb:
     container_name: ecommerce-redis-master
@@ -47,3 +42,10 @@ services:
       - ecommerce-network
     ports:
       - 6379:6379
+
+
+networks:
+  ecommerce-network:
+
+volumes:
+  ecommerce-data: 
