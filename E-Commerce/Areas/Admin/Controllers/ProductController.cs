@@ -53,47 +53,10 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upsert(ProductVM _productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM _productVM, List<IFormFile?> files)
         {
 
-            if (ModelState.IsValid)
-            {
-                if (file is not null)
-                {
-                    string wwwRootPath = _webHostEnvironment.WebRootPath;
-                    string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string ProductImagePath = Path.Combine(wwwRootPath, @"Images/Products");
-                    string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
-
-                    //if (!Directory.Exists(ProductImagePath))
-                    //    Directory.CreateDirectory(ProductImagePath);
-
-                    //if (!string.IsNullOrEmpty(_productVM.product.ImageURL))
-                    //{
-                    //    string OldFileName = Path.Combine(wwwRootPath, _productVM.product.ImageURL.TrimStart('\\'));
-
-                    //    if (System.IO.File.Exists(OldFileName))
-                    //        System.IO.File.Delete(OldFileName);
-                    //}
-
-                    //using (var fileStream = new FileStream(CompleteFilePath, FileMode.Create))
-                    //{
-                    //    file.CopyTo(fileStream);
-                    //}
-
-                    //_productVM.product.ImageURL = @$"\Images\Products\{Filename}";
-                }
-
-                if (_productVM.product.Id == 0)
-                    _UnitOfWork.Product.Add(_productVM.product);
-                else
-                    _UnitOfWork.Product.Update(_productVM.product);
-
-                _UnitOfWork.Save();
-                TempData["success"] = "Product Created Successfully";
-                return RedirectToAction("Index");
-            }
-            else
+            if (!ModelState.IsValid)
             {
                 _productVM.categoryList = _UnitOfWork.Category
                     .GetAll().Where(a => !a.IsDeleted)
@@ -102,9 +65,58 @@ namespace E_Commerce.Areas.Admin.Controllers
                         Text = d.Name,
                         Value = d.Id.ToString()
                     });
-
                 return View(_productVM);
             }
+
+
+            if (_productVM.product.Id == 0)
+                _UnitOfWork.Product.Add(_productVM.product);
+            else
+                _UnitOfWork.Product.Update(_productVM.product);
+
+            _UnitOfWork.Save();
+
+
+            if (files is not null)
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+                files.ForEach(file =>
+                {
+                    string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string FolderPath = $@"Images/Products/Product-{_productVM.product.Id}";
+                    string ProductImagePath = Path.Combine(wwwRootPath, FolderPath);
+                    string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
+
+                    if (!Directory.Exists(ProductImagePath))
+                        Directory.CreateDirectory(ProductImagePath);
+
+                    using (var fileStream = new FileStream(CompleteFilePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+
+                    ProductImages productImages = new()
+                    {
+                        ImageURL = $"\\{FolderPath}\\{Filename}",
+                        ProductID = _productVM.product.Id
+                    };
+
+                    if (_productVM.product.ProductImages is null)
+                        _productVM.product.ProductImages = new List<ProductImages>();
+
+                    _productVM.product.ProductImages.Add(productImages);
+
+                });
+
+                _UnitOfWork.Product.Update(_productVM.product);
+                _UnitOfWork.Save();
+            }
+
+
+            TempData["success"] = "Product Created Successfully";
+            return RedirectToAction("Index");
+
         }
 
 

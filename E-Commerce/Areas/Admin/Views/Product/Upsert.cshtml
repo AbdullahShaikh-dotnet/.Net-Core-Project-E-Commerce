@@ -45,17 +45,17 @@
         </div>
 
         <div class="flex items-center space-x-4">
-@*             <!-- File Upload -->
+            <!-- File Upload -->
             <div class="flex-1">
-                <label asp-for="product.ImageURL" class="block text-gray-700 font-medium"></label>
-                <input asp-for="product.ImageURL"
+                <label asp-for="product.ProductImages" class="block text-gray-700 font-medium"></label>
+                <input asp-for="product.ProductImages"
                        class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500"
-                       type="file"
-                       name="file" />
+                       type="file" multiple
+                       name="files" />
             </div>
 
             <!-- Image Preview -->
-            @if (!string.IsNullOrEmpty(Model.product.ImageURL))
+@*             @if (!string.IsNullOrEmpty(Model.product.ImageURL))
             {
                 <a href="@Model.product.ImageURL" target="_blank">
                     <div class="w-20 h-20 border shadow-md rounded-md flex items-center justify-center bg-gray-100 duration-300 transition hover:shadow-lg border-gray-200 hover:scale-110">
