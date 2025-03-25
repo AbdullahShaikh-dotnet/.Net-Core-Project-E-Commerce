@@ -3,6 +3,7 @@
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
+#USER root
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -18,6 +19,8 @@ COPY ["ECom.Models/ECom.Models.csproj", "ECom.Models/"]
 COPY ["ECom.Utility/ECom.Utility.csproj", "ECom.Utility/"]
 RUN dotnet restore "./E-Commerce/E-Commerce.csproj"
 COPY . .
+
+
 WORKDIR "/src/E-Commerce"
 RUN dotnet build "./E-Commerce.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
@@ -30,4 +33,7 @@ RUN dotnet publish "./E-Commerce.csproj" -c $BUILD_CONFIGURATION -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
 ENTRYPOINT ["dotnet", "E-Commerce.dll"]
+
+
