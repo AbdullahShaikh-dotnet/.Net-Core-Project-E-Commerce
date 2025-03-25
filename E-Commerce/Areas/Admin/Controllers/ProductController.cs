@@ -84,7 +84,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                 files.ForEach(file =>
                 {
                     string Filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string FolderPath = $@"Images/Products/Product-{_productVM.product.Id}";
+                    string FolderPath = $@"Media/Products/Product-{_productVM.product.Id}";
                     string ProductImagePath = Path.Combine(wwwRootPath, FolderPath);
                     string CompleteFilePath = Path.Combine(ProductImagePath, Filename);
 
