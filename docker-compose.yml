@@ -30,7 +30,7 @@ services:
     volumes:
         - type: volume
           source: ecommerce-data
-          target: /app/wwwroot/Images/Products
+          target: /app/wwwroot/Media/Products
 
   redis-masterdb:
     container_name: ecommerce-redis-master
