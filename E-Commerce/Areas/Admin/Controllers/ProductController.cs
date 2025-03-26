@@ -48,7 +48,7 @@ namespace E_Commerce.Areas.Admin.Controllers
             if (id == 0 || id is null)
                 return View(productViewModel);
 
-            productViewModel.product = _UnitOfWork.Product.Get(data => data.Id == id);
+            productViewModel.product = _UnitOfWork.Product.Get(data => data.Id == id, includePropertiesList: "ProductImages");
             return View(productViewModel);
         }
 
@@ -98,7 +98,7 @@ namespace E_Commerce.Areas.Admin.Controllers
 
                     ProductImages productImages = new()
                     {
-                        ImageURL = $"\\{FolderPath}\\{Filename}",
+                        ImageURL = $"/{FolderPath}/{Filename}",
                         ProductID = _productVM.product.Id
                     };
 
