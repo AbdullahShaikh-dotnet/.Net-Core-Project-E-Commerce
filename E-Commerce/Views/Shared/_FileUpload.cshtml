@@ -1,0 +1,53 @@
+﻿@model FileUploadViewModel
+
+<div class="mb-4 file-upload-component"
+     data-preview-id="@Model.PreviewId"
+     data-input-id="@Model.InputId"
+     data-error-id="@Model.ErrorId"
+     data-max-file-count="@Model.MaxFileCount"
+     data-max-file-size="@Model.MaxFileSizeMB"
+     data-accepted-types="@Model.AcceptedFileTypes">
+
+    <!-- Label -->
+    <label class="block text-gray-700 font-medium mb-1">
+        @Model.Label
+    </label>
+
+    <!-- File upload container -->
+    <div class="relative">
+        <!-- Hidden file input -->
+        <input asp-for="Files"
+               type="file"
+               multiple="@(Model.AllowMultiple ? "multiple" : null)"
+               name="@Model.InputName"
+               id="@Model.InputId"
+               class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+               accept="@Model.AcceptedFileTypes" />
+
+        <!-- Styled upload area -->
+        <div class="flex flex-col items-center justify-center px-6 py-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:border-blue-500 hover:bg-blue-50 transition-all duration-200">
+            <!-- Upload icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+
+            <!-- Instruction text -->
+            <div class="text-center">
+                <p class="text-sm font-medium text-gray-700">
+                    <span class="text-indigo-600">Click to upload</span> or drag and drop
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                    @Model.FileTypeDescription up to @Model.MaxFileSizeMB MB (Max @Model.MaxFileCount files)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation error message -->
+    <div id="@Model.ErrorId" class="mt-1 text-sm text-red-600 hidden"></div>
+
+    <!-- Selected files preview -->
+    <div id="@Model.PreviewId" class="mt-2 grid grid-cols-12 gap-1 hidden">
+        <!-- Files will be displayed here -->
+    </div>
+</div>
