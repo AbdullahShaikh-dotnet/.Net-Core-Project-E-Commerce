@@ -4,6 +4,29 @@
 	ViewData["Title"] = "Product";
 }
 
+<style>
+	.image-slide {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.image-track-container {
+		cursor: grab;
+	}
+
+		.image-track-container:active {
+			cursor: grabbing;
+		}
+
+	.image-track {
+		transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.image {
+		transition: object-position 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+</style>
+
 <div class="container mx-auto p-4">
 	<div class="flex justify-between items-center pb-4">
 		<h2 class="text-2xl font-bold text-indigo-600">@((Model.product.Id > 0 ? "Update " : "Create ") + ViewData["Title"])</h2>
@@ -47,423 +70,81 @@
 		<div class="flex items-center space-x-4">
 			<!-- File Upload -->
 			<div class="flex-1">
-				<label asp-for="product.ProductImages" class="block text-gray-700 font-medium"></label>
-				<input asp-for="product.ProductImages"
-					   class="w-full p-3 border rounded-md focus:ring-1 focus:ring-blue-500 outline-none shadow-sm transition duration-300 ease-in-out hover:border-blue-500"
-					   type="file" multiple
-					   name="files" />
+				@await Html.PartialAsync("_FileUpload", new FileUploadViewModel
+				{
+					Label = "Upload Product Images",
+					InputName = "productImages",
+					InputId = "product-images-upload",
+					PreviewId = "product-images-preview",
+					ErrorId = "product-images-error",
+					AllowMultiple = true,
+					MaxFileCount = 5,
+					MaxFileSizeMB = 5,
+					AcceptedFileTypes = "image/jpeg,image/png,.gif",
+					FileTypeDescription = "JPEG, PNG, GIF"
+				})
 			</div>
 
 			<!-- Image Preview -->
 			<div class="relative max-w-5xl mx-auto px-10 py-1 mb-5">
-				<div class="image-track-container group relative  overflow-hidden h-[200px] w-[700px] shadow rounded-lg">
-					<div id="image-track" class="absolute top-1/2 left-0 flex gap-4 -translate-y-1/2" data-mouse-down-at="0" data-prev-percentage="0">
+				<div class="image-track-container group relative overflow-hidden h-[200px] w-[700px] rounded-lg">
+					<div class="image-track absolute top-1/2 left-0 flex gap-4 -translate-y-1/2" data-mouse-down-at="0" data-prev-percentage="0">
 						@foreach (var ProductImage in Model.product.ProductImages)
 						{
-							<div class="image-slide relative h-[200px] w-[150px] overflow-hidden rounded-lg border-2 border-white bg-white transition-all duration-300">
-								<a class="absolute top-1 right-1 bg-white/60 rounded p-1 hover:bg-white/80 transition-all duration-300" href="@ProductImage.ImageURL" target="_blank">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 3.75H6A2.25 2.25 0 0 0 3.75 6v1.5M16.5 3.75H18A2.25 2.25 0 0 1 20.25 6v1.5m0 9V18A2.25 2.25 0 0 1 18 20.25h-1.5m-9 0H6A2.25 2.25 0 0 1 3.75 18v-1.5M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-									</svg>
-								</a>
+							<div class="image-slide relative h-[200px] w-[150px] overflow-hidden rounded-lg border-2 border-white bg-white transition-all duration-300 group/image">
+								<!-- Three-dot menu -->
+								<div class="absolute top-1 right-1 group/menu">
+									<button class="bg-white/60 rounded-full p-1 hover:bg-white/80 transition-all duration-300 flex items-center justify-center w-6 h-6">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+										</svg>
+									</button>
+									<!-- Dropdown menu -->
+									<div class="absolute right-0 top-full mt-1 w-32 bg-white rounded-md shadow-lg py-1 z-20 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200">
+										<a href="@ProductImage.ImageURL" download class="flex items-center px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+											</svg>
+											Download
+										</a>
+										<a href="@ProductImage.ImageURL" target="_blank" class="flex items-center px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+												<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+											</svg>
+											View
+										</a>
+										<a href="#" class="flex items-center px-3 py-1.5 text-xs text-red-600 hover:bg-gray-100">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+												<path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+											</svg>
+											Delete
+										</a>
+									</div>
+								</div>
+
 								<img src="@ProductImage.ImageURL" alt="Product image" class="image h-[200px] w-[200px] object-cover transition-transform duration-500" style="object-position: 100% center;" />
 							</div>
 						}
 					</div>
 
 					<!-- Navigation buttons -->
-					<button id="prev-button" class="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md transition-all hover:bg-primary hover:text-white group-hover:opacity-100 md:opacity-0">
+					<button id="prev-button" class="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 border shadow-sm transition-all hover:shadow-md hover:bg-primary hover:text-indigo-500 group-hover:opacity-100 md:opacity-0">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
 						</svg>
 					</button>
-					<button id="next-button" class="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md transition-all hover:bg-primary hover:text-white group-hover:opacity-100 md:opacity-0">
+					<button id="next-button" class="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 border shadow-sm transition-all hover:shadow-md hover:bg-primary hover:text-indigo-500 group-hover:opacity-100 md:opacity-0">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 						</svg>
 					</button>
 				</div>
 
-				<div class="absolute bottom-4 left-0 right-0 -bottom-5 flex justify-center gap-2">
+				<div class="absolute -bottom-5 left-0 right-0 -bottom-5 flex justify-center gap-2">
 					<span class="text-sm text-gray-500">Drag to explore more images</span>
 				</div>
 			</div>
-
-			<style>
-				:root {
-					--primary: #3b82f6;
-					--primary-hover: #2563eb;
-				}
-
-				.image-slide {
-					transition: transform 0.3s ease, box-shadow 0.3s ease;
-				}
-
-				.image-track-container {
-					cursor: grab;
-				}
-
-					.image-track-container:active {
-						cursor: grabbing;
-					}
-
-				/* Add smooth transition for drag */
-				#image-track {
-					transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-				}
-
-				.image {
-					transition: object-position 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-				}
-			</style>
-
-			@* <script>
-				document.addEventListener("DOMContentLoaded", function() {
-					const track = document.getElementById("image-track");
-					const prevButton = document.getElementById("prev-button");
-					const nextButton = document.getElementById("next-button");
-
-					// Initialize
-					let mouseDownAt = 0;
-					let prevPercentage = 0;
-					let percentage = 0;
-					let isDragging = false;
-
-					// Handle mouse events
-					const handleMouseDown = (e) => {
-						mouseDownAt = e.clientX;
-						isDragging = true;
-
-						// Remove transition during drag start for immediate response
-						track.style.transition = "none";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "none";
-						});
-
-						// Prevent default behavior to avoid text selection during drag
-						e.preventDefault();
-					};
-
-					const handleMouseUp = () => {
-						if (!isDragging) return;
-
-						mouseDownAt = 0;
-						prevPercentage = percentage;
-						isDragging = false;
-
-						// Restore transitions after drag for smooth settling
-						track.style.transition = "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "object-position 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						});
-					};
-
-					const handleMouseMove = (e) => {
-						if (!isDragging) return;
-
-						const mouseDelta = mouseDownAt - e.clientX;
-						const maxDelta = window.innerWidth / 2;
-
-						// Calculate percentage moved
-						const percentageDelta = (mouseDelta / maxDelta) * -100;
-						const nextPercentageUnconstrained = prevPercentage + percentageDelta;
-						percentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-
-						// Apply the transform without animation during drag for responsive feel
-						track.style.transform = `translate(${percentage}%, -50%)`;
-
-						// Update each image's object position
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + percentage}% center`;
-						});
-					};
-
-					// Handle touch events
-					const handleTouchStart = (e) => {
-						mouseDownAt = e.touches[0].clientX;
-						isDragging = true;
-
-						// Remove transition during drag start
-						track.style.transition = "none";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "none";
-						});
-					};
-
-					const handleTouchMove = (e) => {
-						if (!isDragging) return;
-
-						const mouseDelta = mouseDownAt - e.touches[0].clientX;
-						const maxDelta = window.innerWidth / 2;
-
-						// Calculate percentage moved
-						const percentageDelta = (mouseDelta / maxDelta) * -100;
-						const nextPercentageUnconstrained = prevPercentage + percentageDelta;
-						percentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-
-						// Apply the transform without animation during drag
-						track.style.transform = `translate(${percentage}%, -50%)`;
-
-						// Update each image's object position
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + percentage}% center`;
-						});
-
-						// Prevent page scrolling while dragging
-						e.preventDefault();
-					};
-
-					const handleTouchEnd = () => {
-						if (!isDragging) return;
-
-						mouseDownAt = 0;
-						prevPercentage = percentage;
-						isDragging = false;
-
-						// Restore transitions after drag
-						track.style.transition = "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "object-position 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						});
-					};
-
-					// Navigation buttons with smooth animation
-					const moveTrack = (direction) => {
-						// Ensure transitions are enabled for button navigation
-						track.style.transition = "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "object-position 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-						});
-
-						const moveAmount = direction === 'prev' ? 20 : -20;
-						const newPercentage = Math.max(Math.min(prevPercentage + moveAmount, 0), -100);
-
-						prevPercentage = newPercentage;
-						percentage = newPercentage;
-
-						// Apply smooth transition
-						track.style.transform = `translate(${newPercentage}%, -50%)`;
-
-						// Update each image's object position with smooth transition
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + newPercentage}% center`;
-						});
-					};
-
-					// Add event listeners
-					track.addEventListener("mousedown", handleMouseDown);
-					window.addEventListener("mouseup", handleMouseUp);
-					window.addEventListener("mousemove", handleMouseMove);
-
-					track.addEventListener("touchstart", handleTouchStart, { passive: false });
-					window.addEventListener("touchmove", handleTouchMove, { passive: false });
-					window.addEventListener("touchend", handleTouchEnd);
-
-					prevButton.addEventListener("click", () => moveTrack('prev'));
-					nextButton.addEventListener("click", () => moveTrack('next'));
-
-					// Prevent context menu on long press (mobile)
-					track.addEventListener("contextmenu", (e) => e.preventDefault());
-
-					// Handle mouse leaving the window
-					window.addEventListener("mouseleave", handleMouseUp);
-
-					// Initialize track position
-					track.style.transform = `translate(0%, -50%)`;
-				});
-			</script> *@
-
-			<script>
-				document.addEventListener("DOMContentLoaded", function() {
-					const track = document.getElementById("image-track");
-					const prevButton = document.getElementById("prev-button");
-					const nextButton = document.getElementById("next-button");
-					const trackContainer = document.querySelector(".image-track-container");
-
-					// Initialize
-					let mouseDownAt = 0;
-					let prevPercentage = 0;
-					let percentage = 0;
-					let isDragging = false;
-					let animationFrameId = null;
-					let targetPercentage = 0;
-					let currentPercentage = 0;
-					const sensitivity = 0.5; // Adjust this value for sensitivity (0.1 to 1)
-					const easing = 0.05; // Adjust for smoothness (0.05 to 0.2)
-
-					// Smooth animation function
-					const animate = () => {
-						// Ease towards the target percentage
-						currentPercentage += (targetPercentage - currentPercentage) * easing;
-
-						// Apply the transform
-						track.style.transform = `translate(${currentPercentage}%, -50%)`;
-
-						// Update each image's object position
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + currentPercentage}% center`;
-						});
-
-						// Continue animation if not reached target
-						if (Math.abs(targetPercentage - currentPercentage) > 0.1) {
-							animationFrameId = requestAnimationFrame(animate);
-						}
-					};
-
-					// Handle mouse events
-					const handleMouseDown = (e) => {
-						// Cancel any ongoing animation
-						if (animationFrameId) {
-							cancelAnimationFrame(animationFrameId);
-							animationFrameId = null;
-						}
-
-						mouseDownAt = e.clientX;
-						isDragging = true;
-						currentPercentage = targetPercentage = prevPercentage;
-
-						// Remove transition during drag for immediate response
-						track.style.transition = "none";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "none";
-						});
-
-						e.preventDefault();
-					};
-
-					const handleMouseUp = () => {
-						if (!isDragging) return;
-
-						mouseDownAt = 0;
-						prevPercentage = percentage;
-						isDragging = false;
-						targetPercentage = percentage;
-
-						// Start smooth animation after drag
-						if (!animationFrameId) {
-							animationFrameId = requestAnimationFrame(animate);
-						}
-					};
-
-					const handleMouseMove = (e) => {
-						if (!isDragging) return;
-
-						const mouseDelta = mouseDownAt - e.clientX;
-						const maxDelta = window.innerWidth / 2;
-
-						// Calculate percentage moved
-						const percentageDelta = (mouseDelta / maxDelta) * -100;
-						const nextPercentageUnconstrained = prevPercentage + percentageDelta;
-						percentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -50);
-
-						// Update current and target for immediate response
-						currentPercentage = targetPercentage = percentage;
-
-						// Apply the transform without animation during drag
-						track.style.transform = `translate(${percentage}%, -50%)`;
-
-						// Update each image's object position
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + percentage}% center`;
-						});
-					};
-
-					// Handle touch events
-					const handleTouchStart = (e) => {
-						if (animationFrameId) {
-							cancelAnimationFrame(animationFrameId);
-							animationFrameId = null;
-						}
-
-						mouseDownAt = e.touches[0].clientX;
-						isDragging = true;
-						currentPercentage = targetPercentage = prevPercentage;
-
-						track.style.transition = "none";
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.transition = "none";
-						});
-					};
-
-					const handleTouchMove = (e) => {
-						if (!isDragging) return;
-
-						const mouseDelta = mouseDownAt - e.touches[0].clientX;
-						const maxDelta = window.innerWidth / 2;
-
-						const percentageDelta = (mouseDelta / maxDelta) * -100;
-						const nextPercentageUnconstrained = prevPercentage + percentageDelta;
-						percentage = Math.max(Math.min(nextPercentageUnconstrained, 0), -100);
-
-						currentPercentage = targetPercentage = percentage;
-
-						track.style.transform = `translate(${percentage}%, -50%)`;
-
-						document.querySelectorAll(".image").forEach(img => {
-							img.style.objectPosition = `${100 + percentage}% center`;
-						});
-
-						e.preventDefault();
-					};
-
-					const handleTouchEnd = () => {
-						if (!isDragging) return;
-
-						mouseDownAt = 0;
-						prevPercentage = percentage;
-						isDragging = false;
-						targetPercentage = percentage;
-
-						if (!animationFrameId) {
-							animationFrameId = requestAnimationFrame(animate);
-						}
-					};
-
-					// Navigation buttons
-					const moveTrack = (direction) => {
-						// Cancel any ongoing animation
-						if (animationFrameId) {
-							cancelAnimationFrame(animationFrameId);
-							animationFrameId = null;
-						}
-
-						const moveAmount = direction === 'prev' ? 20 : -20;
-						targetPercentage = Math.max(Math.min(targetPercentage + moveAmount, 0), -100);
-
-						prevPercentage = percentage = targetPercentage;
-
-						// Start smooth animation
-						if (!animationFrameId) {
-							animationFrameId = requestAnimationFrame(animate);
-						}
-					};
-
-					// Add event listeners
-					track.addEventListener("mousedown", handleMouseDown);
-					window.addEventListener("mouseup", handleMouseUp);
-					window.addEventListener("mousemove", handleMouseMove);
-
-					// Improved wheel event with passive:false for better control
-					// trackContainer.addEventListener("wheel", handleWheel, { passive: false });
-
-					track.addEventListener("touchstart", handleTouchStart, { passive: false });
-					window.addEventListener("touchmove", handleTouchMove, { passive: false });
-					window.addEventListener("touchend", handleTouchEnd);
-
-					prevButton.addEventListener("click", () => moveTrack('prev'));
-					nextButton.addEventListener("click", () => moveTrack('next'));
-
-					// Prevent context menu on long press
-					track.addEventListener("contextmenu", (e) => e.preventDefault());
-
-					// Handle mouse leaving the window
-					window.addEventListener("mouseleave", handleMouseUp);
-
-					// Initialize
-					currentPercentage = targetPercentage = 0;
-					track.style.transform = `translate(0%, -50%)`;
-				});
-			</script>
 		</div>
 
 
@@ -523,13 +204,22 @@
 
 
 <script src="https://cdn.tiny.cloud/1/f0r85f4ubu7hkygrjjeg5r70sspl7k6y9u8bthskwy0ji4g5/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-
+<script src="~/js/ImageSlider.js" type="text/javascript" defer></script>
+<link href="~/css/ImageSlider.css" />
+<script src="~/js/fileUpload.js" type="text/javascript"></script>
 
 <script>
+
+	document.addEventListener("DOMContentLoaded", function() {
+		sliderInit();
+
+		document.querySelectorAll('.file-upload-component').forEach(container => {
+			new FileUpload(container);
+		});
+
+	});
+
+
 	tinymce.init({
 	  selector: 'textarea',
 	  skin: 'oxide',
