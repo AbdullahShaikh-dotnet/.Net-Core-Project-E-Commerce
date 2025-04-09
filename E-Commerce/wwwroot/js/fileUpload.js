@@ -147,9 +147,31 @@
         this.updatePreview();
     }
 
+    //updateFileInput() {
+    //    const dataTransfer = new DataTransfer();
+    //    this.filesArray.forEach(file => dataTransfer.items.add(file));
+    //    this.fileInput.files = dataTransfer.files;
+    //}
+
+
     updateFileInput() {
-        const dataTransfer = new DataTransfer();
-        this.filesArray.forEach(file => dataTransfer.items.add(file));
-        this.fileInput.files = dataTransfer.files;
+        // Create a new file input element instead of using DataTransfer
+        const newInput = document.createElement('input');
+        newInput.type = 'file';
+        newInput.name = this.fileInput.name;
+        newInput.multiple = this.fileInput.multiple;
+        newInput.hidden = true;
+
+        // Replace the old input with the new one
+        this.fileInput.parentNode.insertBefore(newInput, this.fileInput);
+        this.fileInput.remove();
+        this.fileInput = newInput;
+
+        // Store files in a way that survives form submission
+        this.filesArray.forEach(file => {
+            const fileList = new DataTransfer();
+            fileList.items.add(file);
+            this.fileInput.files = fileList.files;
+        });
     }
 }
