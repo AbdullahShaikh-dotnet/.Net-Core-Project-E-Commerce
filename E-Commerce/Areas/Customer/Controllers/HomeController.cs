@@ -37,7 +37,7 @@ namespace E_Commerce.Areas.Customer.Controllers
             int RecordPerPage = 8; // Define records per page
             IEnumerable<Product> query = await _unitOfWork
                 .Product
-                .GetAllAsync(filter: data => !data.IsDeleted, includePropertiesList: "Category", applyCaching: true);
+                .GetAllAsync(filter: data => !data.IsDeleted, includePropertiesList: "Category,ProductImages", applyCaching: true);
 
 
             // Apply Filters
@@ -85,7 +85,7 @@ namespace E_Commerce.Areas.Customer.Controllers
         {
             Product Product =
                 _unitOfWork.Product
-                .Get(data => data.Id == ProductID, includePropertiesList: "Category");
+                .Get(data => data.Id == ProductID, includePropertiesList: "Category,ProductImages");
 
             ShoppingCart shoppingCart = new ShoppingCart()
             {
