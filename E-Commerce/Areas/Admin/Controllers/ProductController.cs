@@ -148,6 +148,29 @@ namespace E_Commerce.Areas.Admin.Controllers
         }
 
 
+        public IActionResult DeleteImage(int ImageID)
+        {
+            var ImageToBeDelete = _UnitOfWork.ProductImages.Get(data => data.ID == ImageID);
+            int ProductID = ImageToBeDelete.ProductID;
+            if (ImageToBeDelete is not null && !string.IsNullOrEmpty(ImageToBeDelete.ImageURL))
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                string OldFileName = Path.Combine(wwwRootPath, ImageToBeDelete.ImageURL.Replace("/","\\").TrimStart('\\'));
+
+                if (System.IO.File.Exists(OldFileName))
+                    System.IO.File.Delete(OldFileName);
+
+
+                _UnitOfWork.ProductImages.Remove(ImageToBeDelete);
+                _UnitOfWork.Save();
+
+                TempData["success"] = "Delete Successfullfy";
+            }
+
+            return RedirectToAction(nameof(Upsert),new { id = ProductID });
+        }
+
+
         public IActionResult Delete(int? id)
         {
             var productToBeDeleted = _UnitOfWork.Product.Get(d => d.Id == id);
@@ -156,14 +179,11 @@ namespace E_Commerce.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Error While Deletig" });
             }
 
-            //string wwwRootPath = _webHostEnvironment.WebRootPath;
-            //if (!string.IsNullOrEmpty(productToBeDeleted.ImageURL))
-            //{
-            //    string OldFileName = Path.Combine(wwwRootPath, productToBeDeleted.ImageURL.TrimStart('\\'));
+            string wwwRootPath = _webHostEnvironment.WebRootPath;
+            string DirectoryPath = Path.Combine(wwwRootPath, @$"Media\Products\Product-{ id }");
 
-            //    if (System.IO.File.Exists(OldFileName))
-            //        System.IO.File.Delete(OldFileName);
-            //}
+            if (Directory.Exists(DirectoryPath))
+                Directory.Delete(DirectoryPath, true);
 
             productToBeDeleted.IsDeleted = true;
             productToBeDeleted.DeletedAt = DateTime.Now;
