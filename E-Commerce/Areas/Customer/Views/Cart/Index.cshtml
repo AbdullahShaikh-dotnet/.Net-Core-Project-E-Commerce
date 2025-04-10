@@ -30,7 +30,14 @@
 								<!-- Product Image -->
 								<a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
 								   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
-									@* <img src="@cart.product.ImageURL" class="h-30 w-30 object-cover md:h-20 md:w-20 sm:w-full rounded-md" alt="Product Image" /> *@
+									@if (cart.product.ProductImages is not null && @cart.product.ProductImages.Count() > 0)
+									{
+										<img src="@cart.product.ProductImages.FirstOrDefault().ImageURL" class="h-30 w-30 object-cover md:h-20 md:w-20 sm:w-full rounded-md" alt="Product Image" />
+									}else{
+										<div class="h-30 w-30 md:h-20 md:w-20 sm:w-full rounded-md flex items-center justify-center bg-gray-200 text-gray-600 text-lg">
+											No Media Available
+										</div>
+									}
 								</a>
 
 
