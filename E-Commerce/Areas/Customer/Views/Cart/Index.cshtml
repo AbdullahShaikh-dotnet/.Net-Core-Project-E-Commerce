@@ -1,156 +1,160 @@
 ﻿@model ShoppingCartVM
 
 @{
-	ViewData["Title"] = "Shopping Cart";
+    ViewData["Title"] = "Shopping Cart";
 }
 
-<div class="mx-auto">
-	<div class="flex justify-between items-center pt-4">
-		<h2 class="text-3xl font-bold text-gray-700">@ViewData["Title"]</h2>
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">@ViewData["Title"]</h1>
 
-		<div class="mb-4 text-start">
-			<a asp-controller="Home" asp-action="Index" class="text-slate-800 hover:text-slate-600 font-medium flex items-center">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-				</svg>
-				Continue Shopping
-			</a>
-		</div>
-	</div>
+        <a asp-controller="Home" asp-action="Index" class="group flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            <span class="font-medium">Continue Shopping</span>
+        </a>
+    </div>
 
-	<form method="post">
-		@if (Model.shoppingCartsList != null && Model.shoppingCartsList.Count() >= 1)
-		{
-			<div class="bg-white rounded-md border border-slate-200 p-6 mt-6">
-				<div class="mb-6 pb-6">
-					<div class="space-y-6">
-						@foreach (var cart in Model.shoppingCartsList)
-						{
-							<div class="flex flex-col md:flex-row items-center md:items-center py-4 px-2 md:px-4">
-								<!-- Product Image -->
-								<a class="text-decoration-none" asp-area="Customer" asp-controller="Home"
-								   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
-									@if (cart.product.ProductImages is not null && @cart.product.ProductImages.Count() > 0)
-									{
-										<img src="@cart.product.ProductImages.FirstOrDefault().ImageURL" class="h-30 w-30 object-cover md:h-20 md:w-20 sm:w-full rounded-md" alt="Product Image" />
-									}else{
-										<div class="h-30 w-30 md:h-20 md:w-20 sm:w-full rounded-md flex items-center justify-center bg-gray-200 text-gray-600 text-lg">
-											No Media Available
-										</div>
-									}
-								</a>
+    <form method="post">
+        @if (Model.shoppingCartsList != null && Model.shoppingCartsList.Count() >= 1)
+        {
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Cart Items -->
+                <div class="divide-y divide-gray-100">
+                    @foreach (var cart in Model.shoppingCartsList)
+                    {
+                        <div class="p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+                            <!-- Product Image -->
+                            <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-ProductID="@cart.ProductID"
+                               class="block w-full sm:w-auto flex-shrink-0 group" target="_blank">
+                                @if (cart.product.ProductImages is not null && @cart.product.ProductImages.Count() > 0)
+                                {
+                                    <div class="relative w-full sm:w-24 h-24 rounded-lg overflow-hidden bg-gray-50 group-hover:opacity-90 transition-opacity">
+                                        <img src="@cart.product.ProductImages.FirstOrDefault().ImageURL"
+                                             class="w-full h-full object-cover" alt="@cart.product.Title" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="w-full sm:w-24 h-24 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                                        No Image
+                                    </div>
+                                }
+                            </a>
 
+                            <!-- Product Details -->
+                            <div class="flex-1 min-w-0">
+                                <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-ProductID="@cart.ProductID"
+                                   class="block text-lg font-medium text-gray-900 hover:text-gray-700 hover:underline mb-1" target="_blank">
+                                    @cart.product.Title
+                                </a>
+                                <div class="text-sm text-gray-500 line-clamp-2">
+                                    @Html.Raw(cart.product.Description)
+                                </div>
+                            </div>
 
-								<!-- Product Details -->
-								<div class="flex-1 pt-3 md:pt-0 text-center md:text-left ml-4 w-20">
+                            <!-- Price -->
+                            <div class="text-base font-semibold text-gray-900 sm:text-right whitespace-nowrap">
+                                @cart.product.Price.ToString("C")
+                            </div>
 
-									<a class="text-gray-900 hover:underline text-lg font-semibold text-gray-800" asp-area="Customer" asp-controller="Home"
-									   asp-action="Details" asp-route-ProductID="@cart.ProductID" target="_blank">
-										@cart.product.Title
-									</a>
+                            <!-- Quantity Controls -->
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center border border-gray-200 rounded-md">
+                                    <!-- Decrease Button -->
+                                    <a asp-action="CartMinus" asp-route-CartID="@cart.ID"
+                                       class="flex items-center justify-center w-8 h-8 text-gray-600 hover:bg-gray-50 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                            <path fill-rule="evenodd" d="M4 10a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
 
-									<div class="w-30 text-sm line-clamp-3 overflow-hidden text-ellipsis">
-										@Html.Raw(cart.product.Description)
-									</div>
+                                    <!-- Quantity Display -->
+                                    <span class="w-10 text-center text-sm font-medium text-gray-900">
+                                        @cart.Count
+                                    </span>
 
-								</div>
+                                    <!-- Increase Button -->
+                                    <a asp-action="CartPlus" asp-route-CartID="@cart.ID"
+                                       class="flex items-center justify-center w-8 h-8 text-gray-600 hover:bg-gray-50 transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </div>
 
-								<!-- Product Actions -->
-								<div class="flex justify-center md:justify-end items-center space-x-10 py-2">
-									<div class="text-md font-semibold text-gray-700">
-										@cart.product.Price.ToString("C")
-									</div>
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-									</svg>
+                                <!-- Remove Button -->
+                                <button asp-action="CartRemove" asp-route-CartID="@cart.ID"
+                                        class="flex items-center justify-center w-8 h-8 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                                        title="Remove item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                        <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
 
+                <!-- Order Summary -->
+                <div class="bg-gray-50 p-6">
+                    <div class="max-w-md ml-auto">
+                        <div class="flex justify-between items-center py-3 text-gray-900">
+                            <span class="text-base font-medium">Subtotal</span>
+                            <span class="text-lg font-semibold">@Model.orderHeader.OrderTotal.ToString("C")</span>
+                        </div>
 
-									<div class="w-[150px] max-w-sm relative flex items-center justify-between gap-1 border border-slate-200 p-1 rounded-md">
-										<!-- Decrease Button -->
-										<a asp-action="CartMinus" asp-route-CartID="@cart.ID" id="decreaseButton"
-										   class="rounded bg-slate-800 p-1.5 border border-transparent text-center text-sm text-white transition-all
-											  focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700
-											  disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-												<path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
-											</svg>
-										</a>
+                        <div class="border-t border-gray-200 my-2"></div>
 
-										<!-- Input Field -->
-										<input id="amountInput" type="number" value="@cart.Count" maxlength="50" disabled="disabled"
-											   class="w-14 text-center bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border-0 border-slate-200
-											  rounded-md px-2 py-1 transition duration-300 ease focus:outline-none focus:border-slate-400
-											  hover:border-slate-300 appearance-none [&::-webkit-outer-spin-button]:appearance-none
-											  [&::-webkit-inner-spin-button]:appearance-none" />
+                        <div class="flex justify-between items-center py-3 text-gray-900">
+                            <span class="text-base font-medium">Total</span>
+                            <span class="text-xl font-bold">@Model.orderHeader.OrderTotal.ToString("C")</span>
+                        </div>
 
-										<!-- Increase Button -->
-										<a asp-action="CartPlus" asp-route-CartID="@cart.ID" id="increaseButton"
-										   class="rounded bg-slate-800 p-1.5 border border-transparent text-center text-sm text-white transition-all
-											  focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700
-											  disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-												<path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-											</svg>
-										</a>
-									</div>
-
-									<div>
-										<button asp-action="CartRemove" asp-route-CartID="@cart.ID"
-												class="border border-red-300 text-red-600 rounded-md p-2.5 py-2.2 hover:bg-red-500 hover:text-white active:bg-red-800 active:text-white">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-												<path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
-											</svg>
-										</button>
-									</div>
-								</div>
-							</div>
-						}
-
-					</div>
-
-					<!-- Cart Total -->
-					<div class="bg-white mt-6 pt-4">
-						<div class="flex justify-center">
-							<div class="w-full sm:w-1/2 md:w-1/3">
-								<ul class="list-none mb-4">
-									<li class="flex justify-between items-center py-2 text-lg font-semibold text-gray-800">
-										<span>Total (INR)</span>
-										<span>@Model.orderHeader.OrderTotal.ToString("C")</span>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="flex justify-end mt-4">
-							<div class="w-full sm:w-auto md:w-1/4">
-								<button asp-action="Summary" class="btn border p-5 rounded-sm transition-all duration-300 ease-in-out
-										text-gray-900 rounded-lg w-full py-2 shadow-sm hover:bg-gray-50">
-									Summary
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		}
-		else
-		{
-			<div class="relative min-h-60 w-full flex flex-col justify-center items-center my-6 bg-white shadow-sm border border-slate-200 rounded-lg p-2">
-				<div class="p-3 text-center">
-					<div class="flex justify-center mb-4">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-slate-400 w-10 h-10">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-						</svg>
-					</div>
-					<div class="flex justify-center mb-2">
-						<h5 class="text-slate-800 text-2xl font-semibold">
-							Cart is Empty
-						</h5>
-					</div>
-					<p class="block text-slate-600 leading-normal font-light mb-4 max-w-lg">
-						Your cart is currently empty. Please add items to proceed.
-					</p>
-				</div>
-			</div>
-		}
-	</form>
+                        <div class="mt-6">
+                            <button asp-action="Summary"
+                                    class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <!-- Empty Cart State -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-8 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 text-gray-400 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-semibold text-gray-900 mb-2">Your cart is empty</h2>
+                <p class="text-gray-500 mb-6 max-w-md mx-auto">Looks like you haven't added any items to your cart yet.</p>
+                <a asp-controller="Home" asp-action="Index"
+                   class="inline-flex items-center justify-center bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 px-5 rounded-lg transition-colors">
+                    Start Shopping
+                </a>
+            </div>
+        }
+    </form>
 </div>
+
+<script>
+    // You can add any additional JavaScript functionality here if needed
+    document.addEventListener('DOMContentLoaded', function() {
+        // Example: Add animation to remove buttons
+        const removeButtons = document.querySelectorAll('button[asp-action="CartRemove"]');
+        removeButtons.forEach(button => {
+            button.addEventListener('mouseover', function() {
+                this.classList.add('scale-110');
+                setTimeout(() => {
+                    this.classList.remove('scale-110');
+                }, 200);
+            });
+        });
+    });
+</script>
