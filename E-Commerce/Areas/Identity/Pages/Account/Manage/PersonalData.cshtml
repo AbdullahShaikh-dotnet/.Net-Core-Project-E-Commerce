@@ -5,28 +5,57 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3 class="text-2xl font-semibold text-gray-800 mb-4">@ViewData["Title"]</h3>
+<div class="max-w-md mx-auto p-4">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 space-y-6">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-600">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-semibold text-gray-800">Personal Data</h2>
+                <p class="text-gray-500 text-sm mt-1">Manage your account information</p>
+            </div>
 
-<div class="max-w-lg mx-auto bg-white shadow-lg rounded-xl p-6">
-    <p class="text-gray-600">
-        Your account contains personal data that you have provided. This page allows you to <strong>download</strong> or <strong>delete</strong> that data.
-    </p>
+            <div class="space-y-4">
+                <p class="text-gray-600 text-center">
+                    Your account contains personal data you've provided. You can download or permanently delete this data.
+                </p>
 
-    <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-lg">
-        <p class="font-medium">⚠ Deleting your data will permanently remove your account, and this action <span class="font-bold">cannot be undone.</span></p>
-    </div>
+                <div class="p-4 bg-red-50 border border-red-100 rounded-lg">
+                    <div class="flex items-start">
+                        <i class="bi bi-exclamation-triangle-fill text-red-500 mr-2 mt-0.5"></i>
+                        <div>
+                            <p class="text-red-800 font-medium">Important Notice</p>
+                            <p class="text-red-700 text-sm mt-1">
+                                Deleting your data will <span class="font-bold">permanently remove</span> your account.
+                                This action <span class="font-bold">cannot be undone</span>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="mt-6 space-y-4">
-        <form id="download-data" asp-page="DownloadPersonalData" method="post">
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition">
-                 Download Personal Data
-            </button>
-        </form>
+                <div class="space-y-3 pt-2">
+                    <form id="download-data" asp-page="DownloadPersonalData" method="post">
+                        <button class="w-full flex items-center justify-center gap-2 bg-gray-900 text-white font-medium py-2.5 px-4 rounded-lg
+                                    hover:bg-gray-800 transition-colors duration-200
+                                    focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+                            <i class="bi bi-download"></i>
+                            Download My Data
+                        </button>
+                    </form>
 
-        <a id="delete" asp-page="DeletePersonalData"
-            class="w-full inline-block text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-lg shadow-md transition">
-            Delete Account
-        </a>
+                    <a id="delete" asp-page="DeletePersonalData"
+                       class="w-full flex items-center justify-center gap-2 bg-white text-red-600 font-medium py-2.5 px-4 rounded-lg
+                              border border-red-200 hover:bg-red-50 transition-colors duration-200
+                              focus:outline-none focus:ring-2 focus:ring-red-200 focus:ring-offset-2">
+                        <i class="bi bi-trash"></i>
+                        Delete Account
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
