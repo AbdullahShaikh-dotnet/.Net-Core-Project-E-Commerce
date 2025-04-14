@@ -1,10 +1,12 @@
-﻿using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository;
+using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;
 using ECom.Utility.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Security.Claims;
 
 namespace E_Commerce.Areas.Admin.Controllers
@@ -90,11 +92,21 @@ namespace E_Commerce.Areas.Admin.Controllers
 
         public IActionResult Details(int OrderId)
         {
+            IEnumerable<ProductImages> ProductImages = _UnitOfWork.ProductImages.GetAll();
+
             orderVM = new()
             {
                 orderHeader = _UnitOfWork.OrderHeaders.Get(data => data.ID == OrderId, includePropertiesList: "_ApplicationUser"),
                 orderDetails = _UnitOfWork.OrderDetails.GetAll(data => data.OrderHeaderID == OrderId, includePropertiesList: "_Product")
             };
+
+            foreach (var OrderDetail in orderVM.orderDetails)
+            {
+                OrderDetail._Product.ProductImages = ProductImages
+                    .Where(data => data.ProductID == OrderDetail.ProductID)
+                    .ToList();
+            }
+
             return View(orderVM);
         }
 
