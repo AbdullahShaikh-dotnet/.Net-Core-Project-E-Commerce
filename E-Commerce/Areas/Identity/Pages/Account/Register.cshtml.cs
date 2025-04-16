@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using AspNetCore.ReCaptcha;
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility;
@@ -144,6 +145,7 @@ namespace E_Commerce.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        [ValidateReCaptcha(ErrorMessage = "Captcha Validation Failed")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");

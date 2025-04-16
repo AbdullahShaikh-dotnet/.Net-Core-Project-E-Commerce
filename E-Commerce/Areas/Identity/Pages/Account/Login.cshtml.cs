@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using AspNetCore.ReCaptcha;
 using ECom.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -95,8 +96,11 @@ namespace E_Commerce.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        [ValidateReCaptcha(ErrorMessage = "Captcha Validation Failed")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var GCaptchaToken = Request.Form["g-recaptcha-response"];
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();

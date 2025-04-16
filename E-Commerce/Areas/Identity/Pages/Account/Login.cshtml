@@ -5,6 +5,9 @@
     ViewData["Title"] = "Log in";
 }
 
+@using AspNetCore.ReCaptcha
+
+
 <div class="min-h-screen flex items-center justify-center bg-white p-4">
     <div class="w-full max-w-md">
         <div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
@@ -16,7 +19,8 @@
             <!-- Form -->
             <div class="p-6">
                 <form id="account" method="post" class="space-y-5">
-                    <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4" role="alert"></div>
+                    <recaptcha />
+                    <div asp-validation-summary="ModelOnly" class="text-red-500 bg-red-50 p-2 rounded-md text-sm mb-4" role="alert"></div>
 
                     <!-- Email Field -->
                     <div>

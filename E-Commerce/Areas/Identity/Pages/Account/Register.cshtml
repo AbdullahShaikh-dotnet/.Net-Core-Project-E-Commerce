@@ -5,6 +5,7 @@
     ViewData["Title"] = "Register";
     bool isAdmin = User.IsInRole(SD.Role_Admin);
 }
+@using AspNetCore.ReCaptcha
 
 <div class="min-h-screen flex items-center justify-center bg-white p-4">
     <div class="w-full max-w-2xl">
@@ -17,6 +18,7 @@
             <!-- Form -->
             <div class="p-6">
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-5">
+                    <recaptcha />
                     <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded-md" role="alert"></div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
