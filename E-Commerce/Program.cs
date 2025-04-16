@@ -1,3 +1,4 @@
+using AspNetCore.ReCaptcha;
 using E_Commerce.DataAccess.Data;
 using ECom.DataAccess.Data.DbInitializer;
 using ECom.DataAccess.Repository;
@@ -16,23 +17,10 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Added Serilog Logger
-//Log.Logger = new LoggerConfiguration()
-//    .Enrich.FromLogContext()                          // Adds contextual information to logs
-//    .Enrich.WithProperty("Application", "E-Commerce")      // Adds custom property to logs
-//    .WriteTo.Console()                                // Logs to console
-//    .WriteTo.File("logs/warning-log.txt",             // Logs warnings and above to this file
-//                  rollingInterval: RollingInterval.Day,
-//                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning)
-//    .WriteTo.File("logs/error-log.txt",               // Logs errors and above to this file
-//                  rollingInterval: RollingInterval.Day,
-//                  restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
-//    .CreateLogger();
-
-//builder.Host.UseSerilog();
+// Server Loggging
 builder.Host.UseSerilog((context, services, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
+
 
 
 // Mis-Configuration throws Error on Buid Time Insted of Run Time
@@ -43,19 +31,19 @@ builder.Host.UseDefaultServiceProvider((context, option) =>
 });
 
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var isRunningInDockerContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
+// Connection String
+var isRunningInDockerContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 string pcName = Environment.MachineName;
 string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
-
-//if (isRunningInDockerContainer)
-//    ConnectionStringName = "DockerConnection";
-
 string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
 
+
+// Docker Connection String
 if (isRunningInDockerContainer)
 {
     ConnectionString = builder.Configuration["ConnectionStrings:DockerConnection"] =
@@ -66,13 +54,18 @@ if (isRunningInDockerContainer)
         "TrustServerCertificate=True;";
 }
 
+
+
+// SQL Connection
 builder.Services.AddDbContext<ApplicationDbContext>
     (options => options.UseSqlServer(ConnectionString));
 
 
+
+
+// Identity Configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
 
 builder.Services.ConfigureApplicationCookie(option =>
 {
@@ -82,6 +75,9 @@ builder.Services.ConfigureApplicationCookie(option =>
 });
 
 
+
+
+// Facebook External Login
 builder.Services.AddAuthentication().AddFacebook(option =>
 {
     var FacebookSettings = builder.Configuration.GetSection("Facebook").Get<FacebookSettings>();
@@ -100,7 +96,7 @@ builder.Services.AddAuthentication().AddFacebook(option =>
     };
 });
 
-
+// Google External Login
 builder.Services.AddAuthentication().AddGoogle(option =>
 {
     var GoogleSettings = builder.Configuration.GetSection("Google").Get<GoogleSettings>();
@@ -119,24 +115,16 @@ builder.Services.AddAuthentication().AddGoogle(option =>
     };
 });
 
+// Google Recaptcha
+builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptcha"));
 
 
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(option =>
-{
-    option.IdleTimeout = TimeSpan.FromMinutes(100);
-    option.Cookie.HttpOnly = true;
-    option.Cookie.IsEssential = true;
-}); // Configured Session
-
-
-builder.Services.AddRazorPages();
+// Services
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
-
 
 builder.Services.Configure<RazorPaySettings>(builder.Configuration.GetSection("Razorpay"));
 builder.Services.AddSingleton<IRazorPayService, RazorPayService>();
@@ -144,16 +132,28 @@ builder.Services.AddSingleton<IRazorPayService, RazorPayService>();
 builder.Services.Configure<MailJetSettings>(builder.Configuration.GetSection("MailJet"));
 builder.Services.AddSingleton<IMailJetService, MailJetService>();
 
-
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
     ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection")));
 
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
+
+
+
+
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddRazorPages();
+builder.Services.AddSession(option =>
+{
+    option.IdleTimeout = TimeSpan.FromMinutes(100);
+    option.Cookie.HttpOnly = true;
+    option.Cookie.IsEssential = true;
+}); // Configured Session
+
 
 
 var app = builder.Build();
