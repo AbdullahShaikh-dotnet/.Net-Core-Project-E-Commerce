@@ -7,76 +7,112 @@
 
 <partial name="_StatusMessage" for="StatusMessage" />
 
-<div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-md border border-gray-200">
-    <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
-        </svg>
-        @ViewData["Title"]
-    </h3>
+<div class="min-h-screen flex items-center justify-center bg-white p-4">
+    <div class="w-full max-w-md">
+        <div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gray-800 p-4 text-white text-center">
+                <h1 class="text-xl font-medium">Recovery Codes</h1>
+            </div>
 
-    <div class="mt-4 p-4 bg-yellow-100 text-yellow-800 rounded-lg flex items-center gap-3">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"></path>
-        </svg>
-        <div>
-            <strong>Store these codes securely!</strong>
-            <p class="text-sm">If you lose your device and these codes, you will be locked out of your account.</p>
-        </div>
-    </div>
-
-    <div class="mt-6 p-4 bg-gray-100 rounded-lg shadow-sm">
-        <h4 class="text-lg font-semibold mb-2 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 pr-2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-            </svg>
-            Your Recovery Codes
-        </h4>
-        <div class="grid grid-cols-2 gap-2 font-mono text-lg">
-            @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
-            {
-                <div class="flex justify-between items-center bg-white px-4 py-2 border rounded-md shadow-sm">
-                    <span>@Model.RecoveryCodes[row]</span>
-                    <button class="copy-btn" data-code="@Model.RecoveryCodes[row]" title="Copy">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Warning Message -->
+                <div class="mb-6 p-3 bg-amber-50 border border-amber-200 rounded-md text-amber-800 text-sm">
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mt-0.5 mr-2 flex-shrink-0">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                         </svg>
+                        <div>
+                            <p class="font-medium">Store these codes in a secure location.</p>
+                            <p class="mt-1">If you lose your device and don't have these recovery codes, you will lose access to your account.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recovery Codes -->
+                <div class="mb-6">
+                    <h2 class="text-sm font-medium text-gray-700 mb-3">YOUR RECOVERY CODES</h2>
+                    <div class="grid grid-cols-1 gap-2">
+                        @for (var i = 0; i < Model.RecoveryCodes.Length; i++)
+                        {
+                            <div class="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-md">
+                                <code class="font-mono text-sm">@Model.RecoveryCodes[i]</code>
+                                <button type="button" class="copy-btn text-gray-500 hover:text-gray-700" data-code="@Model.RecoveryCodes[i]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                                    </svg>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Copy All Button -->
+                <div class="text-center">
+                    <button id="copy-all" type="button" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
+                        </svg>
+                        Copy All Codes
                     </button>
                 </div>
-                <div class="flex justify-between items-center bg-white px-4 py-2 border rounded-md shadow-sm">
-                    <span>@Model.RecoveryCodes[row + 1]</span>
-                    <button class="copy-btn" data-code="@Model.RecoveryCodes[row + 1]" title="Copy">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                        </svg>
-                    </button>
+
+                <!-- Back Link -->
+                <div class="mt-6 text-center text-sm">
+                    <a href="./TwoFactorAuthentication" class="text-gray-600 hover:text-gray-800">
+                        &larr; Back to two-factor authentication
+                    </a>
                 </div>
-            }
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="mt-4 text-center">
-        <button onclick="copyAllCodes()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-            </svg> Copy All Codes
-        </button>
-    </div>
+<!-- Toast Notification -->
+<div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-md shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 flex items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75" />
+    </svg>
+    <span id="toast-message">Code copied!</span>
 </div>
 
 @section Scripts {
     <script>
-        document.querySelectorAll('.copy-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                navigator.clipboard.writeText(this.dataset.code);
-                alert('Copied: ' + this.dataset.code);
+        document.addEventListener('DOMContentLoaded', function() {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+
+            // Function to show toast notification
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toast.classList.remove('translate-y-10', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-10', 'opacity-0');
+                }, 3000);
+            }
+
+            // Copy individual code
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const code = this.dataset.code;
+                    navigator.clipboard.writeText(code);
+                    showToast(`Code copied: ${code}`);
+                });
+            });
+
+            // Copy all codes
+            document.getElementById('copy-all').addEventListener('click', function() {
+                const codes = [...document.querySelectorAll('.copy-btn')]
+                    .map(btn => btn.dataset.code)
+                    .join('\n');
+
+                navigator.clipboard.writeText(codes);
+                showToast('All codes copied!');
             });
         });
-
-        function copyAllCodes() {
-            let codes = [...document.querySelectorAll('.copy-btn')].map(btn => btn.dataset.code).join('\n');
-            navigator.clipboard.writeText(codes);
-            alert('All codes copied!');
-        }
     </script>
 }
