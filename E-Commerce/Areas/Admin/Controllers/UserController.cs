@@ -93,7 +93,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                     Text = data.Name,
                     Value = data.Name,
                 }),
-                CompanyList = _db.Companies.Select(data => new SelectListItem
+                CompanyList = _db.Companies.Where(data => data.IsDeleted == false).Select(data => new SelectListItem
                 {
                     Text = data.Name,
                     Value = data.ID.ToString(),
@@ -113,7 +113,7 @@ namespace E_Commerce.Areas.Admin.Controllers
             var OldRole = _db.Roles.FirstOrDefault(data => data.Id == RoleID).Name;
 
             if (_roleManagementVM.ApplicationUser.Role == OldRole)
-                return RedirectToAction(nameof(RoleManagement));
+                return RedirectToAction(nameof(RoleManagement), new { Userid = _roleManagementVM.ApplicationUser.Id });
 
 
             ApplicationUser _applicationUser = _db.ApplicationUsers.FirstOrDefault(data => data.Id == _roleManagementVM.ApplicationUser.Id);
