@@ -1,43 +1,71 @@
-﻿@section Styles {
-	<link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
-	<link href="~/css/datatables.tailwind.css" rel="stylesheet" />
+﻿@model List<Category>
+
+@section Styles {
+    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
+    <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
+    <style>
+        .dataTables_wrapper .dataTables_length select,
+        .dataTables_wrapper .dataTables_filter input {
+            @@apply border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            @@apply bg-gray-800 text-white border-gray-800;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):hover {
+            @@apply bg-gray-100 text-gray-800 border-gray-300;
+        }
+    </style>
 }
 
 @{
-	ViewData["Title"] = "Category List";
+    ViewData["Title"] = "Category List";
 }
 
+<div class="min-h-screen bg-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div class="mb-4 sm:mb-0">
+                    <h1 class="text-2xl font-semibold text-gray-900">@ViewData["Title"]</h1>
+                    <p class="mt-1 text-sm text-gray-500">Manage your categories</p>
+                </div>
 
-<div class="mx-auto mt-4 mb-5 flex flex-col md:flex-row md:justify-between gap-4 mb-4">
+                <div>
+                    <a asp-controller="Category" asp-action="Upsert"
+                       class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Create Category
+                    </a>
+                </div>
+            </div>
+        </div>
 
-	<div>
-		<h2 class="text-indigo-700 text-2xl md:text-3xl font-bold">@ViewData["Title"]</h2>
-	</div>
+        <!-- DataTable Card -->
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6">
+                <table class="tblData w-full"
+                       data-Root="/admin/category/"
+                       data-GetURL="getall"
+                       data-DeleteURL="Delete?id="
+                       data-EditURL="Upsert?id=">
+                </table>
+            </div>
+        </div>
 
-	<!-- Button Group -->
-	<div class="flex flex-wrap justify-end">
-		<a asp-controller="Category" asp-action="Upsert" class="rounded-md border border-slate-300 py-2 px-4 text-center text-sm md:text-md transition-all shadow-sm
-                  hover:shadow-lg hover:text-white hover:bg-indigo-700 flex justify-center item-center
-                  focus:text-white focus:bg-indigo-800 active:text-white active:bg-indigo-800 disabled:pointer-events-none disabled:opacity-50">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 mx-2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-			</svg>
-			Create Category
-		</a>
-	</div>
-</div>
-
-<div class="bg-white rounded-lg p-4 border border-slate-200">
-	<table class="tblData w-full border-collapse border border-gray-200 rounded-lg"
-		   data-Root="/admin/category/"
-		   data-GetURL="getall"
-		   data-DeleteURL="Delete?id="
-		   data-EditURL="Upsert?id=">
-	</table>
+        <!-- Help Text -->
+        <div class="mt-4 text-sm text-gray-500">
+            <p>Use the table above to manage your categories. You can sort, filter, and perform actions on each category.</p>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-	<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
-	<script src="~/js/datatables.tailwind.js"></script>
-	<script src="~/js/Category.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
+    <script src="~/js/datatables.tailwind.js"></script>
+    <script src="~/js/Category.js"></script>
 }

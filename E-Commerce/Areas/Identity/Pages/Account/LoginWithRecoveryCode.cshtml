@@ -4,28 +4,69 @@
     ViewData["Title"] = "Recovery Code Verification";
 }
 
-<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-    <h1 class="text-2xl font-semibold text-gray-900 text-center">@ViewData["Title"]</h1>
-    <p class="text-gray-600 text-center mt-2">
-        You have requested to log in with a recovery code. This login will not be remembered until you provide
-        an authenticator app code at log in or disable 2FA and log in again.
-    </p>
+<div class="bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            @ViewData["Title"]
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Use your recovery code to log in. This login won't be remembered unless you verify with an authenticator app or disable 2FA.
+        </p>
+    </div>
 
-    <form method="post" class="mt-6 space-y-4">
-        <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm" role="alert"></div>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-200">
+            <form method="post" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-sm text-red-600 rounded-md" role="alert"></div>
 
-        <div>
-            <label asp-for="Input.RecoveryCode" class="block text-sm font-medium text-gray-700">Recovery Code</label>
-            <input asp-for="Input.RecoveryCode" class="w-full mt-1 p-3 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300 outline-none" autocomplete="off" placeholder="Enter Recovery Code" />
-            <span asp-validation-for="Input.RecoveryCode" class="text-red-500 text-sm"></span>
+                <div>
+                    <label asp-for="Input.RecoveryCode" class="block text-sm font-medium text-gray-700">
+                        Recovery Code
+                    </label>
+                    <div class="mt-1">
+                        <input asp-for="Input.RecoveryCode"
+                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                               autocomplete="off"
+                               placeholder="Enter your recovery code"
+                               autofocus />
+                    </div>
+                    <span asp-validation-for="Input.RecoveryCode" class="mt-1 text-sm text-red-600"></span>
+                </div>
+
+                <div>
+                    <button type="submit"
+                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                        Log in
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a id="auth-code-login"
+                   asp-page="./LoginWith2fa"
+                   asp-route-returnUrl="@Model.ReturnUrl"
+                   class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                    Log in with an authenticator app
+                </a>
+            </div>
         </div>
+    </div>
 
-        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-md transition">
-            Log in
-        </button>
-    </form>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <a asp-page="./Login" class="text-sm text-gray-600 hover:text-gray-900 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back to login
+        </a>
+    </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('Input_RecoveryCode')?.focus();
+        });
+    </script>
 }
