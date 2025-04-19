@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "redis1": {
+      "containerPorts": "6379:6379",
+      "secretStore": "LocalSecretsFile",
+      "containerName": "Redis-Inproject",
+      "containerImage": "redis:alpine",
+      "type": "redis.container",
+      "connectionId": "RedisConnection"
+    }
+  }
+}

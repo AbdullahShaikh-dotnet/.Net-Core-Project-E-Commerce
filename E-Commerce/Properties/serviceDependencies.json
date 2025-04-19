@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "redis1": {
+      "type": "redis",
+      "connectionId": "RedisConnection"
+    }
+  }
+}
