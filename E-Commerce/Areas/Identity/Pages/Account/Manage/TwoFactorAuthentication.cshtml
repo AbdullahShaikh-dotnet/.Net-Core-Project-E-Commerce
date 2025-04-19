@@ -27,9 +27,9 @@
                         <div class="relative right-0">
                             <ul class="relative flex flex-wrap px-1.5 py-1.5 list-none rounded-md bg-slate-100" data-tabs="tabs" role="list">
                                 <li class="z-30 flex-auto text-center">
-                                    <a class="z-30 flex items-center justify-center w-full px-0 py-2 text-sm mb-0 transition-all 
-                                        ease-in-out border-0 rounded-md cursor-pointer 
-                                            @(!Model.Is2faEnabled ? "text-gray-900 bg-white" : "text-slate-400 bg-inherit")"
+                                    <a class="z-30 flex items-center justify-center w-full px-0 py-2 text-sm mb-0 transition-all
+                                            ease-in-out border-0 rounded-md cursor-pointer
+                                                @(!Model.Is2faEnabled ? "text-gray-900 bg-white" : "text-slate-400 bg-inherit")"
                                        onclick="switchTab('authenticator')"
                                        data-tab-target=""
                                        role="tab"
@@ -39,13 +39,13 @@
                                 </li>
                                 <li class="z-30 flex-auto text-center">
                                     <a class="z-30 flex items-center justify-center w-full px-0 py-2 mb-0 text-sm transition-all ease-in-out
-                                        border-0 rounded-lg cursor-pointer 
-                                            @(Model.Is2faEnabled ? "text-gray-900 bg-white" : "text-slate-400 bg-inherit")"
+                                            border-0 rounded-lg cursor-pointer
+                                                @(Model.Is2faEnabled ? "text-gray-900 bg-white" : "text-slate-400 bg-inherit")"
                                        onclick="switchTab('recovery')"
                                        data-tab-target=""
                                        role="tab"
                                        aria-selected="@(Model.Is2faEnabled ? "true" : "false")"
-                                        @(!Model.Is2faEnabled ? "disabled" : "")>
+                                    @(!Model.Is2faEnabled ? "disabled" : "")>
                                         Recovery Codes
                                     </a>
                                 </li>
@@ -68,7 +68,7 @@
                                         {
                                             <a asp-page="./EnableAuthenticator"
                                                class="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg
-                                                              hover:bg-gray-700 transition-colors">
+                                                                  hover:bg-gray-700 transition-colors">
                                                 <i class="bi bi-plus-lg"></i>
                                                 Add Authenticator App
                                             </a>
@@ -133,18 +133,22 @@
                                             <form method="post">
                                                 <button type="submit"
                                                         class="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg
-                                                                       hover:bg-gray-300 transition-colors">
+                                                                           hover:bg-gray-300 transition-colors">
                                                     <i class="bi bi-trash"></i>
                                                     Forget This Browser
                                                 </button>
                                             </form>
                                         }
                                         <a asp-page="./Disable2fa"
-                                           class="flex items-center gap-2 px-4 py-2 rounded-md 
-                                                              transition-colors bg-red-700 text-white hover:bg-red-600">
-                                            <i class="bi bi-x-circle"></i>
+                                           class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium
+                                                        text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                            </svg>
                                             Disable 2FA
                                         </a>
+
+
                                         <a asp-page="./GenerateRecoveryCodes"
                                            class="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-md transition-colors">
                                             <i class="bi bi-arrow-repeat"></i>
