@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ECom.Utility.Services
@@ -64,7 +65,11 @@ namespace ECom.Utility.Services
             try
             {
                 var value = await _redisDB.StringGetAsync(key);
-                return value.HasValue ? JsonSerializer.Deserialize<T>(value!) : default;
+                return value.HasValue ? JsonSerializer.Deserialize<T>(value!, new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = false
+                }) : default;
             }
             catch (Exception ex)
             {
@@ -80,7 +85,13 @@ namespace ECom.Utility.Services
         {
             try
             {
-                var serializedValue = JsonSerializer.Serialize(value);
+                var serializedValue = JsonSerializer.Serialize(value,
+                    new JsonSerializerOptions
+                    {
+                        ReferenceHandler = ReferenceHandler.Preserve,
+                        WriteIndented = false
+                    });
+
                 return await _redisDB.StringSetAsync(key, serializedValue, expiry);
             }
             catch (Exception ex)
