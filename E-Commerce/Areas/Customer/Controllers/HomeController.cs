@@ -172,13 +172,13 @@ namespace E_Commerce.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult GetFiltersData()
         {
-            var CategoriesDB = _unitOfWork.Category.GetAll(data => !data.IsDeleted);
+            var CategoriesDB = _unitOfWork.Category.GetAll(data => !data.IsDeleted, applyCaching: true);
 
-            var MaxListPrice = _unitOfWork.Product.GetAll()
+            var MaxListPrice = _unitOfWork.Product.GetAll(applyCaching: true)
                 .OrderByDescending(data => data.ListPrice)
                 .FirstOrDefault()?.Price;
 
-            var MinListPrice = _unitOfWork.Product.GetAll()
+            var MinListPrice = _unitOfWork.Product.GetAll(applyCaching: true)
                 .OrderBy(data => data.ListPrice)
                 .FirstOrDefault()?.Price;
 
