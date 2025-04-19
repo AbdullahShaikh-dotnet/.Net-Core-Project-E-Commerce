@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using QuestPDF.Infrastructure;
 using Serilog;
 using StackExchange.Redis;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -153,6 +154,15 @@ builder.Services.AddSession(option =>
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 }); // Configured Session
+
+
+var redisOptions = await ConfigurationOptions.Parse(builder.Configuration["RedisConnection"]!).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
+
+builder.Services.AddStackExchangeRedisCache(option =>
+{
+    option.ConfigurationOptions = redisOptions;
+});
+
 
 
 
