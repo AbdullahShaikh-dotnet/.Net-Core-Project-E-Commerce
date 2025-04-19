@@ -1,4 +1,4 @@
-using ECom.DataAccess.Repository.IRepository;
+﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Models.ViewModels;
 using ECom.Utility;
@@ -345,68 +345,181 @@ namespace E_Commerce.Areas.Customer.Controllers
             return RedirectToAction(nameof(OrderConfirmation), new { isCustomer = User.IsInRole(SD.Role_Customer), OrderID = _PaymentVM.OrderID });
         }
 
-
         private async Task SendConfirmationMail(int OrderID)
         {
             var OrderDetailDB = _unitOfWork.OrderDetails.GetAll(data => data.OrderHeaderID == OrderID);
-            string ProductTitles = string.Empty;
+            string ProductItems = string.Empty;
 
+            var UserData = _unitOfWork.ApplicationUsers.Get(data => data.Id == _userService.GetUserId());
+            string SendToEmail = UserData.Email;
+
+            decimal orderTotal = 0;
             foreach (var OrderDetails in OrderDetailDB)
             {
                 var ProductListDB = _unitOfWork.Product.Get(data => data.Id == OrderDetails.ProductID);
-                ProductTitles += $"<li style='font-size: 14px; color: #374151; margin-bottom: 8px;'>{ProductListDB.Title}</li>";
+                ProductItems += $@"
+                                <tr>
+                                    <td style='padding: 12px 0; border-bottom: 1px solid #f3f4f6;'>
+                                        <div style='font-size: 16px; color: #111827; font-weight: 500;'>{ProductListDB.Title}</div>
+                                        <div style='font-size: 14px; color: #6b7280;'>Qty: {OrderDetails.Count}</div>
+                                    </td>
+                                    <td style='padding: 12px 0; border-bottom: 1px solid #f3f4f6; text-align: right; font-size: 16px; color: #111827; font-weight: 500;'>
+                                        ₹{OrderDetails.Price * OrderDetails.Count:0.00}
+                                    </td>
+                                </tr>";
+                orderTotal += (decimal)OrderDetails.Price * OrderDetails.Count;
             }
 
             string htmlBody = $@"
-                    <!DOCTYPE html>
-                    <html lang='en'>
-                    <head>
-                        <meta charset='UTF-8'>
-                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                        <title>Order Confirmation</title>
-                    </head>
-                    <body style='font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px;'>
-                        <div style='max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 24px;'>
-                            <!-- Header -->
-                            <div style='text-align: center; margin-bottom: 24px;'>
-                                <h1 style='font-size: 24px; font-weight: 600; color: #111827;'>?? Order Confirmed!</h1>
-                                <p style='font-size: 16px; color: #6b7280;'>Thank you for your purchase. Your order has been successfully confirmed.</p>
-                            </div>
-
-                            <!-- Order Details -->
-                            <div style='margin-bottom: 24px;'>
-                                <h2 style='font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 12px;'>Order Details</h2>
-                                <div style='background-color: #f3f4f6; border-radius: 6px; padding: 16px;'>
-                                    <p style='font-size: 14px; color: #374151; margin: 0;'>
-                                        <strong>Order ID:</strong> <span style='color: #111827;'>{OrderID}</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Product List -->
-                            <div style='margin-bottom: 24px;'>
-                                <h2 style='font-size: 18px; font-weight: 600; color: #111827; margin-bottom: 12px;'>Products Ordered</h2>
-                                <ol style='list-style-type: decimal; padding-left: 20px; margin: 0;'>
-                                    {ProductTitles}
-                                </ol>
-                            </div>
-
-                            <!-- Footer -->
-                            <div style='text-align: center; color: #6b7280; font-size: 14px;'>
-                                <p>If you have any questions, feel free to <a href='mailto:support@example.com' style='color: #3b82f6; text-decoration: none;'>contact us</a>.</p>
-                                <p>� 2023 Your Company. All rights reserved.</p>
-                            </div>
-                        </div>
-                    </body>
-                    </html>";
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset='UTF-8'>
+                            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                            <title>Order Confirmation</title>
+                        </head>
+                        <body style='font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9fafb;'>
+                            <!-- Main Container -->
+                            <table width='100%' border='0' cellspacing='0' cellpadding='0' style='background-color: #f9fafb;'>
+                                <tr>
+                                    <td align='center'>
+                                        <table width='600' border='0' cellspacing='0' cellpadding='0' style='background-color: #ffffff; margin: 0 auto;'>
+                                            <!-- Header -->
+                                            <tr>
+                                                <td style='padding: 24px; border-bottom: 1px solid #e5e7eb;'>
+                                                    <div style='font-size: 20px; font-weight: 600; color: #111827;'>Order Confirmation</div>
+                                                    <div style='font-size: 14px; color: #6b7280; margin-top: 4px;'>Thank you for your purchase</div>
+                                                </td>
+                                            </tr>
+                            
+                                            <!-- Content -->
+                                            <tr>
+                                                <td style='padding: 24px;'>
+                                                    <!-- Order Info -->
+                                                    <table width='100%' border='0' cellspacing='0' cellpadding='0' style='margin-bottom: 24px;'>
+                                                        <tr>
+                                                            <td style='background-color: #f9fafb; border-radius: 8px; padding: 16px;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280; padding-bottom: 8px;'>Order Number</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500; padding-bottom: 8px;'>#{OrderID}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280;'>Order Date</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500;'>{DateTime.Now.ToString("MMMM dd, yyyy")}</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                    
+                                                    <!-- Shipping Info -->
+                                                    <table width='100%' border='0' cellspacing='0' cellpadding='0' style='margin-bottom: 24px;'>
+                                                        <tr>
+                                                            <td style='font-size: 18px; color: #111827; font-weight: 600; padding-bottom: 16px;'>Shipping Information</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='background-color: #f9fafb; border-radius: 8px; padding: 16px;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280; padding-bottom: 8px;'>Full Name</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500; padding-bottom: 8px;'>{ UserData.Name }</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280; padding-bottom: 8px;'>Phone</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500; padding-bottom: 8px;'>{ UserData.PhoneNumber }</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280; padding-bottom: 8px;'>Address</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500; padding-bottom: 8px;'>{ UserData.StreetAddress }</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width='120' style='font-size: 14px; color: #6b7280; padding-bottom: 8px;'>City/State/Zip</td>
+                                                                        <td style='font-size: 14px; color: #111827; font-weight: 500; padding-bottom: 8px;'>{ UserData.City }, { UserData.State }, { UserData.PostalCode }</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                    
+                                                    <!-- Order Items -->
+                                                    <table width='100%' border='0' cellspacing='0' cellpadding='0' style='margin-bottom: 24px;'>
+                                                        <tr>
+                                                            <td style='font-size: 18px; color: #111827; font-weight: 600; padding-bottom: 16px;'>Order Summary</td>
+                                                        </tr>
+                                                        {ProductItems}
+                                                    </table>
+                                    
+                                                    <!-- Order Total -->
+                                                    <table width='100%' border='0' cellspacing='0' cellpadding='0' style='margin-bottom: 24px;'>
+                                                        <tr>
+                                                            <td style='padding: 12px 0; border-bottom: 1px solid #f3f4f6;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td style='color: #6b7280;'>Subtotal</td>
+                                                                        <td style='text-align: right; font-weight: 500;'>₹{orderTotal:0.00}</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='padding: 12px 0; border-bottom: 1px solid #f3f4f6;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td style='color: #6b7280;'>Shipping</td>
+                                                                        <td style='text-align: right; font-weight: 500;'>Free</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='padding: 12px 0; border-bottom: 1px solid #f3f4f6;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td style='color: #6b7280;'>Tax</td>
+                                                                        <td style='text-align: right; font-weight: 500;'>Included</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style='padding-top: 16px; border-top: 1px solid #e5e7eb;'>
+                                                                <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                                                                    <tr>
+                                                                        <td style='font-weight: 600;'>Total</td>
+                                                                        <td style='text-align: right; font-weight: 600;'>₹{orderTotal:0.00}</td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style='padding: 24px; text-align: center; border-top: 1px solid #e5e7eb;'>
+                                                    <div style='font-size: 12px; color: #9ca3af; margin-bottom: 16px;'>
+                                                        By placing your order, you agree to our <a href='#' style='color: #6366f1; text-decoration: none;'>Terms of Service</a> and <a href='#' style='color: #6366f1; text-decoration: none;'>Privacy Policy</a>
+                                                    </div>
+                                                    <div style='font-size: 12px; color: #9ca3af;'>
+                                                        © {DateTime.Now.Year} E-commerce. All rights reserved.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                        </html>";
 
             await _mailJetService.SendEmailAsync(
-                "abdullah.goldmedalindia@gmail.com",
-                "Order Confirmed",
+                SendToEmail,
+                $"Your Order #{OrderID} is Confirmed",
                 htmlBody
             );
         }
-
 
         [HttpPost]
         [ActionName("DelayedPayNow")]
