@@ -5,6 +5,7 @@
       "secretStore": "LocalSecretsFile",
       "containerName": "Redis-Inproject",
       "containerImage": "redis:alpine",
+      "resourceId": null,
       "type": "redis.container",
       "connectionId": "RedisConnection"
     }
