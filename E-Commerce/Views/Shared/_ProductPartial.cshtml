@@ -3,79 +3,99 @@
 <input type="hidden" id="hfTotalPages" value="@Model.TotalPages" />
 <input type="hidden" id="hfcurrentPage" value="@Model.CurrentPage" />
 
-@foreach (var product in Model.Products)
+
+
+@if (Model.Products.Count() > 0)
 {
-	<a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block" target="_blank">
-		<div class="relative w-full h-60 bg-white border border-b-0 border-slate-200 p-2 pb-0 rounded-t-lg overflow-hidden group">
+    @foreach (var product in Model.Products)
+    {
+        <a asp-action="Details" asp-controller="Home" asp-route-ProductID="@product.Id" class="block" target="_blank">
+            <div class="relative w-full h-60 bg-white border border-b-0 border-slate-200 p-2 pb-0 rounded-t-lg overflow-hidden group">
 
-			@if (product.ListPrice > product.Price)
-			{
-				<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-semibold px-3 py-1 rounded-full shadow-sm m-2">
-					-@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
-				</span>
-			}
+                @if (product.ListPrice > product.Price)
+                {
+                    <span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-semibold px-3 py-1 rounded-full shadow-sm m-2">
+                        -@(((product.ListPrice - product.Price) / product.ListPrice * 100).ToString("0"))% Off
+                    </span>
+                }
 
-			@if (product.ProductImages is not null && product.ProductImages.Count() > 0)
-			{
-				<img src="@product.ProductImages.FirstOrDefault().ImageURL" class="w-full h-full object-cover rounded-md transition-all duration-200">
+                @if (product.ProductImages is not null && product.ProductImages.Count() > 0)
+                {
+                    <img src="@product.ProductImages.FirstOrDefault().ImageURL" class="w-full h-full object-cover rounded-md transition-all duration-200">
 
-			}
-			else
-			{
-				<div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg w-full h-full object-cover rounded-md transition-all duration-200">
-					No Media Available
-				</div>
-			}
+                }
+                else
+                {
+                    <div class="flex items-center justify-center h-56 bg-gray-200 text-gray-600 text-lg w-full h-full object-cover rounded-md transition-all duration-200">
+                        No Media Available
+                    </div>
+                }
 
 
-			<!-- Backdrop -->
-			<div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-2 m-2 rounded-md mb-0
+                <!-- Backdrop -->
+                <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center p-2 m-2 rounded-md mb-0
                         translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-in-out z-10">
-				<span class="text-white text-xs font-semibold line-clamp-6">@Html.Raw(product.Description)</span>
-			</div>
-		</div>
+                    <span class="text-white text-xs font-semibold line-clamp-6">@Html.Raw(product.Description)</span>
+                </div>
+            </div>
 
-		<div class="text-left border border-t-0 border-slate-200 rounded-b-md p-2 relative">
-			<div class="flex justify-between">
+            <div class="text-left border border-t-0 border-slate-200 rounded-b-md p-2 relative">
+                <div class="flex justify-between">
 
-				<h5 class="text-md font-semibold text-gray-700 truncate max-w-[80%] md:max-w-50" title="@product.Title">
-					@product.Title
-				</h5>
-
-
-				<div class="absolute right-2 rounded-md bg-slate-100 py-0.2 px-1.5 border border-transparent text-[10px] text-slate-800 transition-all shadow-sm">
-					@product.Category.Name
-				</div>
-
-			</div>
-			<p class="capitalize text-gray-500 text-xs">by @product.Author</p>
+                    <h5 class="text-md font-semibold text-gray-700 truncate max-w-[80%] md:max-w-50" title="@product.Title">
+                        @product.Title
+                    </h5>
 
 
-			<!-- Price -->
-			<div class="flex items-center justify-end">
-				<div class="text-lg font-semibold text-gray-700 mb-2">@product.Price.ToString("C")</div>
-			</div>
+                    <div class="absolute right-2 rounded-md bg-slate-100 py-0.2 px-1.5 border border-transparent text-[10px] text-slate-800 transition-all shadow-sm">
+                        @product.Category.Name
+                    </div>
+
+                </div>
+                <p class="capitalize text-gray-500 text-xs">by @product.Author</p>
 
 
-			<div class="flex justify-between">
+                <!-- Price -->
+                <div class="flex items-center justify-end">
+                    <div class="text-lg font-semibold text-gray-700 mb-2">@product.Price.ToString("C")</div>
+                </div>
 
-				<!-- Wishlist Button -->
-				<button class="bg-white text-gray-700 p-2 rounded-full border border-slate-300 hover:bg-red-500 hover:border-red-500 hover:text-white transition duration-300 mr-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-						<path stroke-linecap="round" stroke-linejoin="round"
-							  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-					</svg>
-				</button>
 
-				<!-- Add to Cart Button -->
-				<button onclick="addToCart(@product.Id, event)" class="btn-primary w-full" type="button" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()">
-					Add to cart
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5">
-						<path stroke-linecap="round" stroke-linejoin="round"
-							  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-					</svg>
-				</button>
-			</div>
-		</div>
-	</a>
+                <div class="flex justify-between">
+
+                    <!-- Wishlist Button -->
+                    <button class="bg-white text-gray-700 p-2 rounded-full border border-slate-300 hover:bg-red-500 hover:border-red-500 hover:text-white transition duration-300 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A5.978 5.978 0 0 1 16.5 3 5.5 5.5 0 0 1 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                    </button>
+
+                    <!-- Add to Cart Button -->
+                    <button onclick="addToCart(@product.Id, event)" class="btn-primary w-full" type="button" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()">
+                        Add to cart
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 ml-1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </a>
+    }
+}
+else
+{
+    <div id="productNotFoundDiv" class="col-span-full flex flex-col items-center justify-center bg-white border border-gray-200 rounded-md shadow-sm p-8 min-h-[300px] text-center transition-all">
+        <div class="inline-flex items-center justify-center p-5 rounded-full bg-gray-100 text-gray-400 mb-4">
+            <svg class="text-gray-400 w-20 h-20" viewBox="0 0 24 24" fill="none">
+                <path d="M12 11.286 22 7v10.714L12 22zm0 0L2 7v10.714L12 22zM12 3 2 7m10-4 10 4"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </div>
+        <h5 class="text-xl text-gray-800 font-semibold mb-2 tracking-tight">No Products Found</h5>
+        <p class="text-gray-500 max-w-sm text-sm leading-relaxed">
+            Try adjusting your filters or search to find what you're looking for.
+        </p>
+    </div>
 }

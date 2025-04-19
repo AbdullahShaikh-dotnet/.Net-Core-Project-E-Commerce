@@ -4,162 +4,204 @@
     ViewData["Title"] = "Home";
 }
 
+
 <script defer src="~/js/producthome.js"></script>
 
-<div class="container mx-auto px-4 md:mt-6 grid grid-cols-1 md:grid-cols-4 gap-6">
-    <!-- Sidebar Filters (Desktop) -->
-    <aside class="hidden md:block bg-white rounded-md p-5 sticky top-4 h-fit border border-slate-200">
-        <h3 class="text-2xl font-semibold text-gray-900 mb-4">Filters</h3>
-
-        <!-- Categories -->
-        <div class="mb-6 h-full max-h-[500px] grid-1">
-            <h4 class="text-md font-semibold text-gray-800 mb-2">Categories</h4>
-            <div class="relative flex flex-col rounded-md bg-white" id="liCategory"></div>
-        </div>
-
-        <!-- Price Range -->
-        <h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
-        <div class="flex flex-col w-[98%] mt-[10%] mb-[5%] mx-[2%]">
-            <div class="relative min-h-[20px]">
-
-                <div class="relative group">
-                    <input id="fromSlider" class="dual-range-slider h-0 z-[1]" type="range" value="10" min="0" max="@Model.MinPrice" />
-                    <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
-                        Min: <span id="fromValue"></span>
-                    </span>
-                </div>
-
-                <div class="relative group">
-                    <input id="toSlider" class="dual-range-slider" type="range" value="40" min="0" max="@Model.MaxPrice" />
-                    <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-slate-800 text-white text-[11px] rounded px-2 py-1">
-                        Max: <span id="toValue"></span>
-                    </span>
-                </div>
-            </div>
-            <div class="flex justify-around gap-2">
-                <div class="form_control_container flex-1">
-                    <div class="form_control_container__time text-[12px] text-slate-400">Min</div>
-                    <input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400 text-slate-700
-						text-sm border border-slate-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400
-						hover:border-slate-300 shadow-sm focus:shadow appearance-none
-						[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                           type="number" id="fromInput" value="@Model.MinPrice" min="0" max="100" />
-                </div>
-                <div class="form_control_container flex-1">
-                    <div class="form_control_container__time text-[12px] text-slate-400">Max</div>
-                    <input class="form_control_container__time__input w-full bg-transparent placeholder:text-slate-400
-						text-slate-700 text-sm border border-slate-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease
-						focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow appearance-none
-						[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                           type="number" id="toInput" value="@Model.MaxPrice" min="0" max="100" />
-                </div>
-            </div>
-        </div>
-
-        <!-- Sort By -->
-        <div>
-            <h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
-            <select id="comboxSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
-                <option selected value="priceasc">Price: Low to High</option>
-                <option value="pricedesc">Price: High to Low</option>
-                <option>Newest Arrivals</option>
-            </select>
-        </div>
-
-
-        <div class="flex justify-between gap-2 mt-10">
-            <button class="btn-primary w-full" id="btnApplyFilter" onclick="GetProductData(event)" data-url="@Url.Action("Index", "Home")">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+<div class="bg-white py-4 sm:py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <!-- Mobile Filter Button -->
+        <div class="md:hidden flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-900">Products</h3>
+            <button id="mobileFilterBtn" onclick="mobileFilterButton()" class="flex items-center space-x-1 px-3 py-2 border border-gray-300 rounded-md bg-white shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-                </svg>Apply
-            </button>
-            <button class="btn-primary-outline w-full" onclick="location.reload()">Clear</button>
-        </div>
-
-
-    </aside>
-
-    <!-- Mobile Filter Button -->
-    <div class="md:hidden flex justify-start">
-        <button id="toggleFilter" class="btn-primary-outline">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-            </svg>
-        </button>
-    </div>
-
-    <!-- Mobile Filter Modal -->
-    <div id="mobileFilters" class="fixed inset-0 z-50 bg-white transform translate-x-full transition-transform duration-300">
-        <div class="p-5 relative">
-            <button id="closeFilter" class="absolute top-4 right-4 p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
-
-            </button>
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Filters</h3>
-            <ul class="space-y-2 text-gray-700">
-                <li class="cursor-pointer hover:text-blue-600 transition">Electronics</li>
-                <li class="cursor-pointer hover:text-blue-600 transition">Books</li>
-                <li class="cursor-pointer hover:text-blue-600 transition">Fashion</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Product Grid -->
-    <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productListContainer">
-        @{
-            await Html.RenderPartialAsync("_ProductPartial", Model);
-        }
-    </div>
-
-    <!-- Pagination Button ( Dummy ) -->
-    <div class="col-span-full flex justify-end mt-4 gap-4 py-4">
-        <div class="flex items-center gap-8">
-            <!-- Previous Page Button -->
-            <button id="prevPageBtn" data-page="1" class="pagination-btn rounded-md border border-slate-300 p-2 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                    <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-
-            <!-- Page Number Display -->
-            <p class="text-slate-600">
-                Page <strong class="text-slate-800" id="currentPage">@Model.CurrentPage</strong> of <strong class="text-slate-800" id="totalPages">@Model.TotalPages</strong>
-            </p>
-
-            <!-- Next Page Button -->
-            <button id="nextPageBtn" data-page="2" class="pagination-btn rounded-md border border-slate-300 p-2 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-                    <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
+                <span>Filters</span>
             </button>
         </div>
-    </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Sidebar Filters (Desktop) -->
+            <aside class="hidden md:block bg-white rounded-lg border border-gray-200 shadow-sm p-5 sticky top-4 h-fit">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Filters</h3>
 
+                <!-- Categories -->
+                <h4 class="text-sm font-medium text-gray-700 mb-2">Categories</h4>
+                <div class="mb-6 overflow-y-auto max-h-[250px]">
+                    <div class="relative flex flex-col rounded-md bg-white text-wrap overflow-x-auto" id="liCategory">
+                        <!-- Categories will be populated by JS -->
+                    </div>
+                </div>
 
+                <!-- Price Range -->
+                <h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
+                <div class="flex flex-col w-[98%] mt-[10%] mb-[5%] mx-[2%]">
+                    <div class="relative min-h-[20px]">
+                        <div class="relative group">
+                            <input id="fromSlider" class="dual-range-slider h-0 z-[1]" type="range" value="10" min="0" max="@Model.MinPrice" />
+                            <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-gray-800 text-white text-[11px] rounded px-2 py-1">
+                                Min: <span id="fromValue"></span>
+                            </span>
+                        </div>
 
+                        <div class="relative group">
+                            <input id="toSlider" class="dual-range-slider" type="range" value="40" min="0" max="@Model.MaxPrice" />
+                            <span class="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-gray-800 text-white text-[11px] rounded px-2 py-1">
+                                Max: <span id="toValue"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex justify-around gap-2">
+                        <div class="form_control_container flex-1">
+                            <div class="form_control_container__time text-[12px] text-gray-400">Min</div>
+                            <input class="form_control_container__time__input w-full bg-transparent placeholder:text-gray-400 text-gray-700
+                                text-sm border border-gray-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease focus:outline-none focus:border-gray-400
+                                hover:border-gray-300 shadow-sm focus:shadow appearance-none
+                                [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                   type="number" id="fromInput" value="@Model.MinPrice" min="0" max="100" />
+                        </div>
+                        <div class="form_control_container flex-1">
+                            <div class="form_control_container__time text-[12px] text-gray-400">Max</div>
+                            <input class="form_control_container__time__input w-full bg-transparent placeholder:text-gray-400
+                                text-gray-700 text-sm border border-gray-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease
+                                focus:outline-none focus:border-gray-400 hover:border-gray-300 shadow-sm focus:shadow appearance-none
+                                [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                   type="number" id="toInput" value="@Model.MaxPrice" min="0" max="100" />
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Sort By -->
+                <div>
+                    <h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
+                    <select id="comboxSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
+                        <option selected value="priceasc">Price: Low to High</option>
+                        <option value="pricedesc">Price: High to Low</option>
+                        <option value="newest">Newest Arrivals</option>
+                    </select>
+                </div>
 
-    <!-- Product Not Found Div (Takes up remaining space) -->
-    <div id="productNotFoundDiv" class="relative h-full w-full md:col-span-3 flex flex-col justify-center items-center bg-white border border-slate-200 rounded-md p-2 hidden">
-        <div class="p-3 text-center">
-            <div class="flex justify-center mb-4">
-                <svg class="text-slate-400 w-10 h-10" width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 11.286 22 7v10.714L12 22zm0 0L2 7v10.714L12 22zM12 3 2 7m10-4 10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+                <div class="flex justify-between gap-2 mt-10">
+                    <button class="btn-primary w-full" id="btnApplyFilter" onclick="GetProductData(event)" data-url="@Url.Action("Index", "Home")">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                        </svg>Apply
+                    </button>
+                    <button class="btn-primary-outline w-full" onclick="location.reload()">Clear</button>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="md:col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productListContainer">
+                @{
+                    await Html.RenderPartialAsync("_ProductPartial", Model);
+                }
             </div>
-            <div class="flex justify-center mb-2">
-                <h5 class="text-slate-800 text-2xl font-semibold">
-                    No Products Found
-                </h5>
+
+            <!-- Pagination Button -->
+            <div class="col-span-full flex justify-end mt-4 gap-4 py-4">
+                <div class="flex items-center gap-8">
+                    <!-- Previous Page Button -->
+                    <button id="prevPageBtn" data-page="1" class="pagination-btn rounded-md border border-gray-300 p-2 text-center text-sm transition-all shadow-sm hover:shadow-lg text-gray-600 hover:text-white hover:bg-gray-800 hover:border-gray-800 focus:text-white focus:bg-gray-800 focus:border-gray-800 active:border-gray-800 active:text-white active:bg-gray-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                            <path fill-rule="evenodd" d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+
+                    <!-- Page Number Display -->
+                    <p class="text-gray-600">
+                        Page <strong class="text-gray-800" id="currentPage">@Model.CurrentPage</strong> of <strong class="text-gray-800" id="totalPages">@Model.TotalPages</strong>
+                    </p>
+
+                    <!-- Next Page Button -->
+                    <button id="nextPageBtn" data-page="2" class="pagination-btn rounded-md border border-gray-300 p-2 text-center text-sm transition-all shadow-sm hover:shadow-lg text-gray-600 hover:text-white hover:bg-gray-800 hover:border-gray-800 focus:text-white focus:bg-gray-800 focus:border-gray-800 active:border-gray-800 active:text-white active:bg-gray-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                            <path fill-rule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <p class="block text-slate-600 leading-normal font-light mb-4 max-w-lg">
-                We couldn't find any products matching your criteria.
-            </p>
         </div>
     </div>
 </div>
 
+<!-- Mobile Filter Popup -->
+<div id="mobileFilterPopup" class="fixed inset-0 z-50 hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black bg-opacity-50" id="filterBackdrop" onclick="closeFilterPopup()"></div>
+
+    <!-- Filter Content -->
+    <div class="absolute inset-y-0 right-0 max-w-full flex pointer-events-none">
+        <div class="relative w-screen max-w-md pointer-events-auto transform transition-transform duration-300 translate-x-full" id="filterPanel">
+            <div class="h-full flex flex-col bg-white shadow-xl overflow-y-auto">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
+                    <button id="closeFilterBtn" onclick="closeFilterPopup()" class="text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Filter Body -->
+                <div class="flex-1 overflow-y-auto overflow-x-hidden p-4">
+                    <!-- Categories -->
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Categories</h4>
+                    <!-- In your mobile filter popup -->
+                    <div class="mb-6 overflow-y-auto max-h-[250px]">
+                        <div class="relative flex flex-col rounded-md bg-white text-wrap overflow-x-auto" id="mobileLiCategory">
+                            <!-- Categories will be populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Price Range -->
+                    <h4 class="text-md font-semibold text-gray-800 mb-2">Price Range</h4>
+                    <div class="flex flex-col w-[98%] mt-[10%] mb-[5%] mx-[2%]">
+                        <div class="flex justify-around gap-2">
+                            <div class="form_control_container flex-1">
+                                <div class="form_control_container__time text-[12px] text-gray-400">Min</div>
+                                <input class="form_control_container__time__input w-full bg-transparent placeholder:text-gray-400 text-gray-700
+                                    text-sm border border-gray-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease focus:outline-none focus:border-gray-400
+                                    hover:border-gray-300 shadow-sm focus:shadow appearance-none
+                                    [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                       type="number" id="mobileFromInput" value="@Model.MinPrice" min="0" max="100" />
+                            </div>
+                            <div class="form_control_container flex-1">
+                                <div class="form_control_container__time text-[12px] text-gray-400">Max</div>
+                                <input class="form_control_container__time__input w-full bg-transparent placeholder:text-gray-400
+                                    text-gray-700 text-sm border border-gray-200 rounded-md pl-3 pr-20 py-2 transition duration-300 ease
+                                    focus:outline-none focus:border-gray-400 hover:border-gray-300 shadow-sm focus:shadow appearance-none
+                                    [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                       type="number" id="mobileToInput" value="@Model.MaxPrice" min="0" max="100" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sort By -->
+                    <div>
+                        <h4 class="text-md font-semibold text-gray-800 mb-2 mt-5">Sort By</h4>
+                        <select id="mobileSortBy" class="w-full p-2 border border-gray-300 rounded-md outline-none">
+                            <option selected value="priceasc">Price: Low to High</option>
+                            <option value="pricedesc">Price: High to Low</option>
+                            <option value="newest">Newest Arrivals</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="border-t border-gray-200 p-4">
+                    <div class="flex justify-between gap-2">
+                        <button class="btn-primary w-full" id="mobileApplyFilterBtn" onclick="mobileApplyFilter()">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                            </svg>Apply
+                        </button>
+                        <button class="btn-primary-outline w-full" id="mobileClearFilterBtn" onclick="location.reload()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
