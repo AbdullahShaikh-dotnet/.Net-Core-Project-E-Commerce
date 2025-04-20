@@ -18,6 +18,7 @@ namespace ECom.DataAccess.Repository
         public IOrderDetailRepository OrderDetails { get; private set; }
         public IOrderPaymentRepository OrderPayments { get; private set; }
         public IProductImageRepository ProductImages { get; private set; }
+        public IWishlist Wishlist { get; private set; }
 
         private readonly ICacheService _cacheService;
 
@@ -34,6 +35,7 @@ namespace ECom.DataAccess.Repository
             OrderHeaders = new OrderHeaderRepository(_db, _cacheService);
             OrderPayments = new OrderPaymentRepository(_db, _cacheService);
             ProductImages = new ProductImageRepository(_db, _cacheService);
+            Wishlist = new WishlistRepository(_db, _cacheService);
         }
 
         public void Save(bool resetCache = false)
