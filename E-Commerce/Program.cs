@@ -156,12 +156,13 @@ builder.Services.AddSession(option =>
 }); // Configured Session
 
 
-var redisOptions = await ConfigurationOptions.Parse(builder.Configuration["RedisConnection"]!).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
+//var redisOptions = await ConfigurationOptions.Parse(builder.Configuration["RedisConnection"]!).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
 
-builder.Services.AddStackExchangeRedisCache(option =>
-{
-    option.ConfigurationOptions = redisOptions;
-});
+//builder.Services.AddStackExchangeRedisCache(option =>
+//{
+//    option.ConfigurationOptions = redisOptions;
+//});
+
 
 
 
