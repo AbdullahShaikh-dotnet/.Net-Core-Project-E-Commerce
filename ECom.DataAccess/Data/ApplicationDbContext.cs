@@ -22,6 +22,7 @@ namespace E_Commerce.DataAccess.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderPayment> OrderPayments { get; set; }
         public DbSet<ProductImages> ProductImages { get; set; }
+        public DbSet<Wishlist> Wishlist { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
