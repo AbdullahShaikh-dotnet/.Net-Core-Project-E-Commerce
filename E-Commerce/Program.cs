@@ -18,6 +18,20 @@ using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+///<summary>
+/// Below chain builds config from multiple sources in this order:
+/// appsettings.json, User Secrets, Env Variables
+/// UserSecrets Path : C:\Users\[USerName]\AppData\Roaming\Microsoft\UserSecrets\51d0634e-c8b6-4026-94c1-5443f893aadd\Secret.json
+/// This GUID(51d0634e-c8b6-4026-94c1-5443f893aadd) Added in .csproj file <UserSecretsId>51d0634e-c8b6-4026-94c1-5443f893aadd</UserSecretsId>
+///</summary>
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddUserSecrets<Program>() // This line is critical
+    .AddEnvironmentVariables();
+
+
 // Server Loggging
 builder.Host.UseSerilog((context, services, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
@@ -136,8 +150,29 @@ builder.Services.AddSingleton<IMailJetService, MailJetService>();
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
-    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection")));
+//builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
+//    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection")));
+
+
+// Register Redis Connection if Failed Skip the Redis Connection
+builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
+{
+    try
+    {
+        var configKey = isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection";
+        var redisConnStr = builder.Configuration[configKey];
+        return ConnectionMultiplexer.Connect(redisConnStr);
+    }
+    catch
+    {
+        // Redis connection failed, skip registration
+        return null;
+    }
+});
+
+
+
+
 
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
