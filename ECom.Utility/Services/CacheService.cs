@@ -20,8 +20,8 @@ namespace ECom.Utility.Services
         public CacheService(IConnectionMultiplexer connectionMultiplexer, ILogger<CacheService> logger)
         {
             _connectionMultiplexer = connectionMultiplexer;
-            _redisDB = _connectionMultiplexer.GetDatabase();
-            _subscriber = _connectionMultiplexer.GetSubscriber();
+            _redisDB = _connectionMultiplexer?.GetDatabase();
+            _subscriber = _connectionMultiplexer?.GetSubscriber();
             _logger = logger;
         }
 
@@ -32,7 +32,10 @@ namespace ECom.Utility.Services
         {
             try
             {
-                return await _redisDB.StringGetAsync(key);
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+                return await _redisDB?.StringGetAsync(key);
             }
             catch (Exception ex)
             {
@@ -48,7 +51,10 @@ namespace ECom.Utility.Services
         {
             try
             {
-                return await _redisDB.StringSetAsync(key, value, expiry);
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+                return await _redisDB?.StringSetAsync(key, value, expiry);
             }
             catch (Exception ex)
             {
@@ -64,7 +70,10 @@ namespace ECom.Utility.Services
         {
             try
             {
-                var value = await _redisDB.StringGetAsync(key);
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+                var value = await _redisDB?.StringGetAsync(key);
                 return value.HasValue ? JsonSerializer.Deserialize<T>(value!, new JsonSerializerOptions
                 {
                     ReferenceHandler = ReferenceHandler.Preserve,
@@ -85,6 +94,10 @@ namespace ECom.Utility.Services
         {
             try
             {
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+
                 var serializedValue = JsonSerializer.Serialize(value,
                     new JsonSerializerOptions
                     {
@@ -92,7 +105,7 @@ namespace ECom.Utility.Services
                         WriteIndented = false
                     });
 
-                return await _redisDB.StringSetAsync(key, serializedValue, expiry);
+                return await _redisDB?.StringSetAsync(key, serializedValue, expiry);
             }
             catch (Exception ex)
             {
@@ -108,7 +121,10 @@ namespace ECom.Utility.Services
         {
             try
             {
-                return await _redisDB.KeyDeleteAsync(key);
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+                return await _redisDB?.KeyDeleteAsync(key);
             }
             catch (Exception ex)
             {
@@ -124,7 +140,10 @@ namespace ECom.Utility.Services
         {
             try
             {
-                return await _redisDB.KeyExistsAsync(key);
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
+
+                return await _redisDB?.KeyExistsAsync(key);
             }
             catch (Exception ex)
             {
@@ -156,12 +175,23 @@ namespace ECom.Utility.Services
         // ======================== RATE LIMITING ========================
         public async Task<bool> IsRateLimitedAsync(string key, int limit, TimeSpan duration)
         {
-            long count = await _redisDB.StringIncrementAsync(key);
+            try
+            {
+                if (_redisDB is null)
+                    throw new InvalidOperationException("_redisDB is not initialized.");
 
-            if (count == 1)
-                await _redisDB.KeyExpireAsync(key, duration);
 
-            return count > limit;
+                long count = await _redisDB?.StringIncrementAsync(key);
+
+                if (count == 1)
+                    await _redisDB?.KeyExpireAsync(key, duration);
+
+                return count > limit;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
