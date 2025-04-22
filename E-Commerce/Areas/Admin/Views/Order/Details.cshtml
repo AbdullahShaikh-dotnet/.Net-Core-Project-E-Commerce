@@ -27,28 +27,20 @@
 
 }
 
-@* <div class="container mx-auto mb-10">
-    <div class="flex flex-wrap items-center pt-6">
-        <div class="w-full md:w-10/12">
-            <h2 class="text-2xl font-bold text-indigo-700">@ViewData["Title"]</h2>
-        </div>
-        <div class="w-full md:w-2/12 text-right">
-            <a href="@Url.Action("Index")" class="text-gray-600 hover:text-indigo-700 font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-1">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
-                Back to List
-            </a>
-        </div>
-    </div>
-</div> *@
-
-
 <div class="max-w-6xl mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="mb-8">
+
+    <!-- Header Section -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">@ViewData["Title"]</h1>
+
+        <a asp-controller="Order" asp-action="Index" class="group flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            <span class="font-medium">Back to list</span>
+        </a>
     </div>
+
 
     <form method="post" id="OrderForm" class="space-y-6">
         <input type="hidden" asp-for="orderHeader.ID" />
