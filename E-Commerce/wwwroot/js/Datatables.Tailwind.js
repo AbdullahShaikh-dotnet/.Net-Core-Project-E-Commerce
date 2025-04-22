@@ -61,7 +61,7 @@
 		container: "dt-container dt-tailwindcss w-full overflow-x-auto",
 
 		search: {
-			input: "border border-gray-300 rounded-md px-4 py-2 w-full max-w-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-100 focus:border-blue-100 bg-white shadow-sm transition"
+			input: "border border-gray-300 rounded-md px-4 py-2 w-full max-w-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-100 focus:border-gray-100 bg-white shadow-sm transition"
 		},
 
 		length: {
@@ -78,7 +78,7 @@
 			button: "px-4 py-2 mx-0.5 rounded-md border border-gray-300 shadow-sm hover:bg-gray-100 hover:scale-2 transition",
 			first: "rounded-md",
 			last: "rounded-md",
-			enabled: "hover:text-gray-700 focus:ring-1 focus:ring-blue-50 transition",
+			enabled: "hover:text-gray-700 focus:ring-1 focus:ring-gray-50 transition",
 			notEnabled: "text-gray-200 cursor-not-allowed hover:bg-white"
 		},
 
@@ -108,9 +108,9 @@
 
 		filter: "flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 bg-gray-100 p-2 rounded-lg shadow-sm",
 
-		sortIcon: "text-gray-400 group-hover:text-blue-500 transition",
+		sortIcon: "text-gray-400 group-hover:text-gray-500 transition",
 
-		sortActive: "bg-blue-50 text-blue-700 font-semibold",
+		sortActive: "bg-gray-50 text-gray-700 font-semibold",
 
 		scrollBody: "overflow-auto max-h-96 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100",
 
