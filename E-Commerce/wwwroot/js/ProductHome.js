@@ -801,7 +801,7 @@ class ProductFilter {
 
         this.showButtonLoader(button);
 
-        const URL = `/Customer/Home/AddToWishlist?ProductID=${encodeURIComponent(productId)}`;
+        const URL = `/Customer/Wishlist/AddToWishlist?ProductID=${encodeURIComponent(productId)}`;
 
         fetch(URL, {
             method: 'GET',
