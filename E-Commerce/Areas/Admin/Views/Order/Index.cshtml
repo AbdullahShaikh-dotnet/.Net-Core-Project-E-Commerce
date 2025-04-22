@@ -1,207 +1,195 @@
 ﻿@{
-    ViewData["Title"] = "Orders";
+	ViewData["Title"] = "Orders";
 }
 
 @section Styles {
-    <link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
-    <link href="~/css/datatables.tailwind.css" rel="stylesheet" />
+	<link href="//cdn.datatables.net/v/bs5/jszip-3.10.1/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1/datatables.min.css" rel="stylesheet">
+	<link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
 
 @{
-    string? Status = Context.Request.Query["status"];
-    var pending = "";
-    var inprocess = "";
-    var completed = "";
-    var approved = "";
-    var cancelled = "";
-    var delayedApproved = "";
-    var all = "";
+	string? Status = Context.Request.Query["status"];
+	var pending = "";
+	var inprocess = "";
+	var completed = "";
+	var approved = "";
+	var cancelled = "";
+	var delayedApproved = "";
+	var all = "";
 
-    switch (Status)
-    {
-        case "pending":
-            pending = "active";
-            break;
-        case "inprocess":
-            inprocess = "active";
-            break;
-        case "completed":
-            completed = "active";
-            break;
-        case "approved":
-            approved = "active";
-            break;
-        case "cancelled":
-            cancelled = "active";
-            break;
-        case "delayedApproved":
-            delayedApproved = "active";
-            break;
-        default:
-            all = "active";
-            break;
-    }
+	switch (Status)
+	{
+		case "pending":
+			pending = "active";
+			break;
+		case "inprocess":
+			inprocess = "active";
+			break;
+		case "completed":
+			completed = "active";
+			break;
+		case "approved":
+			approved = "active";
+			break;
+		case "cancelled":
+			cancelled = "active";
+			break;
+		case "delayedApproved":
+			delayedApproved = "active";
+			break;
+		default:
+			all = "active";
+			break;
+	}
 }
 
-<script>
-        function getLoadingSpinner() {
-        return `<div class="flex items-center justify-center overflow-hidden">
-              <svg class="mr-3 -ml-1 size-5 animate-spin text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24"><circle class="opacity-10" cx="12" cy="12" r="10"
-              stroke="currentColor" stroke-width="4"></circle><path class="opacity-75"
-              fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0
-              12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path></svg></div>`;
-    }
-</script>
-
 <div class="min-h-screen bg-white py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header Section -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-800">Order List</h2>
-                <p class="text-gray-500 mt-1">Manage and track all customer orders</p>
-            </div>
-        </div>
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<!-- Header Section -->
+		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+			<div>
+				<h2 class="text-2xl font-bold text-gray-800">Order List</h2>
+				<p class="text-gray-500 mt-1">Manage and track all customer orders</p>
+			</div>
+		</div>
 
-        <!-- Filter Tabs -->
-        <div class="mb-6 border-b border-gray-200">
-            <nav class="-mb-px flex flex-wrap gap-2 sm:gap-0">
-                <a asp-action="Index" asp-controller="Order" asp-route-status="all"
-                   class="@(all == "active" ? "border-gray-800 text-gray-800" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    All Orders
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="inprocess"
-                   class="@(inprocess == "active" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    In Process
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="pending"
-                   class="@(pending == "active" ? "border-amber-500 text-amber-500" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    Payment Pending
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="completed"
-                   class="@(completed == "active" ? "border-green-600 text-green-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    Completed
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="approved"
-                   class="@(approved == "active" ? "border-purple-600 text-purple-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    Approved
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="cancelled"
-                   class="@(cancelled == "active" ? "border-red-600 text-red-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    Cancelled
-                </a>
-                <a asp-action="Index" asp-controller="Order" asp-route-status="delayedApproved"
-                   class="@(delayedApproved == "active" ? "border-slate-600 text-slate-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
-                    Approved for delay Payment
-                </a>
-            </nav>
-        </div>
+		<!-- Filter Tabs -->
+		<div class="mb-6 border-b border-gray-200">
+			<nav class="-mb-px flex flex-wrap gap-2 sm:gap-0">
+				<a asp-action="Index" asp-controller="Order" asp-route-status="all"
+				   class="@(all == "active" ? "border-gray-800 text-gray-800" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					All Orders
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="inprocess"
+				   class="@(inprocess == "active" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					In Process
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="pending"
+				   class="@(pending == "active" ? "border-amber-500 text-amber-500" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					Payment Pending
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="completed"
+				   class="@(completed == "active" ? "border-green-600 text-green-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					Completed
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="approved"
+				   class="@(approved == "active" ? "border-purple-600 text-purple-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					Approved
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="cancelled"
+				   class="@(cancelled == "active" ? "border-red-600 text-red-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					Cancelled
+				</a>
+				<a asp-action="Index" asp-controller="Order" asp-route-status="delayedApproved"
+				   class="@(delayedApproved == "active" ? "border-slate-600 text-slate-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+					Approved for delay Payment
+				</a>
+			</nav>
+		</div>
 
-        <!-- Status Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">In Process</h3>
-                        <p id="inProgressTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-amber-100 rounded-md p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-amber-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">Payment Pending</h3>
-                        <p id="paymentPendingTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">Completed</h3>
-                        <p id="completeTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-purple-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">Approved</h3>
-                        <p id="approvedTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
+		<!-- Status Summary Cards -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-blue-100 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" />
+						</svg>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">In Process</h3>
+						<p id="inProgressTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-amber-100 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-amber-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+						</svg>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">Payment Pending</h3>
+						<p id="paymentPendingTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">Completed</h3>
+						<p id="completeTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-purple-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+						</svg>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">Approved</h3>
+						<p id="approvedTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
 
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-red-100 rounded-md p-3">
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-red-100 rounded-md p-3">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                        </svg>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+						</svg>
 
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">Cancelled</h3>
-                        <p id="cancelledTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">Cancelled</h3>
+						<p id="cancelledTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
 
-            <div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-slate-100 rounded-md p-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-600">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75
+			<div class="bg-white border border-gray-200 rounded-lg p-2 shadow-sm">
+				<div class="flex items-center">
+					<div class="flex-shrink-0 bg-slate-100 rounded-md p-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-slate-600">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75
                             3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <h3 class="text-xs font-medium text-gray-500">Delayed Payment</h3>
-                        <p id="delayedPaymentTotalCount" class="text-lg font-semibold text-gray-900"></p>
-                    </div>
-                </div>
-            </div>
+						</svg>
+					</div>
+					<div class="ml-4">
+						<h3 class="text-xs font-medium text-gray-500">Delayed Payment</h3>
+						<p id="delayedPaymentTotalCount" class="text-lg font-semibold text-gray-900"></p>
+					</div>
+				</div>
+			</div>
 
-        </div>
+		</div>
 
-        <!-- DataTable -->
-        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-            <div class="p-3">
-                <table class="w-full border-collapse tblData"
-                       data-Root="/admin/order/"
-                       data-GetURL="getall"
-                       data-EditURL="Details?OrderId=">
-                </table>
-            </div>
-        </div>
-    </div>
+		<!-- DataTable -->
+		<div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+			<div class="p-3">
+				<table class="w-full border-collapse tblData"
+					   data-Root="/admin/order/"
+					   data-GetURL="getall"
+					   data-EditURL="Details?OrderId=">
+				</table>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
-    <script src="~/js/datatables.tailwind.js"></script>
-    <script src="~/js/Order.js"></script>
+	<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js" asp-append-version="true"></script>
+	<script src="~/js/datatables.tailwind.js"></script>
+	<script src="~/js/Order.js"></script>
 }
