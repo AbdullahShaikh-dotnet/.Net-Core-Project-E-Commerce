@@ -77,6 +77,12 @@ namespace E_Commerce.Areas.Admin.Controllers
                 case "approved":
                     orderHeaders = orderHeaders.Where(data => data.OrderStatus == SD.Status_Approved);
                     break;
+                case "cancelled":
+                    orderHeaders = orderHeaders.Where(data => data.OrderStatus == SD.Status_Cancelled);
+                    break;
+                case "delayedApproved":
+                    orderHeaders = orderHeaders.Where(data => data.PaymentStatus == SD.Payment_Status_Delayed_Payment);
+                    break;
                 default:
                     break;
             }
@@ -198,5 +204,36 @@ namespace E_Commerce.Areas.Admin.Controllers
             return RedirectToAction(nameof(Details), new { OrderId = orderVM.orderHeader.ID });
         }
 
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetOrderCategoryCount()
+        {
+            var inProgressTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.OrderStatus == SD.Status_In_Process))
+                .Count();
+
+            var paymentPendingTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.PaymentStatus == SD.Payment_Status_Pending))
+                .Count();
+
+            var completeTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.OrderStatus == SD.Status_Shipped))
+                .Count();
+
+            var approvedTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.OrderStatus == SD.Status_Approved))
+                .Count();
+
+            var cancelledTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.OrderStatus == SD.Status_Cancelled))
+                .Count();
+
+            var delayedPaymentTotalCount = (await _UnitOfWork.OrderHeaders
+                .GetAllAsync(data => data.PaymentStatus == SD.Payment_Status_Delayed_Payment))
+                .Count();
+
+            return Json(new { inProgressTotalCount, paymentPendingTotalCount, completeTotalCount, approvedTotalCount, cancelledTotalCount, delayedPaymentTotalCount });
+        }
     }
 }
