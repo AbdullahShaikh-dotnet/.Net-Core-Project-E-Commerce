@@ -30,6 +30,11 @@
         public const string ShoppingCartSessionKey = "ShoppingCartSession";
 
 
+        /// <summary>
+        /// Wishlist Session Key 
+        /// </summary>
+        public const string WishlistSessionKey = "WishlistSessionKey";
+
 
         /// <summary>
         /// Order Status Pending 
