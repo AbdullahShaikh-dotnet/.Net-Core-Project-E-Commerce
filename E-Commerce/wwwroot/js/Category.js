@@ -84,7 +84,6 @@ const DeleteConfirmation = function (url) {
     }).then((result) => {
         if (!result.isConfirmed) return;
 
-        debugger;
         fetch(url, {
             method: "GET",
         }).then(response => response.json())
