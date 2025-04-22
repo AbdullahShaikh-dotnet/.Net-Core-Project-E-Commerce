@@ -165,29 +165,6 @@ namespace E_Commerce.Areas.Customer.Controllers
             return Json(new { success = true, message = "Product added to cart successfully!" });
         }
 
-
-        [Authorize]
-        public IActionResult AddToWishlist(int ProductID)
-        {
-            var userId = _userService.GetUserId();
-            var WishlistDB = _unitOfWork.Wishlist.Get(data => data.ApplicationUserID == userId && data.ProductID == ProductID && !data.IsDeleted);
-
-            if(WishlistDB is not null)
-                return Json(new { success = true, message = "Product is already in the wishlist." });
-
-            Wishlist WishlistToADD = new Wishlist
-            {
-                ProductID = ProductID,
-                ApplicationUserID = userId
-            };
-
-            _unitOfWork.Wishlist.Add(WishlistToADD);
-            _unitOfWork.Save();
-
-            return Json(new { success = true, message = "Product added to wishlist!" });
-        }
-
-
         [HttpGet]
         public IActionResult GetFiltersData()
         {
