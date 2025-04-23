@@ -7,41 +7,8 @@
 	<link href="~/css/datatables.tailwind.css" rel="stylesheet" />
 }
 
-@{
-	string? Status = Context.Request.Query["status"];
-	var pending = "";
-	var inprocess = "";
-	var completed = "";
-	var approved = "";
-	var cancelled = "";
-	var delayedApproved = "";
-	var all = "";
 
-	switch (Status)
-	{
-		case "pending":
-			pending = "active";
-			break;
-		case "inprocess":
-			inprocess = "active";
-			break;
-		case "completed":
-			completed = "active";
-			break;
-		case "approved":
-			approved = "active";
-			break;
-		case "cancelled":
-			cancelled = "active";
-			break;
-		case "delayedApproved":
-			delayedApproved = "active";
-			break;
-		default:
-			all = "active";
-			break;
-	}
-}
+
 
 <div class="min-h-screen bg-white py-8">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,32 +23,32 @@
 		<!-- Filter Tabs -->
 		<div class="mb-6 border-b border-gray-200">
 			<nav class="-mb-px flex flex-wrap gap-2 sm:gap-0">
-				<a asp-action="Index" asp-controller="Order" asp-route-status="all"
-				   class="@(all == "active" ? "border-gray-800 text-gray-800" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#all" id="filter-all" data-activecolor="border-gray-800 text-gray-800"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					All Orders
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="inprocess"
-				   class="@(inprocess == "active" ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#inprocess" id="filter-inprocess" data-activecolor="border-blue-600 text-blue-600"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					In Process
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="pending"
-				   class="@(pending == "active" ? "border-amber-500 text-amber-500" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#pending" id="filter-pending" data-activecolor="border-amber-500 text-amber-500"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					Payment Pending
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="completed"
-				   class="@(completed == "active" ? "border-green-600 text-green-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#completed" id="filter-completed" data-activecolor="border-green-600 text-green-600"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					Completed
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="approved"
-				   class="@(approved == "active" ? "border-purple-600 text-purple-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#approved" id="filter-approved" data-activecolor="border-purple-600 text-purple-600"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					Approved
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="cancelled"
-				   class="@(cancelled == "active" ? "border-red-600 text-red-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#cancelled" id="filter-cancelled" data-activecolor="border-red-600 text-red-600"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					Cancelled
 				</a>
-				<a asp-action="Index" asp-controller="Order" asp-route-status="delayedApproved"
-				   class="@(delayedApproved == "active" ? "border-slate-600 text-slate-600" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300") whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
+				<a href="#delayedapproved" id="filter-delayedapproved" data-activecolor="border-slate-600 text-slate-600"
+				   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tabLinks whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm transition-colors">
 					Approved for delay Payment
 				</a>
 			</nav>
@@ -98,7 +65,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">In Process</h3>
-						<p id="inProgressTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="inProgressTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
@@ -111,7 +78,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">Payment Pending</h3>
-						<p id="paymentPendingTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="paymentPendingTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
@@ -124,7 +91,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">Completed</h3>
-						<p id="completeTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="completeTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
@@ -137,7 +104,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">Approved</h3>
-						<p id="approvedTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="approvedTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
@@ -153,7 +120,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">Cancelled</h3>
-						<p id="cancelledTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="cancelledTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
@@ -168,7 +135,7 @@
 					</div>
 					<div class="ml-4">
 						<h3 class="text-xs font-medium text-gray-500">Delayed Payment</h3>
-						<p id="delayedPaymentTotalCount" class="text-lg font-semibold text-gray-900"></p>
+						<p id="delayedPaymentTotalCount" class="text-lg font-semibold text-gray-900 countCards"></p>
 					</div>
 				</div>
 			</div>
