@@ -91,7 +91,7 @@
         /// <summary>
         /// Maximum Count of API Request Per Second
         /// </summary>
-        public const int RATE_LIMITING_COUNT = 5;
+        public const int RATE_LIMITING_COUNT = 50;
 
         /// <summary>
         /// Notification Key for redis Pub/Sub
