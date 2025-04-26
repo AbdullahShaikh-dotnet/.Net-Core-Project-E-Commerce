@@ -59,22 +59,32 @@
                     <div class="border border-gray-200 rounded-md p-4 bg-gray-50">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
 
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-1">
-                                <div class="flex items-center justify-center w-full">
-                                    <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-md cursor-pointer bg-white hover:bg-gray-50 transition-colors">
-                                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                            <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                            </svg>
-                                            <p class="mb-1 text-sm text-gray-500">Click to upload or drag and drop</p>
-                                            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                                        </div>
-                                        <input asp-for="product.ProductImages" type="file" multiple name="files" accept="image/*" class="hidden" />
-                                    </label>
+                        <!-- File upload component - can be repeated multiple times on a page -->
+                        <div class="file-upload-container" data-max-size="10" data-allowed-extensions="jpg,jpeg,png,gif,webp" data-max-files="5">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-center w-full">
+                                        <label class="file-upload-label flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-md cursor-pointer bg-white hover:bg-gray-50 transition-colors">
+                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                                </svg>
+                                                <p class="mb-1 text-sm text-gray-500">Click to upload or drag and drop</p>
+                                                <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                            </div>
+                                            <input class="file-upload-input hidden" type="file" multiple name="files" accept="image/*" />
+                                        </label>
+                                    </div>
+
+                                    <!-- Selected Files Container -->
+                                    <div class="selected-files-container mt-4 space-y-2"></div>
+
+                                    <!-- Error Container -->
+                                    <div class="error-container mt-2"></div>
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- Image Preview -->
                         @if (Model.product.ProductImages?.Count() is not null && Model.product.ProductImages.Count > 0)
@@ -177,7 +187,7 @@
                             }
                             else
                             {
-                                <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 
+                                <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-700
                                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                                     Update
                                 </button>
@@ -212,13 +222,13 @@
             }
         });
 
-        // Preview uploaded images
-        const fileInput = document.querySelector('input[type="file"]');
-        fileInput.addEventListener('change', function() {
-            // You could add preview functionality here if needed
-        });
+        // INITIALIZE FILE UPLOADS
+        window.fileUploadRegistry = new FileUploadRegistry();
+
     });
 </script>
+
+<script src="~/js/fileUpload.js"></script>
 
 @section Scripts {
     @{
