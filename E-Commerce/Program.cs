@@ -15,6 +15,7 @@ using QuestPDF.Infrastructure;
 using Serilog;
 using StackExchange.Redis;
 using Azure.Identity;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,6 @@ builder.Host.UseSerilog((context, services, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
 
-
 // Mis-Configuration throws Error on Buid Time Insted of Run Time
 builder.Host.UseDefaultServiceProvider((context, option) =>
 {
@@ -46,36 +46,38 @@ builder.Host.UseDefaultServiceProvider((context, option) =>
 });
 
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
-// Connection String
 var isRunningInDockerContainer = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
-string pcName = Environment.MachineName;
-string ConnectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
-string? ConnectionString = builder.Configuration.GetConnectionString(ConnectionStringName);
 
 
-// Docker Connection String
+// Now: Read connection string based on environment
+string connectionString;
+
 if (isRunningInDockerContainer)
 {
-    ConnectionString = builder.Configuration["ConnectionStrings:DockerConnection"] =
-        $"Server={Environment.GetEnvironmentVariable("DB_HOST")},{Environment.GetEnvironmentVariable("DB_PORT")};" + // Fix here
-        $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" + // Moved DB_PORT to Server
-        $"User Id=sa;" +
-        $"Password={Environment.GetEnvironmentVariable("DB_SA_PASSWORD")};" +
-        "TrustServerCertificate=True;";
+    // Build dynamic Docker connection string
+    var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+    var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+    var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+    var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+
+    connectionString = $"Server={dbHost},{dbPort};Database={dbName};User Id=sa;Password={dbPassword};TrustServerCertificate=True;";
+}
+else
+{
+    // Local Development
+    string pcName = Environment.MachineName;
+    string connectionStringName = pcName == "MERA-PC" ? $"{pcName}Connection" : "DefaultConnection";
+
+    connectionString = builder.Configuration.GetConnectionString(connectionStringName);
 }
 
 
-
-// SQL Connection
-builder.Services.AddDbContext<ApplicationDbContext>
-    (options => options.UseSqlServer(ConnectionString));
-
-
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString)
+);
 
 
 // Identity Configuration
@@ -88,8 +90,6 @@ builder.Services.ConfigureApplicationCookie(option =>
     option.LogoutPath = $"/Identity/Account/Logout";
     option.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
-
-
 
 
 // Facebook External Login
@@ -150,9 +150,6 @@ builder.Services.AddSingleton<IMailJetService, MailJetService>();
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
-//builder.Services.AddSingleton<IConnectionMultiplexer>(data =>
-//    ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>(isRunningInDockerContainer ? "RedisDockerConnection" : "RedisConnection")));
-
 
 // Register Redis Connection if Failed Skip the Redis Connection
 builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
@@ -171,16 +168,8 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(serviceProvider =>
 });
 
 
-
-
-
 builder.Services.AddSingleton<ICacheService, CacheService>();
 builder.Services.AddSingleton<IWebSocketManager, ECom.Utility.Services.WebSocketManager>();
-
-
-
-
-
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddRazorPages();
 builder.Services.AddSession(option =>
@@ -191,18 +180,10 @@ builder.Services.AddSession(option =>
 }); // Configured Session
 
 
-//var redisOptions = await ConfigurationOptions.Parse(builder.Configuration["RedisConnection"]!).ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
-
-//builder.Services.AddStackExchangeRedisCache(option =>
-//{
-//    option.ConfigurationOptions = redisOptions;
-//});
-
-
-
-
 
 var app = builder.Build();
+ApplyMigrationsAndSeed();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -211,7 +192,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 
 
 // Websocket Integration
@@ -234,30 +214,29 @@ using (var scope = app.Services.CreateScope())
 };
 
 
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession(); // Added Session
-InIt_Database(); // Initialize Database
+//InIt_Database(); // Initialize Database
 app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
-
 app.Run();
 
 
-
-void InIt_Database()
+void ApplyMigrationsAndSeed()
 {
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-        dbInitializer.Initialize();
-    }
+    using var scope = app.Services.CreateScope();
+    // For Docker Only
+    //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    //dbContext.Database.Migrate();
+
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+    dbInitializer.Initialize();
 }
