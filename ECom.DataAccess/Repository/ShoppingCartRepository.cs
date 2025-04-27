@@ -17,5 +17,10 @@ namespace ECom.DataAccess.Repository
         {
             _db.ShoppingCarts.Update(ShoppingCartObj);
         }
+
+        public void UpdateBulk(IEnumerable<ShoppingCart> ShoppingCartObjList)
+        {
+            _db.ShoppingCarts.UpdateRange(ShoppingCartObjList);
+        }
     }
 }

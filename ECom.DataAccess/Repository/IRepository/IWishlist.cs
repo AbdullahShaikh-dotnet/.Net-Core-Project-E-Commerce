@@ -5,5 +5,7 @@ namespace ECom.DataAccess.Repository.IRepository
     public interface IWishlist : IRepository<Wishlist>
     {
         void Update(Wishlist WishlistObj);
+
+        void UpdateBulk(IEnumerable<Wishlist> WishlistObjList);
     }
 }

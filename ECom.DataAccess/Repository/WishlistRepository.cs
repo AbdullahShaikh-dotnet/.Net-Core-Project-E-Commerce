@@ -17,5 +17,11 @@ namespace ECom.DataAccess.Repository
         {
             _db.Wishlist.Update(WishlistObj);
         }
+
+        public void UpdateBulk(IEnumerable<Wishlist> WishlistObjList)
+        {
+            _db.Wishlist.UpdateRange(WishlistObjList);
+        }
+
     }
 }

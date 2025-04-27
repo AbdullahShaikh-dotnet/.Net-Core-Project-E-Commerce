@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECom.DataAccess.Repository.IRepository
 {
@@ -10,5 +11,8 @@ namespace ECom.DataAccess.Repository.IRepository
         void Add(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
+        Task AddAsync(T entity);
+        void BulkAdd(IEnumerable<T> entities);
+        Task BulkAddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
     }
 }

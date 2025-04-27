@@ -33,6 +33,21 @@ namespace ECom.DataAccess.Repository
             dbset.Add(entity);
         }
 
+        public async Task AddAsync(T entity)
+        {
+           await dbset.AddAsync(entity);
+        }
+
+        public void BulkAdd(IEnumerable<T> entities)
+        {
+            dbset.AddRange(entities.ToList());
+        }
+
+        public async Task BulkAddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
+        {
+            await dbset.AddRangeAsync(entities.ToList(), cancellationToken);
+        }
+
         public T Get(Expression<Func<T, bool>> filter, string? includePropertiesList = null, bool tracked = false)
         {
             IQueryable<T> query = tracked ? dbset : dbset.AsNoTracking();
@@ -51,7 +66,7 @@ namespace ECom.DataAccess.Repository
         {
             var entityName = typeof(T).Name;
 
-            // Rate Limiter for Particular Entity 5 Request Per Second for a Particular User 
+            // Rate Limiter for Particular Entity 50 Request Per Second for a Particular User 
             string key = $"rate_limit:{_userService.GetUserId()}{entityName}";
             if (await _cacheService.IsRateLimitedAsync(key, SD.RATE_LIMITING_COUNT, TimeSpan.FromSeconds(1)))
                 throw new Exception("Too many requests. Please try again later.");
@@ -88,12 +103,11 @@ namespace ECom.DataAccess.Repository
             return query.ToList();
         }
 
-
         public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includePropertiesList = null, bool applyCaching = false)
         {
             var entityName = typeof(T).Name;
 
-            // Rate Limiter for Particular Entity 5 Request Per Second for a Particular User 
+            // Rate Limiter for Particular Entity 50 Request Per Second for a Particular User 
             string key = $"rate_limit:{_userService.GetUserId()}{entityName}";
             if (_cacheService.IsRateLimitedAsync(key, SD.RATE_LIMITING_COUNT, TimeSpan.FromSeconds(1)).GetAwaiter().GetResult())
                 throw new Exception("Too many requests. Please try again later.");

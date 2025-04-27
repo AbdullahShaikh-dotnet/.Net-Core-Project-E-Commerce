@@ -2,6 +2,7 @@
 using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
 using ECom.Utility.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECom.DataAccess.Repository
 {
@@ -30,8 +31,11 @@ namespace ECom.DataAccess.Repository
             _product.Price100 = ProductObject.Price100;
             _product.Description = ProductObject.Description;
             _product.ProductImages = ProductObject.ProductImages;
-            //if (ProductObject.ImageURL != null)
-            //    _product.ImageURL = ProductObject.ImageURL;
+        }
+
+        public void UpdateBulk(IEnumerable<Product> productObjectList)
+        {
+                _db.Products.UpdateRange(productObjectList);
         }
     }
 }

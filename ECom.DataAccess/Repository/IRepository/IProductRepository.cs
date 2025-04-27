@@ -5,5 +5,7 @@ namespace ECom.DataAccess.Repository.IRepository
     public interface IProductRepository : IRepository<Product>
     {
         void Update(Product ProductObject);
+
+        void UpdateBulk(IEnumerable<Product> productObjectList);
     }
 }
