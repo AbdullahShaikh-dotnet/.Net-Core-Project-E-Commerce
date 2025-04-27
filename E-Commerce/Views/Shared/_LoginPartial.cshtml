@@ -31,7 +31,8 @@
                 </svg>
                 <!-- Wishlist count badge -->
                 <div id="wishlist-count-LoginPartial" class="absolute -top-3 left-4 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full w-5 h-5 shadow">
-                    @await Component.InvokeAsync("ShoppingCartCount")
+                    @* @await Component.InvokeAsync("ShoppingCartCount") *@
+                    @await Component.InvokeAsync("CountWidget", new { type = "wishlist" })
                 </div>
             </a>
         </li>
@@ -44,7 +45,7 @@
                 </svg>
                 <!-- Cart count badge -->
                 <div id="cart-count-LoginPartial" class="absolute -top-3 left-4 flex items-center justify-center text-xs font-bold text-white bg-red-500 rounded-full w-5 h-5 shadow">
-                    @await Component.InvokeAsync("ShoppingCartCount")
+                    @await Component.InvokeAsync("CountWidget", new { type = "cart" })
                 </div>
             </a>
         </li>
