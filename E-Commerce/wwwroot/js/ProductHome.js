@@ -657,7 +657,8 @@ class ProductFilter {
             filterPanel: document.getElementById('filterPanel'),
             mobileApplyBtn: document.getElementById('mobileApplyBtn'),
             mobileCloseBtn: document.getElementById('mobileCloseBtn'),
-            cartCountElement: document.getElementById('cart-count-LoginPartial')
+            cartCountElement: document.getElementById('cart-count-LoginPartial'),
+            wishlistCountElement: document.getElementById('wishlist-count-LoginPartial')
         };
 
         this.rangeSlider = new RangeSlider({
@@ -763,7 +764,7 @@ class ProductFilter {
             return;
         }
 
-        fetch('/Customer/Home/ReloadCartCount', {
+        fetch('/Customer/Home/ReloadCartCount?type=cart', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             cache: 'no-store' // Prevent caching
@@ -781,6 +782,35 @@ class ProductFilter {
                 console.error('Error reloading cart count:', error);
             });
     }
+
+
+    reloadWishlistCount() {
+        const { wishlistCountElement } = this.elements;
+
+        if (!wishlistCountElement) {
+            console.warn('Cart count element not found');
+            return;
+        }
+
+        fetch('/Customer/Wishlist/ReloadWishlistCount?type=wishlist', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store' // Prevent caching
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                wishlistCountElement.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error reloading wishlist count:', error);
+            });
+    }
+
 
     addToWishList(event) {
         event.preventDefault();
@@ -816,6 +846,7 @@ class ProductFilter {
             .then(data => {
                 if (data.success) {
                     toast.success('Item added to wishlist', 5);
+                    this.reloadWishlistCount();
                 } else {
                     console.error('Failed to add product to wishlist:', data.message || 'Unknown error');
                     toast.error('Failed to add item to wishlist', 5);
