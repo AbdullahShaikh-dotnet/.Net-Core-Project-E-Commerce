@@ -1,7 +1,9 @@
 ﻿using ECom.DataAccess.Repository.IRepository;
 using ECom.Models;
+using ECom.Models.ViewModels;
 using ECom.Utility;
 using ECom.Utility.Interface;
+using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,6 +69,7 @@ namespace E_Commerce.Areas.Customer.Controllers
         public IActionResult RemoveFromWishlist(int itemId)
         {
             var wishlistItem = _unitOfWork.Wishlist.Get(w => w.ID == itemId);
+            string userId = _userService.GetUserId();
 
             if (wishlistItem == null)
             {
@@ -76,6 +79,8 @@ namespace E_Commerce.Areas.Customer.Controllers
 
             MarkAsDeleted(wishlistItem);
             _unitOfWork.Save();
+
+            UpdateWishlistSession(userId);
 
             TempData["success"] = "Item Removed";
             return RedirectToAction(nameof(Index));
@@ -111,12 +116,58 @@ namespace E_Commerce.Areas.Customer.Controllers
 
             MarkAsDeleted(wishlistItem);
             _unitOfWork.Save();
-
+            UpdateWishlistSession(userId);
             UpdateCartSession(userId);
 
             TempData["success"] = "Item moved to cart";
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult ReloadWishlistCount(string type)
+        {
+            return ReloadCount(type);
+        }
+
+        public ViewComponentResult ReloadCount(string type)
+        {
+            return ViewComponent("CountWidget", new { type });
+        }
+
+        public IActionResult AddAllToCart()
+        {
+            var Userid = _userService.GetUserId();
+            var wishlistDB = _unitOfWork.Wishlist.GetAll(data => data.ApplicationUserID == Userid && !data.IsDeleted).ToList();
+
+            foreach (var wishlistItem in wishlistDB)
+            {
+                var ShoppingListDBUpdate = _unitOfWork.ShoppingCarts
+                    .Get(data => data.ProductID == wishlistItem.ProductID && data.ApplicationUserID == Userid && !data.IsDeleted);
+
+                if (ShoppingListDBUpdate is null)
+                {
+                    _unitOfWork.ShoppingCarts.Add(new ShoppingCart
+                    {
+                        ApplicationUserID = Userid,
+                        ProductID = wishlistItem.ProductID,
+                        Count = 1,
+                        CreateDate = DateTime.Now
+                    });
+                }
+
+                wishlistItem.IsDeleted = true;
+                wishlistItem.DeletedAt = DateTime.Now;
+
+                _unitOfWork.Wishlist.Update(wishlistItem);
+            }
+            _unitOfWork.Save();
+
+            UpdateWishlistSession(Userid);
+            UpdateCartSession(Userid);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
 
         #region Helpers
 
@@ -130,13 +181,13 @@ namespace E_Commerce.Areas.Customer.Controllers
         private void UpdateWishlistSession(string userId)
         {
             int count = _unitOfWork.Wishlist.GetAll(w => w.ApplicationUserID == userId && !w.IsDeleted).Count();
-            HttpContext.Session.SetInt32(SD.WishlistSessionKey, count);
+            _userService.SetWishlistCount(count);
         }
 
         private void UpdateCartSession(string userId)
         {
             int count = _unitOfWork.ShoppingCarts.GetAll(c => c.ApplicationUserID == userId && !c.IsDeleted).Count();
-            HttpContext.Session.SetInt32(SD.ShoppingCartSessionKey, count);
+            _userService.SetCartCount(count);
         }
 
         #endregion
