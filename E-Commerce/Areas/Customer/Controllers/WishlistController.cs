@@ -135,37 +135,77 @@ namespace E_Commerce.Areas.Customer.Controllers
 
         public IActionResult AddAllToCart()
         {
-            var Userid = _userService.GetUserId();
-            var wishlistDB = _unitOfWork.Wishlist.GetAll(data => data.ApplicationUserID == Userid && !data.IsDeleted).ToList();
+            var userId = _userService.GetUserId();
 
-            foreach (var wishlistItem in wishlistDB)
+            var wishlistItems = _unitOfWork.Wishlist
+                .GetAll(x => x.ApplicationUserID == userId && !x.IsDeleted)
+                .ToList();
+
+            if (!wishlistItems.Any())
             {
-                var ShoppingListDBUpdate = _unitOfWork.ShoppingCarts
-                    .Get(data => data.ProductID == wishlistItem.ProductID && data.ApplicationUserID == Userid && !data.IsDeleted);
+                TempData["info"] = "No items in wishlist to move.";
+                return RedirectToAction(nameof(Index));
+            }
 
-                if (ShoppingListDBUpdate is null)
+            var productIdsInWishlist = wishlistItems.Select(x => x.ProductID).ToList();
+
+            // Get existing cart items as a dictionary for quick lookup
+            var existingCartItems = _unitOfWork.ShoppingCarts
+                .GetAll(x => productIdsInWishlist.Contains(x.ProductID)
+                             && x.ApplicationUserID == userId
+                             && !x.IsDeleted)
+                .ToDictionary(x => x.ProductID, x => x);
+
+            var newShoppingCarts = new List<ShoppingCart>();
+            var cartsToUpdate = new List<ShoppingCart>();
+
+            foreach (var wishlistItem in wishlistItems)
+            {
+                if (existingCartItems.TryGetValue(wishlistItem.ProductID, out var existingCartItem))
                 {
-                    _unitOfWork.ShoppingCarts.Add(new ShoppingCart
+                    // Product exists in cart - increment count
+                    existingCartItem.Count += 1;
+                    cartsToUpdate.Add(existingCartItem);
+                }
+                else
+                {
+                    // Product doesn't exist in cart - create new
+                    newShoppingCarts.Add(new ShoppingCart
                     {
-                        ApplicationUserID = Userid,
+                        ApplicationUserID = userId,
                         ProductID = wishlistItem.ProductID,
                         Count = 1,
                         CreateDate = DateTime.Now
                     });
                 }
 
+                // Mark wishlist item for deletion
                 wishlistItem.IsDeleted = true;
                 wishlistItem.DeletedAt = DateTime.Now;
-
-                _unitOfWork.Wishlist.Update(wishlistItem);
             }
+
+            _unitOfWork.Wishlist.UpdateBulk(wishlistItems);
+
+            if (newShoppingCarts.Any())
+            {
+                _unitOfWork.ShoppingCarts.BulkAdd(newShoppingCarts);
+            }
+
+            if (cartsToUpdate.Any())
+            {
+                _unitOfWork.ShoppingCarts.UpdateBulk(cartsToUpdate);
+            }
+
             _unitOfWork.Save();
 
-            UpdateWishlistSession(Userid);
-            UpdateCartSession(Userid);
+            UpdateWishlistSession(userId);
+            UpdateCartSession(userId);
 
+            TempData["success"] = "Items moved to cart successfully.";
             return RedirectToAction(nameof(Index));
         }
+
+
 
 
 
