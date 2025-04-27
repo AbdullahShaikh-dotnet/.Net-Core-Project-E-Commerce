@@ -8,16 +8,24 @@
 @using AspNetCore.ReCaptcha
 
 
-<div class="flex items-center justify-center bg-white p-4">
+<div class="bg-white flex flex-col items-center justify-center p-4 sm:p-6">
     <div class="w-full max-w-md">
         <div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
-            <!-- Header -->
-            <div class="bg-gray-800 p-4 text-white text-center">
-                <h1 class="text-xl font-medium">Sign In</h1>
-            </div>
 
             <!-- Form -->
-            <div class="p-6">
+            <div class="p-6 sm:p-8">
+
+                <!-- Header -->
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-10 w-10 text-gray-600" width="24" height="24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-900">@ViewData["Title"]</h1>
+                </div>
+
+
                 <form id="account" method="post" class="space-y-5">
                     <recaptcha />
                     <div asp-validation-summary="ModelOnly" class="text-red-500 bg-red-50 p-2 rounded-md text-sm mb-4" role="alert"></div>
@@ -89,18 +97,19 @@
                 <!-- External Logins -->
                 @if ((Model.ExternalLogins?.Count ?? 0) > 0)
                 {
-                    <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="mt-4 pt-2">
                         <div class="text-center text-sm text-gray-500 mb-4">
                             Or sign in with
                         </div>
 
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-3">
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="flex justify-between gap-2">
                             @foreach (var provider in Model.ExternalLogins!)
                             {
                                 @if (provider.Name == "Google")
                                 {
                                     <button type="submit" name="provider" value="@provider.Name"
-                                            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                            class="w-full flex items-center justify-center px-4 py-2 rounded-md 
+                                            text-xs font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
                                         <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
                                             <path fill="#EA4335" d="M5.26620003,9.76452941 C6.19878754,6.93863203 8.85444915,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.50909091 16.4181818,6.49090909 L19.9090909,3 C17.7818182,1.14545455 15.0545455,0 12,0 C7.27006974,0 3.1977497,2.69829785 1.23999023,6.65002441 L5.26620003,9.76452941 Z" />
                                             <path fill="#34A853" d="M16.0407269,18.0125889 C14.9509167,18.7163016 13.5660892,19.0909091 12,19.0909091 C8.86648613,19.0909091 6.21911939,17.076871 5.27698177,14.2678769 L1.23746264,17.3349879 C3.19279051,21.2936293 7.26500293,24 12,24 C14.9328362,24 17.7353462,22.9573905 19.834192,20.9995801 L16.0407269,18.0125889 Z" />
@@ -113,7 +122,8 @@
                                 else if (provider.Name == "Facebook")
                                 {
                                     <button type="submit" name="provider" value="@provider.Name"
-                                            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-[#1877F2] hover:bg-[#166FE5]">
+                                            class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-xs
+                                            font-medium text-white bg-[#1877F2] hover:bg-[#166FE5]">
                                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z" />
                                         </svg>
@@ -147,12 +157,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
-</style>

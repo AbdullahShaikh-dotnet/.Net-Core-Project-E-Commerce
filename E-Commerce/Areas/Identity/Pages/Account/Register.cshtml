@@ -2,228 +2,232 @@
 @using ECom.Utility
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
-    bool isAdmin = User.IsInRole(SD.Role_Admin);
+	ViewData["Title"] = "Register";
+	bool isAdmin = User.IsInRole(SD.Role_Admin);
 }
 @using AspNetCore.ReCaptcha
 
 <div class="flex items-center justify-center bg-white p-4">
-    <div class="w-full max-w-2xl">
-        <div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
-            <!-- Header -->
-            <div class="bg-gray-800 p-4 text-white text-center">
-                <h1 class="text-xl font-medium">@ViewData["Title"] @(isAdmin ? "Admin Portal" : "")</h1>
-            </div>
+	<div class="w-full max-w-2xl">
+		<div class="bg-white border border-gray-200 rounded-md shadow-sm overflow-hidden">
 
-            <!-- Form -->
-            <div class="p-6">
-                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-5">
-                    <recaptcha />
-                    <div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded-md" role="alert"></div>
+			<!-- Form -->
+			<div class="p-6 sm:p-8">
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Email -->
-                        <div>
-                            <label asp-for="Input.Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input asp-for="Input.Email"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="name@example.com" />
-                            <span asp-validation-for="Input.Email" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+				<!-- Header -->
+				<div class="text-center">
+					<h1 class="text-2xl font-bold text-gray-900">@ViewData["Title"] @(isAdmin ? "Admin Portal" : "")</h1>
+				</div>
 
-                        <!-- Name -->
-                        <div>
-                            <label asp-for="Input.Name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                            <input asp-for="Input.Name"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Your Name" />
-                            <span asp-validation-for="Input.Name" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
 
-                        <!-- Password -->
-                        <div>
-                            <label asp-for="Input.Password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                            <input asp-for="Input.Password" type="password"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Password" />
-                            <span asp-validation-for="Input.Password" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
 
-                        <!-- Confirm Password -->
-                        <div>
-                            <label asp-for="Input.ConfirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                            <input asp-for="Input.ConfirmPassword" type="password"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Confirm Password" />
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+				<form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-5">
+					<recaptcha />
+					<div asp-validation-summary="ModelOnly" class="text-red-500 text-sm mb-4 bg-red-50 p-2 rounded-md" role="alert"></div>
 
-                        <!-- Street Address -->
-                        <div>
-                            <label asp-for="Input.StreetAddress" class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
-                            <input asp-for="Input.StreetAddress"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Address" />
-                            <span asp-validation-for="Input.StreetAddress" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<!-- Email -->
+						<div>
+							<label asp-for="Input.Email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+							<input asp-for="Input.Email"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="name@example.com" />
+							<span asp-validation-for="Input.Email" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                        <!-- City -->
-                        <div>
-                            <label asp-for="Input.City" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                            <input asp-for="Input.City"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="City" />
-                            <span asp-validation-for="Input.City" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+						<!-- Name -->
+						<div>
+							<label asp-for="Input.Name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+							<input asp-for="Input.Name"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Your Name" />
+							<span asp-validation-for="Input.Name" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                        <!-- State -->
-                        <div>
-                            <label asp-for="Input.State" class="block text-sm font-medium text-gray-700 mb-1">State</label>
-                            <input asp-for="Input.State"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="State" />
-                            <span asp-validation-for="Input.State" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+						<!-- Password -->
+						<div>
+							<label asp-for="Input.Password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+							<input asp-for="Input.Password" type="password"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Password" />
+							<span asp-validation-for="Input.Password" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                        <!-- Postal Code -->
-                        <div>
-                            <label asp-for="Input.PostalCode" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
-                            <input asp-for="Input.PostalCode"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Postal Code" />
-                            <span asp-validation-for="Input.PostalCode" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
+						<!-- Confirm Password -->
+						<div>
+							<label asp-for="Input.ConfirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+							<input asp-for="Input.ConfirmPassword" type="password"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Confirm Password" />
+							<span asp-validation-for="Input.ConfirmPassword" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                        <!-- Phone Number -->
-                        <div>
-                            <label asp-for="Input.PhoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input asp-for="Input.PhoneNumber"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
-                                   placeholder="Phone Number" />
-                            <span asp-validation-for="Input.PhoneNumber" class="text-red-500 text-sm mt-1 block"></span>
-                        </div>
-                    </div>
+						<!-- Street Address -->
+						<div>
+							<label asp-for="Input.StreetAddress" class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+							<input asp-for="Input.StreetAddress"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Address" />
+							<span asp-validation-for="Input.StreetAddress" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                    <!-- Admin-only fields -->
-                    @if (isAdmin)
-                    {
-                        <div class="space-y-4 pt-2">
-                            <!-- Role Selection -->
-                            <div>
-                                <label asp-for="Input.Role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                                <select id="selectRole" asp-for="Input.Role" asp-items="@Model.Input.RoleList"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white">
-                                    <option disabled selected>Select Role</option>
-                                </select>
-                            </div>
+						<!-- City -->
+						<div>
+							<label asp-for="Input.City" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+							<input asp-for="Input.City"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="City" />
+							<span asp-validation-for="Input.City" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                            <!-- Company Selection (hidden by default) -->
-                            <div id="companySelection" class="hidden">
-                                <label asp-for="Input.CompanyID" class="block text-sm font-medium text-gray-700 mb-1">Company</label>
-                                <select id="selectCompany" asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white">
-                                    <option disabled selected>Select Company</option>
-                                </select>
-                            </div>
-                        </div>
-                    }
+						<!-- State -->
+						<div>
+							<label asp-for="Input.State" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+							<input asp-for="Input.State"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="State" />
+							<span asp-validation-for="Input.State" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                    <!-- Register Button -->
-                    <div class="pt-2">
-                        <button type="submit"
-                                class="w-full py-2 px-4 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-md transition-colors">
-                            Register
-                        </button>
-                    </div>
+						<!-- Postal Code -->
+						<div>
+							<label asp-for="Input.PostalCode" class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+							<input asp-for="Input.PostalCode"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Postal Code" />
+							<span asp-validation-for="Input.PostalCode" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
 
-                    <!-- Login Link (non-admin only) -->
-                    @if (!isAdmin)
-                    {
-                        <div class="text-center text-sm mt-4">
-                            <span class="text-gray-600">Already have an account?</span>
-                            <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-gray-800 font-medium ml-1">
-                                Login
-                            </a>
-                        </div>
-                    }
-                </form>
+						<!-- Phone Number -->
+						<div>
+							<label asp-for="Input.PhoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+							<input asp-for="Input.PhoneNumber"
+								   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400"
+								   placeholder="Phone Number" />
+							<span asp-validation-for="Input.PhoneNumber" class="text-red-500 text-sm mt-1 block"></span>
+						</div>
+					</div>
 
-                <!-- External Logins (non-admin only) -->
-                @if (!isAdmin)
-                {
-                    <div class="mt-6 pt-6 border-t border-gray-200">
-                        <div class="text-center text-sm text-gray-500 mb-4">
-                            Or register with
-                        </div>
+					<!-- Admin-only fields -->
+					@if (isAdmin)
+					{
+						<div class="space-y-4 pt-2">
+							<!-- Role Selection -->
+							<div>
+								<label asp-for="Input.Role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+								<select id="selectRole" asp-for="Input.Role" asp-items="@Model.Input.RoleList"
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white">
+									<option disabled selected>Select Role</option>
+								</select>
+							</div>
 
-                        @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-                        {
-                            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="space-y-3">
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    @foreach (var provider in Model.ExternalLogins!)
-                                    {
-                                        @if (provider.Name == "Google")
-                                        {
-                                            <button type="submit" name="provider" value="@provider.Name"
-                                                    class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                                                    <path fill="#EA4335" d="M5.26620003,9.76452941 C6.19878754,6.93863203 8.85444915,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.50909091 16.4181818,6.49090909 L19.9090909,3 C17.7818182,1.14545455 15.0545455,0 12,0 C7.27006974,0 3.1977497,2.69829785 1.23999023,6.65002441 L5.26620003,9.76452941 Z" />
-                                                    <path fill="#34A853" d="M16.0407269,18.0125889 C14.9509167,18.7163016 13.5660892,19.0909091 12,19.0909091 C8.86648613,19.0909091 6.21911939,17.076871 5.27698177,14.2678769 L1.23746264,17.3349879 C3.19279051,21.2936293 7.26500293,24 12,24 C14.9328362,24 17.7353462,22.9573905 19.834192,20.9995801 L16.0407269,18.0125889 Z" />
-                                                    <path fill="#4A90E2" d="M19.834192,20.9995801 C22.0291676,18.9520994 23.4545455,15.903663 23.4545455,12 C23.4545455,11.2909091 23.3454545,10.5818182 23.1818182,9.90909091 L12,9.90909091 L12,14.4545455 L18.4363636,14.4545455 C18.1187732,16.013626 17.2662994,17.2212117 16.0407269,18.0125889 L19.834192,20.9995801 Z" />
-                                                    <path fill="#FBBC05" d="M5.27698177,14.2678769 C5.03832634,13.556323 4.90909091,12.7937589 4.90909091,12 C4.90909091,11.2182781 5.03443647,10.4668121 5.26620003,9.76452941 L1.23999023,6.65002441 C0.43658717,8.26043162 0,10.0753848 0,12 C0,13.9195484 0.444780743,15.7301709 1.23746264,17.3349879 L5.27698177,14.2678769 Z" />
-                                                </svg>
-                                                Register with Google
-                                            </button>
-                                        }
-                                        else if (provider.Name == "Facebook")
-                                        {
-                                            <button type="submit" name="provider" value="@provider.Name"
-                                                    class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-white bg-[#1877F2] hover:bg-[#166FE5]">
-                                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z" />
-                                                </svg>
-                                                Register with Facebook
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="submit" name="provider" value="@provider.Name"
-                                                    class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                                Register with @provider.DisplayName
-                                            </button>
-                                        }
-                                    }
-                                </div>
-                            </form>
-                        }
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+							<!-- Company Selection (hidden by default) -->
+							<div id="companySelection" class="hidden">
+								<label asp-for="Input.CompanyID" class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+								<select id="selectCompany" asp-for="Input.CompanyID" asp-items="@Model.Input.CompanyList"
+										class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white">
+									<option disabled selected>Select Company</option>
+								</select>
+							</div>
+						</div>
+					}
+
+					<!-- Register Button -->
+					<div class="pt-2">
+						<button type="submit"
+								class="w-full py-2 px-4 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-md transition-colors">
+							Register
+						</button>
+					</div>
+
+					<!-- Login Link (non-admin only) -->
+					@if (!isAdmin)
+					{
+						<div class="text-center text-sm mt-4">
+							<span class="text-gray-600">Already have an account?</span>
+							<a asp-area="Identity" asp-controller="Account" asp-action="Login" class="text-gray-800 font-medium ml-1">
+								Login
+							</a>
+						</div>
+					}
+				</form>
+
+				<!-- External Logins (non-admin only) -->
+				@if (!isAdmin)
+				{
+					<div class="mt-6 pt-6">
+						<div class="text-center text-sm text-gray-500 mb-4">
+							Or register with
+						</div>
+
+						@if ((Model.ExternalLogins?.Count ?? 0) > 0)
+						{
+							<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="flex justify-between gap-2">
+								@foreach (var provider in Model.ExternalLogins!)
+								{
+									@if (provider.Name == "Google")
+									{
+										<button type="submit" name="provider" value="@provider.Name"
+												class="w-full flex items-center justify-center px-4 py-2 rounded-md 
+												text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100">
+											<svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+												<path fill="#EA4335" d="M5.26620003,9.76452941 C6.19878754,6.93863203 8.85444915,4.90909091 12,4.90909091 C13.6909091,4.90909091 15.2181818,5.50909091 16.4181818,6.49090909 L19.9090909,3 C17.7818182,1.14545455 15.0545455,0 12,0 C7.27006974,0 3.1977497,2.69829785 1.23999023,6.65002441 L5.26620003,9.76452941 Z" />
+												<path fill="#34A853" d="M16.0407269,18.0125889 C14.9509167,18.7163016 13.5660892,19.0909091 12,19.0909091 C8.86648613,19.0909091 6.21911939,17.076871 5.27698177,14.2678769 L1.23746264,17.3349879 C3.19279051,21.2936293 7.26500293,24 12,24 C14.9328362,24 17.7353462,22.9573905 19.834192,20.9995801 L16.0407269,18.0125889 Z" />
+												<path fill="#4A90E2" d="M19.834192,20.9995801 C22.0291676,18.9520994 23.4545455,15.903663 23.4545455,12 C23.4545455,11.2909091 23.3454545,10.5818182 23.1818182,9.90909091 L12,9.90909091 L12,14.4545455 L18.4363636,14.4545455 C18.1187732,16.013626 17.2662994,17.2212117 16.0407269,18.0125889 L19.834192,20.9995801 Z" />
+												<path fill="#FBBC05" d="M5.27698177,14.2678769 C5.03832634,13.556323 4.90909091,12.7937589 4.90909091,12 C4.90909091,11.2182781 5.03443647,10.4668121 5.26620003,9.76452941 L1.23999023,6.65002441 C0.43658717,8.26043162 0,10.0753848 0,12 C0,13.9195484 0.444780743,15.7301709 1.23746264,17.3349879 L5.27698177,14.2678769 Z" />
+											</svg>
+											Register with Google
+										</button>
+									}
+									else if (provider.Name == "Facebook")
+									{
+										<button type="submit" name="provider" value="@provider.Name"
+												class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md text-sm 
+												font-medium text-white bg-[#1877F2] hover:bg-[#166FE5]">
+											<svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+												<path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z" />
+											</svg>
+											Register with Facebook
+										</button>
+									}
+									else
+									{
+										<button type="submit" name="provider" value="@provider.Name"
+												class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+											Register with @provider.DisplayName
+										</button>
+									}
+								}
+							</form>
+						}
+					</div>
+				}
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const roleDropdown = document.getElementById('selectRole');
-            const companyDropdown = document.getElementById('companySelection');
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const roleDropdown = document.getElementById('selectRole');
+			const companyDropdown = document.getElementById('companySelection');
 
-            if (roleDropdown && companyDropdown) {
-                roleDropdown.addEventListener('change', function() {
-                    companyDropdown.classList.toggle('hidden', this.value !== 'Company');
-                });
-            }
-        });
-    </script>
-    <partial name="_ValidationScriptsPartial" />
+			if (roleDropdown && companyDropdown) {
+				roleDropdown.addEventListener('change', function() {
+					companyDropdown.classList.toggle('hidden', this.value !== 'Company');
+				});
+			}
+		});
+	</script>
+	<partial name="_ValidationScriptsPartial" />
 }
 
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+	html, body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	}
 </style>
