@@ -189,10 +189,11 @@ namespace E_Commerce.Areas.Customer.Controllers
         }
 
 
-        public IActionResult ReloadCartCount()
+        public IActionResult ReloadCartCount(string type)
         {
-            return ViewComponent("ShoppingCartCount");
+            return ViewComponent("CountWidget", new { type });
         }
+
 
 
         public IActionResult Privacy()
