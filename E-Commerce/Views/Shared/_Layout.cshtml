@@ -5,60 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - E Commerce</title>
     <link href="~/css/renderedtailwindcss.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
-
-
     @await RenderSectionAsync("Styles", required: false)
-
-    <style>
-        @@media only screen and (min-width: 568px) {
-            .iziToast:after {
-                box-shadow: none !important;
-            }
-        }
-
-
-        div.dt-processing > div:last-child > div {
-            background: rgb(0 0 0) !important;
-        }
-
-
-        /* Animation for ripple effect */
-        @@keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        .animate-ripple {
-            position: absolute;
-            transform-origin: center;
-            animation: ripple 0.5s ease-out forwards;
-        }
-
-        /* Animation for errors fading out */
-        .error-container > div {
-            transition: opacity 0.3s ease-out;
-        }
-
-        /* Smooth transitions */
-        .transition-all {
-            transition-property: all;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-            transition-duration: 150ms;
-        }
-
-        /* File upload drag states */
-        .file-upload-label {
-            transition: all 0.2s ease-in-out;
-        }
-
-            .file-upload-label.border-blue-500 {
-                border-color: rgba(59, 130, 246, 0.5);
-            }
-    </style>
 
 </head>
 <body class="flex flex-col min-h-screen bg-white">
@@ -259,9 +209,6 @@
         </div>
     </footer>
 
-
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="//cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
@@ -321,7 +268,9 @@
 
 
     <script defer>
-        const socket = new WebSocket("wss://localhost:7280/ws");
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+
         socket.onopen = function() {
             console.log("✅ Connected to WebSocket");
         };
