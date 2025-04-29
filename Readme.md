@@ -76,7 +76,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## ⚙ Configuration
 Add Configuration in appsettings.Development.json
 
-#### Recommanded Way
+**Recommanded Way**
 Add API Keys in Enviroment Variable or in Secret.json
 
 ```json
