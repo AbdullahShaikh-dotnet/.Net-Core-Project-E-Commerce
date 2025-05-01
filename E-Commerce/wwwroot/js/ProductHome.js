@@ -516,22 +516,22 @@ class RangeSlider {
     bindEvents() {
         const { fromSlider, toSlider, fromInput, toInput, fromValue, toValue } = this.elements;
 
-        fromSlider.addEventListener('input', () => {
+        fromSlider?.addEventListener('input', () => {
             this.controlFromSlider();
             fromValue.textContent = fromSlider.value;
         });
 
-        toSlider.addEventListener('input', () => {
+        toSlider?.addEventListener('input', () => {
             this.controlToSlider();
             toValue.textContent = toSlider.value;
         });
 
-        fromInput.addEventListener('input', () => {
+        fromInput?.addEventListener('input', () => {
             this.controlFromInput();
             fromValue.textContent = fromSlider.value;
         });
 
-        toInput.addEventListener('input', () => {
+        toInput?.addEventListener('input', () => {
             this.controlToInput();
             toValue.textContent = toSlider.value;
         });
@@ -547,9 +547,11 @@ class RangeSlider {
         const { fromSlider, toSlider } = this.elements;
         const { base, range } = this.colors;
 
-        const rangeDistance = toSlider.max - toSlider.min;
-        const fromPosition = fromSlider.value - toSlider.min;
-        const toPosition = toSlider.value - toSlider.min;
+        if (!(fromSlider || toSlider)) return;
+
+        const rangeDistance = toSlider?.max - toSlider?.min;
+        const fromPosition = fromSlider?.value - toSlider?.min;
+        const toPosition = toSlider?.value - toSlider?.min;
 
         toSlider.style.background = `linear-gradient(
       to right,
@@ -563,6 +565,9 @@ class RangeSlider {
 
     setToggleAccessible() {
         const { toSlider } = this.elements;
+
+        if (!toSlider) return;
+
         if (Number(toSlider.value) <= 0) {
             toSlider.style.zIndex = 2;
         } else {
@@ -721,6 +726,8 @@ class ProductFilter {
         }
 
         const productId = button.dataset?.productid;
+        let Qty = button.dataset.qty ? button.dataset.qty : 1;
+
         if (!productId) {
             console.error('Product ID not found');
             return;
@@ -728,7 +735,7 @@ class ProductFilter {
 
         this.showButtonLoader(button);
 
-        fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}`, {
+        fetch(`/Customer/Home/AddtoCart?ProductID=${encodeURIComponent(productId)}&Qty=${encodeURIComponent(Qty) }`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         })
@@ -845,7 +852,7 @@ class ProductFilter {
             })
             .then(data => {
                 if (data.success) {
-                    toast.success('Item added to wishlist', 5);
+                    toast.basic('❤️ Item added to wishlist');
                     this.reloadWishlistCount();
                 } else {
                     console.error('Failed to add product to wishlist:', data.message || 'Unknown error');
