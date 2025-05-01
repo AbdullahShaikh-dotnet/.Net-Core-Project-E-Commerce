@@ -98,5 +98,36 @@
             progressBarEasing: 'linear',
             iconUrl: "/images/Icons/Bell-Icon.svg"
         });
+    },
+
+    basic: (message, position = 'bottom-right') => {
+        const existingToasts = document.querySelectorAll('.custom-basic-toast');
+        existingToasts.forEach(t => t.remove());
+
+        // Map position to Tailwind classes
+        const positionClasses = {
+            'top-left': 'top-5 left-5',
+            'top-right': 'top-5 right-5',
+            'bottom-left': 'bottom-5 left-5',
+            'bottom-right': 'bottom-5 right-5'
+        };
+
+        const posClass = positionClasses[position] || positionClasses['bottom-right'];
+        const toast = document.createElement('div');
+        toast.className = `custom-basic-toast fixed ${posClass} bg-gray-800 text-white px-4 py-2 rounded shadow-lg z-50 transition-all duration-300 ease-in-out opacity-0 translate-y-2`;
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => {
+            toast.classList.remove('opacity-0', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+        });
+        setTimeout(() => {
+            toast.classList.remove('opacity-100', 'translate-y-0');
+            toast.classList.add('opacity-0', 'translate-y-2');
+
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     }
+
 };
