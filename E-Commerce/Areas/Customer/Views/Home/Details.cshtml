@@ -1,196 +1,454 @@
 ﻿@model ShoppingCart
 
 @{
-    ViewData["Title"] = Model.product.Title;
+	ViewData["Title"] = Model.product.Title;
+
+
+	// Generate absolute URLs for images
+	var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}";
+	var imageUrl = Model.product.ProductImages != null && Model.product.ProductImages.Any()
+		? $"{baseUrl}{Model.product.ProductImages.First().ImageURL.Replace("\\", "/")}"
+		: $"https://plus.unsplash.com/premium_photo-1669652639337-c513cc42ead6?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+	// Create a proper product description
+	var description = !string.IsNullOrEmpty(Model.product.Description)
+		? Model.product.Description.Length > 150
+			? Model.product.Description.Substring(0, 147) + "..."
+			: Model.product.Description
+		: $"Buy {Model.product.Title} by {Model.product.Author} from our store";
+
+	var url = $"{Context.Request.Scheme}://www.{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}";
 }
 
 <style>
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 
-    input[type="number"] {
-        -moz-appearance: textfield;
-    }
+	input[type="number"] {
+		-moz-appearance: textfield;
+	}
+
+	/* Share dropdown styles */
+	.share-dropdown {
+		visibility: hidden;
+		opacity: 0;
+		transform: translateY(10px);
+		transition: all 0.2s ease-in-out;
+	}
+
+	.share-container:hover .share-dropdown {
+		visibility: visible;
+		opacity: 1;
+		transform: translateY(0);
+	}
 </style>
 
+<script defer src="~/js/producthome.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const productFilter = new ProductFilter();
+		console.log('@url')
+	});
+</script>
+
+
+<!-- Open Graph Meta Tags -->
+<meta property="og:type" content="product" />
+<meta property="og:title" content="@Model.product.Title" />
+<meta property="og:description" content="@description" />
+<meta property="og:url" content="@url" /> <!-- instead of hardcoded image URL -->
+<meta property="og:image" content="@imageUrl" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content="B-Commerce" />
+<meta property="product:price:amount" content="@Model.product.Price" />
+<meta property="product:price:currency" content="USD" />
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="@Model.product.Title" />
+<meta name="twitter:description" content="@description" />
+<meta name="twitter:image" content="@imageUrl" />
+
+<meta property="og:image:alt" content="@Model.product.Title" />
+
 <form method="post" class="max-w-5xl mx-auto px-4 py-8">
-    <input asp-for="ProductID" type="hidden" />
+	<input asp-for="ProductID" type="hidden" />
 
-    <!-- Back to Home -->
-    <div class="mb-6">
-        <a asp-action="Index" class="text-gray-500 hover:text-gray-700 font-medium inline-flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-            </svg>
-            Back to Home
-        </a>
-    </div>
+	<!-- Back to Home -->
+	<div class="mb-6">
+		<a asp-action="Index" class="text-gray-500 hover:text-gray-700 font-medium inline-flex items-center">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+			</svg>
+			Back to Home
+		</a>
+	</div>
 
-    <!-- Product Container -->
-    <div class="bg-white rounded-lg overflow-hidden border border-gray-100">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
-            <!-- Product Images -->
-            <div class="space-y-4">
-                <!-- Main Image -->
-                <div class="aspect-square rounded-md overflow-hidden bg-gray-50">
-                    <img id="mainImage" src="@(Model.product.ProductImages != null && Model.product.ProductImages.Any() ? Model.product.ProductImages.First().ImageURL : "#")"
-                         alt="@Model.product.Title"
-                         class="w-full h-full object-cover" />
-                </div>
+	<!-- Product Container -->
+	<div class="bg-white rounded-lg overflow-hidden border border-gray-100">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
+			<!-- Product Images -->
+			<div class="space-y-4">
+				<!-- Main Image -->
+				<div class="aspect-square rounded-md overflow-hidden bg-gray-50 relative group">
+					<img id="mainImage" src="@(Model.product.ProductImages != null && Model.product.ProductImages.Any() ? Model.product.ProductImages.First().ImageURL : "#")"
+						 alt="@Model.product.Title"
+						 class="w-full h-full object-cover" />
 
-                <!-- Image Thumbnails -->
-                @if (Model.product.ProductImages != null && Model.product.ProductImages.Count() > 1)
-                {
-                    <div class="flex space-x-2 overflow-x-auto pb-2">
-                        @foreach (var image in Model.product.ProductImages)
-                        {
-                            <button type="button"
-                                    onclick="changeMainImage('@image.ImageURL.Replace("\\","/")')"
-                                    class="w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none transition">
-                                <img src="@image.ImageURL" alt="@Model.product.Title" class="w-full h-full object-cover" />
-                            </button>
-                        }
-                    </div>
-                }
-            </div>
+					<!-- Quick action buttons (positioned on the image) -->
+					<div class="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+						<!-- Wishlist button -->
+						<button data-ProductID="@Model.ProductID" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()"
+								class="btnWishlist bg-white text-gray-700 p-2 rounded-full border border-slate-300 hover:bg-red-500 hover:border-red-500
+                                hover:text-white transition duration-300 mr-2" type="button">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+							</svg>
+						</button>
 
-            <!-- Product Details -->
-            <div class="flex flex-col space-y-5">
-                <!-- Category Badge -->
-                <div>
-                    <span class="inline-block text-xs font-medium bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full">
-                        @Model.product.Category.Name
-                    </span>
-                </div>
+						<!-- Share button with dropdown -->
+						<div class="share-container relative">
+							<button type="button"
+									class="bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200"
+									title="Share product">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+								</svg>
+							</button>
 
-                <!-- Title & Author -->
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">@Model.product.Title</h1>
-                    <p class="text-gray-500 text-sm">by @Model.product.Author</p>
-                </div>
+							<!-- Share dropdown -->
+							<div class="share-dropdown absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 overflow-hidden">
+								<button type="button" onclick="shareOnWhatsApp()"
+										class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+									<svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+										<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+									</svg>
+									WhatsApp
+								</button>
+								<button type="button" onclick="shareOnFacebook()"
+										class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+									<svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+										<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+									</svg>
+									Facebook
+								</button>
 
-                <!-- Product Info -->
-                <div class="text-sm text-gray-500">
-                    <p>ISBN: 1234567890</p>
-                    <p class="mt-1">
-                        List Price: <span class="line-through">@Model.product.ListPrice.ToString("C")</span>
-                    </p>
-                </div>
+								<button type="button" onclick="copyProductLink()"
+										class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+									</svg>
+									Copy Link
+								</button>
+							</div>
 
-                <!-- Pricing Table -->
-                <div class="border border-gray-100 rounded-md overflow-hidden">
-                    <div class="grid grid-cols-4 bg-gray-50 text-xs font-medium text-gray-600">
-                        <div class="p-2 text-center">Quantity</div>
-                        <div class="p-2 text-center">1-50</div>
-                        <div class="p-2 text-center">51-100</div>
-                        <div class="p-2 text-center">100+</div>
-                    </div>
-                    <div class="grid grid-cols-4 text-center text-sm font-semibold text-gray-800">
-                        <div class="p-2 border-t border-gray-100">Price</div>
-                        <div class="p-2 border-t border-gray-100">@Model.product.Price.ToString("C")</div>
-                        <div class="p-2 border-t border-gray-100">@Model.product.Price50.ToString("C")</div>
-                        <div class="p-2 border-t border-gray-100">@Model.product.Price100.ToString("C")</div>
-                    </div>
-                </div>
+						</div>
+					</div>
+				</div>
 
-                <!-- Quantity Selector -->
-                <div class="flex items-center space-x-3">
-                    <label for="Count" class="text-sm font-medium text-gray-700">Quantity</label>
-                    <div class="flex items-center border border-gray-200 rounded-md">
-                        <button type="button"
-                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-50"
-                                onclick="updateQuantity(-1)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
-                            </svg>
-                        </button>
-                        <input asp-for="Count"
-                               type="number"
-                               value="1"
-                               class="w-12 h-8 text-center text-sm border-0 focus:ring-0 focus:outline-none"
-                               id="quantityInput"
-                               min="1"
-                               max="150"
-                               oninput="validateQuantity(this)">
-                        <button type="button"
-                                class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-50"
-                                onclick="updateQuantity(1)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+				<!-- Image Thumbnails -->
+				@if (Model.product.ProductImages != null && Model.product.ProductImages.Count() > 1)
+				{
+					<div class="flex space-x-2 overflow-x-auto pb-2">
+						@foreach (var image in Model.product.ProductImages)
+						{
+							<button type="button"
+									onclick="changeMainImage('@image.ImageURL.Replace("\\","/")')"
+									class="w-16 h-16 rounded-md overflow-hidden flex-shrink-0 border-2 border-transparent hover:border-gray-300 focus:border-blue-500 focus:outline-none transition">
+								<img src="@image.ImageURL" alt="@Model.product.Title" class="w-full h-full object-cover" />
+							</button>
+						}
+					</div>
+				}
+			</div>
 
-                <!-- Action Buttons -->
-                <div class="pt-5 mt-2 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
-                    <button type="submit"
-                            class="w-full sm:w-1/2 bg-gray-800 text-white py-2.5 px-4 rounded-md text-sm font-medium hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                        </svg>
-                        Add to Cart
-                    </button>
-                    <button type="submit"
-                            class="w-full sm:w-1/2 bg-white border border-gray-200 text-gray-800 py-2.5 px-4 rounded-md text-sm font-medium hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
-                        </svg>
-                        Buy Now
-                    </button>
-                </div>
-            </div>
-        </div>
+			<!-- Product Details -->
+			<div class="flex flex-col space-y-5">
+				<!-- Category Badge -->
+				<div>
+					<span class="inline-block text-xs font-medium bg-gray-100 text-gray-700 px-2.5 py-1 rounded-full">
+						@Model.product.Category.Name
+					</span>
+				</div>
 
-        <!-- Description -->
-        @if (!string.IsNullOrEmpty(Model.product.Description))
-        {
-            <div class="p-6 border-t border-gray-100">
-                <h2 class="text-sm font-medium text-gray-700 mb-3">Description</h2>
-                <div class="prose prose-sm max-w-none text-gray-600">
-                    @Html.Raw(Model.product.Description)
-                </div>
-            </div>
-        }
-    </div>
+				<!-- Title & Author -->
+				<div>
+					<h1 class="text-2xl font-bold text-gray-800">@Model.product.Title</h1>
+					<p class="text-gray-500 text-sm">by @Model.product.Author</p>
+				</div>
+
+				<!-- Product Info -->
+				<div class="text-sm text-gray-500">
+					<p>ISBN: 1234567890</p>
+					<p class="mt-1">
+						List Price: <span class="line-through">@Model.product.ListPrice.ToString("C")</span>
+					</p>
+				</div>
+
+				<!-- Pricing Table -->
+				<div class="border border-gray-100 rounded-md overflow-hidden">
+					<div class="grid grid-cols-4 bg-gray-50 text-xs font-medium text-gray-600">
+						<div class="p-2 text-center">Quantity</div>
+						<div class="p-2 text-center">1-50</div>
+						<div class="p-2 text-center">51-100</div>
+						<div class="p-2 text-center">100+</div>
+					</div>
+					<div class="grid grid-cols-4 text-center text-sm font-semibold text-gray-800">
+						<div class="p-2 border-t border-gray-100">Price</div>
+						<div class="p-2 border-t border-gray-100">@Model.product.Price.ToString("C")</div>
+						<div class="p-2 border-t border-gray-100">@Model.product.Price50.ToString("C")</div>
+						<div class="p-2 border-t border-gray-100">@Model.product.Price100.ToString("C")</div>
+					</div>
+				</div>
+
+				<!-- Quantity Selector -->
+				<div class="flex items-center space-x-3">
+					<label for="Count" class="text-sm font-medium text-gray-700">Quantity</label>
+					<div class="flex items-center border border-gray-200 rounded-md">
+						<button type="button"
+								class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-50"
+								onclick="updateQuantity(-1)">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+							</svg>
+						</button>
+						<input asp-for="Count"
+							   type="number"
+							   value="1"
+							   class="w-12 h-8 text-center text-sm border-0 focus:ring-0 focus:outline-none"
+							   id="quantityInput"
+							   min="1"
+							   max="150"
+							   oninput="validateQuantity(this)">
+						<button type="button"
+								class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-50"
+								onclick="updateQuantity(1)">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+							</svg>
+						</button>
+					</div>
+				</div>
+
+				<!-- Action Buttons -->
+				<div class="pt-5 mt-2 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
+					<!-- Add to Cart Button -->
+					<button data-ProductID="@Model.ProductID" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()" data-Qty="10" id="btnAddtocart"
+							class="btnAddtocart w-full sm:w-1/2 bg-gray-800 text-white py-2.5 px-4 rounded-md text-sm font-medium hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+						</svg>
+						Add to Cart
+					</button>
+
+					<!-- Buy Now Button -->
+					<button type="submit"
+							class="w-full sm:w-1/2 bg-white border border-gray-200 text-gray-800 py-2.5 px-4 rounded-md text-sm font-medium hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+						</svg>
+						Buy Now
+					</button>
+				</div>
+
+				<!-- Secondary Action Buttons (Mobile) -->
+				<div class="flex justify-between sm:hidden mt-3">
+					<!-- Wishlist button -->
+					<button data-ProductID="@Model.ProductID" data-isAuthenticated="@User.Identity.IsAuthenticated.ToString().ToLower()"
+							class="btnWishlist bg-white text-gray-700 p-2 rounded-full border border-slate-300 hover:bg-red-500 hover:border-red-500 hover:text-white transition duration-300 mr-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+						</svg>
+					</button>
+
+					<!-- Share dropdown for mobile -->
+					<div class="relative" x-data="{ open: false }">
+						<button type="button"
+								onclick="toggleMobileShare()"
+								class="flex items-center justify-center p-2 border border-gray-200 rounded-full text-gray-700 bg-white hover:bg-gray-50 transition focus:outline-none focus:ring-2 focus:ring-gray-200">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-700">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+							</svg>
+						</button>
+
+						<!-- Mobile share dropdown -->
+						<div id="mobileShareDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-10 overflow-hidden">
+							<button type="button" onclick="shareOnWhatsApp()"
+									class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+								<svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+								</svg>
+								WhatsApp
+							</button>
+							<button type="button" onclick="shareOnFacebook()"
+									class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+								<svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+								</svg>
+								Facebook
+							</button>
+							<button type="button" onclick="copyProductLink()"
+									class="w-full flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors">
+								<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+								</svg>
+								Copy Link
+							</button>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+		</div>
+
+		<!-- Description -->
+		@if (!string.IsNullOrEmpty(Model.product.Description))
+		{
+			<div class="p-6 border-t border-gray-100">
+				<h2 class="text-sm font-medium text-gray-700 mb-3">Description</h2>
+				<div class="prose prose-sm max-w-none text-gray-600">
+					@Html.Raw(Model.product.Description)
+				</div>
+			</div>
+		}
+	</div>
 </form>
 
 <script>
-    function updateQuantity(change) {
-        const quantityInput = document.getElementById('quantityInput');
-        let currentValue = parseInt(quantityInput.value, 10);
+	function updateQuantity(change) {
+		const quantityInput = document.getElementById('quantityInput');
+		const addToCartCount = document.getElementById('btnAddtocart');
+		let currentValue = parseInt(quantityInput.value, 10);
 
-        currentValue += change;
+		currentValue += change;
 
-        if (currentValue < 1) {
-            currentValue = 1;
-        } else if (currentValue > 150) {
-            currentValue = 150;
-        }
+		if (currentValue < 1) {
+			currentValue = 1;
+		} else if (currentValue > 150) {
+			currentValue = 150;
+		}
 
-        quantityInput.value = currentValue;
-    }
+		quantityInput.value = currentValue;
+		addToCartCount.dataset.qty = currentValue;
+	}
 
-    function validateQuantity(input) {
-        let value = parseInt(input.value, 10);
+	function validateQuantity(input) {
+		let value = parseInt(input.value, 10);
 
-        if (isNaN(value)) {
-            input.value = 1;
-            return;
-        }
+		if (isNaN(value)) {
+			input.value = 1;
+			return;
+		}
 
-        if (value < 1) {
-            input.value = 1;
-        } else if (value > 150) {
-            input.value = 150;
-        }
-    }
+		if (value < 1) {
+			input.value = 1;
+		} else if (value > 150) {
+			input.value = 150;
+		}
+	}
 
-    function changeMainImage(imageUrl) {
-        document.getElementById('mainImage').src = imageUrl;
-    }
+	function changeMainImage(imageUrl) {
+		document.getElementById('mainImage').src = imageUrl;
+	}
+
+	// Share functionality
+
+		function shareOnWhatsApp() {
+		// Get the current page URL
+		const url = window.location.href;
+		const title = "@Model.product.Title";
+		const text = "@description";
+
+		// Try to use the Web Share API first (works on mobile)
+		if (navigator.share) {
+			navigator.share({
+				title: title,
+				text: text,
+				url: url
+			}).catch(() => {
+				// Fallback to WhatsApp URL scheme
+				const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(title + '\n\n' + text + '\n\n' + url)}`;
+				window.open(whatsappUrl, '_blank');
+			});
+		} else {
+			// Fallback for desktop
+			const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(title + '\n\n' + text + '\n\n' + url)}`;
+			window.open(whatsappUrl, '_blank');
+		}
+
+		toast.basic('Sharing via WhatsApp');
+	}
+
+
+
+
+
+
+
+
+	function shareOnFacebook() {
+		const url = encodeURIComponent(window.location.href);
+		window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+		toast.basic('Sharing via Facebook');
+	}
+
+	// Copy product link to clipboard
+	function copyProductLink() {
+		const url = window.location.href;
+		navigator.clipboard.writeText(url).then(() => {
+			toast.basic('📋 Link copied to clipboard');
+		}).catch(err => {
+			// Fallback for browsers that don't support clipboard API
+			const textArea = document.createElement('textarea');
+			textArea.value = url;
+			textArea.style.position = 'fixed';
+			document.body.appendChild(textArea);
+			textArea.focus();
+			textArea.select();
+
+			try {
+				document.execCommand('copy');
+				toast.basic('📋 Link copied to clipboard');
+			} catch (err) {
+				toast.basic('Failed to copy link');
+				console.error('Failed to copy: ', err);
+			}
+
+			document.body.removeChild(textArea);
+		});
+	}
+
+	// Toggle mobile share dropdown
+	function toggleMobileShare() {
+		const dropdown = document.getElementById('mobileShareDropdown');
+		dropdown.classList.toggle('hidden');
+
+		// Close dropdown when clicking outside
+		document.addEventListener('click', function closeDropdown(e) {
+			if (!e.target.closest('#mobileShareDropdown') && !e.target.closest('button[onclick="toggleMobileShare()"]')) {
+				dropdown.classList.add('hidden');
+				document.removeEventListener('click', closeDropdown);
+			}
+		});
+	}
+
 </script>
