@@ -130,7 +130,7 @@ namespace E_Commerce.Areas.Customer.Controllers
 
 
         [Authorize]
-        public IActionResult AddtoCart(int ProductID)
+        public IActionResult AddtoCart(int ProductID, int Qty = 1)
         {
             var userId = _userService.GetUserId();
 
@@ -143,7 +143,7 @@ namespace E_Commerce.Areas.Customer.Controllers
                 {
                     ApplicationUserID = userId,
                     ProductID = ProductID,
-                    Count = 1,
+                    Count = Qty,
                     CreateDate = DateTime.Now
                 };
                 _unitOfWork.ShoppingCarts.Add(shoppingCartItem);
