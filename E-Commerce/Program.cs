@@ -233,9 +233,10 @@ app.Run();
 void ApplyMigrationsAndSeed()
 {
     using var scope = app.Services.CreateScope();
+
     // For Docker Only
-    //var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //dbContext.Database.Migrate();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
 
     var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
     dbInitializer.Initialize();
