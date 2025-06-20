@@ -1,4 +1,4 @@
-# 🛍️ E-Commerce Platform (.NET Core 8.0)
+# 🛍️ E-Commerce Book Store (.NET Core 8.0)
 
 ![.NET Core Version](https://img.shields.io/badge/.NET%20Core-8.0-blue)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
