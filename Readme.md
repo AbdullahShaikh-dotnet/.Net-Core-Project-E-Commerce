@@ -32,7 +32,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🛠️ Technologies
 
-- **Backend:** .NET Core 8.0, EF Core, ASP.NET Core Identity
+- **Backend:** .NET Core 8.0, EF Core, ASP.NET Core Identity, C#
 - **Frontend:** Razor Pages, TailwindCSS, Bootstrap 5, JavaScript (ES6+)
 - **Database:** SQL Server, Redis (caching)
 - **DevOps:** Docker
@@ -119,7 +119,7 @@ dotnet ef database update
 
 **To create a new migration**
 ``` bash
-dotnet ef migrations add InitialCreate
+dotnet ef migrations add InitialMigration
 dotnet ef database update
 ```
 
