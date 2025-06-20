@@ -26,6 +26,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🛡️ Google reCAPTCHA v3
 - 📧 Mailjet email service
 - 🔗 WebSocket support
+- 📃 Reporting (Invoice)
+- 📝 Error Logging
 - 📊 (Coming Soon) Recommendation engine & Analytics dashboard
 
 ---
